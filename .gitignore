@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Executables
+*.out
+*.app
+
+*.vs
+*\bin-int
+*\bin
+*.vcxproj*
+*.sln
+*\assets
