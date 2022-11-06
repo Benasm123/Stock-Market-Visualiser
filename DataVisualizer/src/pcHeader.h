@@ -59,7 +59,7 @@ inline void end_log_message(const char* vars...)
 // MACROS
 #ifdef DV_RELEASE
 
-#define LOG_INFO_V(...)
+#define LOG_VULK(...)
 #define LOG_INFO(...)
 #define LOG_WARN(...)
 #define LOG_ERROR(...)
