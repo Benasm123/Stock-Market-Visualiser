@@ -58,6 +58,9 @@
     <Filter Include="src\Core">
       <UniqueIdentifier>{A5D31CCF-91A0-77DA-BAB9-6582A6E5AC68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Core\Components">
+      <UniqueIdentifier>{9A079B25-0669-7833-8FD6-BEE5FB36AFF2}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Renderer">
       <UniqueIdentifier>{73D1DFBF-5F34-6F64-08BA-A71AF4FB3AE7}</UniqueIdentifier>
     </Filter>
@@ -267,8 +270,17 @@
     <ClInclude Include="ext\glm\simd\vector_relational.h">
       <Filter>ext\glm\simd</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Actor.h">
+      <Filter>src\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Application.h">
       <Filter>src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Component.h">
+      <Filter>src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Components\line_component.h">
+      <Filter>src\Core\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\main.h">
       <Filter>src\Core</Filter>
@@ -294,13 +306,19 @@
     <ClInclude Include="src\pcHeader.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Component.h" />
-    <ClInclude Include="src\Core\Actor.h" />
-    <ClInclude Include="src\Core\Components\line_component.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\Actor.cpp">
+      <Filter>src\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\Application.cpp">
       <Filter>src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Component.cpp">
+      <Filter>src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Components\line_component.cpp">
+      <Filter>src\Core\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\LineMesh.cpp">
       <Filter>src\Renderer</Filter>
@@ -323,8 +341,5 @@
     <ClCompile Include="src\pcHeader.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Component.cpp" />
-    <ClCompile Include="src\Core\Actor.cpp" />
-    <ClCompile Include="src\Core\Components\line_component.cpp" />
   </ItemGroup>
 </Project>

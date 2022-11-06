@@ -138,9 +138,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\data_manager.h" />
+    <ClInclude Include="src\graph.h" />
+    <ClInclude Include="src\plot.h" />
+    <ClInclude Include="src\test_actor.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="src\data_manager.cpp" />
-    <ClCompile Include="src\plot.cpp" />
     <ClCompile Include="src\graph.cpp" />
+    <ClCompile Include="src\plot.cpp" />
     <ClCompile Include="src\test.cpp" />
     <ClCompile Include="src\test_actor.cpp" />
   </ItemGroup>
@@ -148,12 +154,6 @@
     <ProjectReference Include="..\DataVisualizer\DataVisualizer.vcxproj">
       <Project>{6DC388EF-5991-7CF5-4225-ED1B2E92585A}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\data_manager.h" />
-    <ClInclude Include="src\plot.h" />
-    <ClInclude Include="src\graph.h" />
-    <ClInclude Include="src\test_actor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

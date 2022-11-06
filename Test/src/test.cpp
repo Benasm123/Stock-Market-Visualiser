@@ -64,11 +64,11 @@ protected:
 		using namespace std;
 		auto first = 2012y/1/24;
 
-		std::cout << "Year: " << date.year() << "\n";
-		std::cout << "Month: " << date.month() << "\n";
-		std::cout << "Day: " << date.day() << "\n";
-
-		std::cout << "Difference: " << std::chrono::sys_days{ date } - std::chrono::sys_days{first} << std::endl;
+		// std::cout << "Year: " << date.year() << "\n";
+		// std::cout << "Month: " << date.month() << "\n";
+		// std::cout << "Day: " << date.day() << "\n";
+		//
+		// std::cout << "Difference: " << std::chrono::sys_days{ date } - std::chrono::sys_days{first} << std::endl;
 	}
 
 	void on_update(float delta_time) override

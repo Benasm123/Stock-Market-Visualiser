@@ -47,7 +47,6 @@ void graph::show()
 	{
 		plot_lines_.push_back(new line_component(this));
 		plot_lines_.back()->init(plot.get_x_values(), plot.get_y_values(), min_x_, max_x_, min_y_, max_y_);
-		printf("MAX: %f\n", max_y_);
 		plot_lines_.back()->set_color(plot.get_color());
 	}
 }

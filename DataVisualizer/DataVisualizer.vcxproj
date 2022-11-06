@@ -150,9 +150,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Core\Components\line_component.h" />
-    <ClInclude Include="src\Core\Actor.h" />
-    <ClInclude Include="src\Core\Component.h" />
     <ClInclude Include="ext\Vulkan\Include\dxc\dxcapi.h" />
     <ClInclude Include="ext\Vulkan\Include\glslang\Include\BaseTypes.h" />
     <ClInclude Include="ext\Vulkan\Include\glslang\Include\Common.h" />
@@ -221,7 +218,10 @@
     <ClInclude Include="ext\glm\simd\platform.h" />
     <ClInclude Include="ext\glm\simd\trigonometric.h" />
     <ClInclude Include="ext\glm\simd\vector_relational.h" />
+    <ClInclude Include="src\Core\Actor.h" />
     <ClInclude Include="src\Core\Application.h" />
+    <ClInclude Include="src\Core\Component.h" />
+    <ClInclude Include="src\Core\Components\line_component.h" />
     <ClInclude Include="src\Core\main.h" />
     <ClInclude Include="src\Renderer\LineMesh.h" />
     <ClInclude Include="src\Renderer\VulkanContext.h" />
@@ -233,8 +233,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Actor.cpp" />
-    <ClCompile Include="src\Core\Component.cpp" />
     <ClCompile Include="src\Core\Application.cpp" />
+    <ClCompile Include="src\Core\Component.cpp" />
     <ClCompile Include="src\Core\Components\line_component.cpp" />
     <ClCompile Include="src\Renderer\LineMesh.cpp" />
     <ClCompile Include="src\Renderer\VulkanContext.cpp" />
