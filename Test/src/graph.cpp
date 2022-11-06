@@ -1,6 +1,6 @@
 #include "graph.h"
 
-graph::graph(application* app, std::vector<plot> plots)
+graph::graph(application* app, const std::vector<plot>& plots)
 	: actor(app)
 	, graph_border_(this)
 {
