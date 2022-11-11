@@ -23,13 +23,14 @@ private:
 
 protected:
 	virtual void on_update(float delta_time) = 0;
+	virtual void on_ui(float delta_time) = 0;
 	virtual void on_startup() = 0;
 	virtual void on_shutdown() = 0;
 
 public:
 	[[nodiscard]] renderer& get_renderer() { return renderer_; }
 
-private:
+protected:
 	bool is_running_ = true;
 	int test_rum_;
 	bool updating_actors_{ false };

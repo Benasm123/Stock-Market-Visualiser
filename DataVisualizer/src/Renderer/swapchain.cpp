@@ -114,18 +114,26 @@ uint32_t swapchain::get_swapchain_image_count() const
 vk::SurfaceFormatKHR swapchain::get_swapchain_format() const
 {
 	const std::vector<vk::SurfaceFormatKHR> available_surface_formats = vulkan_context_->get_physical_device().getSurfaceFormatsKHR(vulkan_context_->get_surface());
-	
 	//Look for a specific surface_format, if not found just use the first available.
 	for (const auto& available_surface_format : available_surface_formats)
 	{
+		vk::ImageFormatProperties fp = vulkan_context_->get_physical_device().getImageFormatProperties(available_surface_format.format,
+			vk::ImageType::e2D,
+			vk::ImageTiling::eOptimal,
+			vk::ImageUsageFlagBits::eColorAttachment,
+			{}
+		);
+		LOG_INFO("IMAGE: %i, %i, %i", fp.maxArrayLayers, fp.maxExtent.width, fp.maxResourceSize);
+		LOG_INFO("IMAGEf: %i", available_surface_format.format);
+		LOG_INFO("IMAGEf: %i", vk::Format::eB8G8R8A8Sint);
+
 		if (available_surface_format.format == vk::Format::eB8G8R8A8Sint &&
 			available_surface_format.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear)
 		{
 			return available_surface_format;
 		}
 	}
-
-	LOG_VULK("Created Swapchain Image Views");
+	
 	return available_surface_formats[0];
 }
 
@@ -173,7 +181,7 @@ std::vector<vk::Image> swapchain::get_swapchain_images() const
 std::vector<vk::ImageView> swapchain::create_swapchain_image_views() const
 {
 	std::vector<vk::ImageView> image_views = {};
-
+	
 	for (const auto& image : images_)
 	{
 		vk::ImageViewCreateInfo image_view_info(

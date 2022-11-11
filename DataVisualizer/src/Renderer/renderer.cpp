@@ -1,6 +1,9 @@
 #include "pcHeader.h"
 #include "renderer.h"
 #include "VulkanContext.h"
+#include "backends/imgui_impl_vulkan.h"
+#include "backends/imgui_impl_win32.h"
+#include "Core/Application.h"
 #include "Core/Components/line_component.h"
 
 bool renderer::init(vulkan_context* vulkan_context)
@@ -40,7 +43,7 @@ bool renderer::init(vulkan_context* vulkan_context)
 		0.0f, 1.0f
 	};
 
-	vk::Rect2D scissor{
+	scissor = vk::Rect2D{
 		{
 			0,
 			0
@@ -61,7 +64,7 @@ bool renderer::init(vulkan_context* vulkan_context)
 	graphics_pipeline_info.cull_mode = vk::CullModeFlagBits::eNone;
 	graphics_pipeline_info.viewports = { main_viewport_};
 	graphics_pipeline_info.scissors = { scissor };
-	graphics_pipeline_info.dynamic_states = { vk::DynamicState::eViewport };
+	graphics_pipeline_info.dynamic_states = { vk::DynamicState::eViewport, vk::DynamicState::eScissor };
 
 	line_pipeline_.init(graphics_pipeline_info);
 
@@ -78,6 +81,7 @@ bool renderer::init(vulkan_context* vulkan_context)
 	uniform_buffer_memory_ = bind_uniform_buffer_memory();
 
 	descriptor_pool_ = create_descriptor_pool();
+	im_gui_descriptor_pool_ = create_im_gui_descriptor_pool();
 
 	descriptor_sets_ = create_descriptor_set();
 
@@ -192,10 +196,14 @@ bool renderer::update()
 	command_buffers_[0].begin(info);
 	{
 		command_buffers_[0].setViewport(0, 1, &main_viewport_);
+		command_buffers_[0].setScissor(0, 1, &scissor);
 
 		command_buffers_[0].beginRenderPass(&render_pass_begin_info, vk::SubpassContents::eInline);
 
+
 		line_pipeline_.bind_pipeline(command_buffers_[0]);
+
+
 		for (auto& line : lines_to_draw_)
 		{
 			//TODO::Pass Something useful to push constant including mvp.
@@ -217,6 +225,44 @@ bool renderer::update()
 				1,
 				0,
 				0);
+		}
+
+		ImGui_ImplVulkan_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+
+		ImGui::Begin("Debug Menu");
+
+		static float f = 0.0f;
+		static int counter = 0;
+		static int selected = 0;
+
+		ImGui::Text("Change Graph");
+
+		std::vector<const char*> stocks = { "AAPL", "TSLA" };
+
+		if(ImGui::ListBox("Stock", &selected, stocks.data(), stocks.size()))
+		{
+			selected_stock = stocks[selected];
+		}
+
+		static float col[3] = { selected_color.x, selected_color.y, selected_color.z };
+		if (ImGui::ColorPicker3("Graph Color", col))
+		{
+			selected_color = glm::vec3{ col[0], col[1], col[2] };
+		}
+
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::End();
+
+
+		ImGui::Render();
+
+		draw_data = ImGui::GetDrawData();
+
+		if (draw_data)
+		{
+			ImGui_ImplVulkan_RenderDrawData(draw_data, command_buffers_[0]);
 		}
 
 		command_buffers_[0].endRenderPass();
@@ -280,6 +326,7 @@ void renderer::shutdown()
 	vulkan_context_->get_logical_device().destroyFence(in_flight_fence_);
 
 	vulkan_context_->get_logical_device().destroyDescriptorPool(descriptor_pool_);
+	vulkan_context_->get_logical_device().destroyDescriptorPool(im_gui_descriptor_pool_);
 
 	line_pipeline_.shutdown();
 	vulkan_context_->get_logical_device().destroyPipelineLayout(pipeline_layout_);
@@ -569,10 +616,39 @@ vk::DescriptorPool renderer::create_descriptor_pool() const
 	return vulkan_context_->get_logical_device().createDescriptorPool(descriptor_pool_info);
 }
 
+
+
+vk::DescriptorPool renderer::create_im_gui_descriptor_pool() const
+{
+	const std::vector<vk::DescriptorPoolSize> pool_sizes{
+			{ vk::DescriptorType::eSampler, 1000 },
+			{ vk::DescriptorType::eCombinedImageSampler, 1000 },
+			{ vk::DescriptorType::eSampledImage, 1000 },
+			{ vk::DescriptorType::eStorageImage, 1000 },
+			{ vk::DescriptorType::eUniformTexelBuffer, 1000 },
+			{ vk::DescriptorType::eStorageTexelBuffer, 1000 },
+			{ vk::DescriptorType::eUniformBuffer, 1000 },
+			{ vk::DescriptorType::eStorageBuffer, 1000 },
+			{ vk::DescriptorType::eUniformBufferDynamic, 1000 },
+			{ vk::DescriptorType::eStorageBufferDynamic, 1000 },
+			{ vk::DescriptorType::eInputAttachment, 1000 }
+	};
+
+	const vk::DescriptorPoolCreateInfo descriptor_pool_info(
+		vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet,
+		1000 * pool_sizes.size(),
+		pool_sizes.size(),
+		pool_sizes.data()
+	);
+
+	LOG_INFO("CREATED IMGUI DESCRIPTOR POOL");
+	return vulkan_context_->get_logical_device().createDescriptorPool(descriptor_pool_info);
+}
+
 std::vector<vk::DescriptorSet> renderer::create_descriptor_set() const
 {
 	const vk::DescriptorSetAllocateInfo allocate_info(
-		descriptor_pool_,
+		im_gui_descriptor_pool_,
 		1,
 		&descriptor_set_layout_
 	);

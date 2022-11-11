@@ -1,5 +1,6 @@
 #pragma once
 #include "graphics_pipeline.h"
+#include "imgui.h"
 #include "LineMesh.h"
 #include "swapchain.h"
 
@@ -22,6 +23,9 @@ public:
 
 	void draw(class line_component* line_component);
 
+	[[nodiscard]] vk::RenderPass get_render_pass() const { return render_pass_; }
+	[[nodiscard]] vk::DescriptorPool get_descriptor_pool() const { return descriptor_pool_; }
+
 private:
 	[[nodiscard]] vk::RenderPass create_render_pass() const;
 	[[nodiscard]] vk::DescriptorSetLayout create_descriptor_set_layout() const;
@@ -34,13 +38,15 @@ private:
 	[[nodiscard]] vk::Buffer create_uniform_buffer() const;
 	[[nodiscard]] vk::DeviceMemory bind_uniform_buffer_memory() const;
 	[[nodiscard]] vk::DescriptorPool create_descriptor_pool() const;
+	vk::DescriptorPool create_im_gui_descriptor_pool() const;
 	[[nodiscard]] std::vector < vk::DescriptorSet> create_descriptor_set() const;
 	void update_descriptor_sets();
 	[[nodiscard]] std::vector <vk::CommandBuffer> create_command_buffer() const;
 	[[nodiscard]] vk::Semaphore create_semaphore() const;
 	[[nodiscard]] vk::Fence create_fence() const;
 
-private:
+
+public:
 	vulkan_context* vulkan_context_{};
 
 	swapchain swapchain_;
@@ -63,6 +69,8 @@ private:
 	vk::DeviceMemory uniform_buffer_memory_;
 
 	vk::DescriptorPool descriptor_pool_;
+	vk::DescriptorPool im_gui_descriptor_pool_;
+	ImDrawData* draw_data;
 	std::vector < vk::DescriptorSet> descriptor_sets_;
 
 	std::vector <vk::CommandBuffer> command_buffers_;
@@ -75,7 +83,12 @@ private:
 
 	vk::Viewport main_viewport_;
 	vk::Viewport sidebar_viewport_;
+	vk::Rect2D scissor;
 
 	int count = 0;
+
+	//TEST
+	const char* selected_stock{};
+	glm::vec3 selected_color{1.0f};
 };
 

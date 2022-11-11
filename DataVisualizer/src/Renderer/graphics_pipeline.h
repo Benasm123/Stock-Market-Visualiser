@@ -13,7 +13,7 @@ public:
 	void bind_pipeline(vk::CommandBuffer command_buffer) const;
 
 public:
-	
+	vk::Pipeline get_pipeline() { return pipeline_; }
 
 private:
 	vk::Pipeline create_graphics_pipeline(const graphics_pipeline_create_info& create_info);

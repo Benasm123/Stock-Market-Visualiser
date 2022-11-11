@@ -2,6 +2,8 @@
 #include "Application.h"
 
 #include "Actor.h"
+#include "backends/imgui_impl_vulkan.h"
+#include "backends/imgui_impl_win32.h"
 
 application::application()
 = default;

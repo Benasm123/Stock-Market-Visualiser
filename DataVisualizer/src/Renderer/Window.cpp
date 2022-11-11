@@ -1,5 +1,8 @@
 #include "pcHeader.h"
 #include "Window.h"
+#include "imgui.h"
+#include "backends/imgui_impl_win32.h"
+#include "backends/imgui_impl_vulkan.h"
 
 bool window::init(const LPCWSTR title, uint32_t width, uint32_t height)
 {
@@ -47,8 +50,14 @@ bool window::update() const
 	return true;
 }
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 LRESULT CALLBACK window::events(const HWND hwnd, const UINT msg, const WPARAM wparam, const LPARAM lparam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam))
+		return true;
+
+
 	switch (msg)
 	{
 	case WM_CLOSE:

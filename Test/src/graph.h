@@ -7,6 +7,7 @@ class graph : public actor
 {
 public:
 	graph(application* app, const std::vector<plot>& plots);
+	~graph() override;
 
 	void update_actor(float delta_time) override;
 

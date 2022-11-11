@@ -15,8 +15,62 @@ workspace "DataVisualizer"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 VulkanInclude = "DataVisualizer/ext/Vulkan/Include"
+imguiInclude = "ext/imgui"
 VulkanLib = "DataVisualizer/ext/Vulkan/Lib"
 GLMInclude = "DataVisualizer/ext/glm"
+SDLInclude = "ext/SDL"
+
+project "ImGui"
+	kind "StaticLib"
+	language "C++"
+    staticruntime "off"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files {
+		"ext/imgui/imconfig.h",
+		"ext/imgui/imgui.h",
+		"ext/imgui/imgui.cpp",
+		"ext/imgui/imgui_draw.cpp",
+		"ext/imgui/imgui_internal.h",
+		"ext/imgui/imgui_tables.cpp",
+		"ext/imgui/imgui_widgets.cpp",
+		"ext/imgui/imstb_rectpack.h",
+		"ext/imgui/imstb_textedit.h",
+		"ext/imgui/imstb_truetype.h",
+		"ext/imgui/imgui_demo.cpp",
+		"ext/imgui/backends/imgui_impl_win32.h",
+		"ext/imgui/backends/imgui_impl_win32.cpp",
+		"ext/imgui/backends/imgui_impl_vulkan.h",
+		"ext/imgui/backends/imgui_impl_vulkan.cpp",
+		"ext/imgui/backends/vulkan/**"
+	}
+	
+	includedirs {
+		"DataVisualizer/src",
+		VulkanInclude,
+		GLMInclude,
+		imguiInclude,
+		SDLInclude
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+		defines {
+			"USING_PLATFORM_WINDOWS"
+		}
+
+	filter "configurations:TEST"
+		defines "DV_TEST"
+		runtime "Release"
+		optimize "On"
+
+	filter "configurations:RELEASE"
+		defines "DV_RELEASE"
+		runtime "Release"
+		optimize "On"
 
 project "DataVisualizer"
 	location "DataVisualizer"
@@ -40,11 +94,13 @@ project "DataVisualizer"
 	includedirs {
 		"DataVisualizer/src",
 		VulkanInclude,
-		GLMInclude
+		GLMInclude,
+		imguiInclude,
+		SDLInclude
 	}
 
 	libdirs {
-		VulkanLib
+		VulkanLib,
 	}
 
 	links {
@@ -94,11 +150,14 @@ project "Test"
 	includedirs {
 		"DataVisualizer/src",
 		VulkanInclude,
-		GLMInclude
+		GLMInclude,
+		imguiInclude,
+		SDLInclude
 	}
 
 	links {
-		"DataVisualizer"
+		"DataVisualizer",
+		"ImGui",
 	}
 
 	filter "system:windows"

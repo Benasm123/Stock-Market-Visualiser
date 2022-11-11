@@ -17,6 +17,11 @@ graph::graph(application* app, const std::vector<plot>& plots)
 	}
 }
 
+graph::~graph()
+{
+
+}
+
 void graph::update_actor(float delta_time)
 {
 }

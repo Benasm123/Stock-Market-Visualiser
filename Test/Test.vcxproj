@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DV_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\DataVisualizer\src;..\DataVisualizer\ext\Vulkan\Include;..\DataVisualizer\ext\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\DataVisualizer\src;..\DataVisualizer\ext\Vulkan\Include;..\DataVisualizer\ext\glm;..\ext\imgui;..\ext\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -98,7 +98,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DV_TEST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\DataVisualizer\src;..\DataVisualizer\ext\Vulkan\Include;..\DataVisualizer\ext\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\DataVisualizer\src;..\DataVisualizer\ext\Vulkan\Include;..\DataVisualizer\ext\glm;..\ext\imgui;..\ext\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -120,7 +120,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\DataVisualizer\src;..\DataVisualizer\ext\Vulkan\Include;..\DataVisualizer\ext\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\DataVisualizer\src;..\DataVisualizer\ext\Vulkan\Include;..\DataVisualizer\ext\glm;..\ext\imgui;..\ext\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -153,6 +153,9 @@
   <ItemGroup>
     <ProjectReference Include="..\DataVisualizer\DataVisualizer.vcxproj">
       <Project>{6DC388EF-5991-7CF5-4225-ED1B2E92585A}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ImGui.vcxproj">
+      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

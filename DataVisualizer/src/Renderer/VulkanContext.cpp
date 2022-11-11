@@ -92,7 +92,7 @@ vk::Instance vulkan_context::create_instance() const
 		APPLICATION_VERSION,
 		ENGINE_NAME,
 		ENGINE_VERSION,
-		VK_API_VERSION_1_0
+		VK_API_VERSION_1_1
 	);
 
 	const vk::InstanceCreateInfo instance_info(
