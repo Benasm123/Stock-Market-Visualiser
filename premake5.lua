@@ -15,8 +15,10 @@ workspace "DataVisualizer"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 VulkanInclude = "DataVisualizer/ext/Vulkan/Include"
+PythonInclude = "ext/Python39_64/include"
 imguiInclude = "ext/imgui"
 VulkanLib = "DataVisualizer/ext/Vulkan/Lib"
+PythonLib = "ext/Python39_64/libs"
 GLMInclude = "DataVisualizer/ext/glm"
 SDLInclude = "ext/SDL"
 
@@ -96,15 +98,18 @@ project "DataVisualizer"
 		VulkanInclude,
 		GLMInclude,
 		imguiInclude,
-		SDLInclude
+		SDLInclude,
+		PythonInclude
 	}
 
 	libdirs {
 		VulkanLib,
+		PythonLib
 	}
 
 	links {
-		"vulkan-1"
+		"vulkan-1",
+		"python39"
 	}
 
 	filter "system:windows"
@@ -152,12 +157,18 @@ project "Test"
 		VulkanInclude,
 		GLMInclude,
 		imguiInclude,
-		SDLInclude
+		SDLInclude,
+		PythonInclude
+	}
+
+	libdirs {
+		PythonLib
 	}
 
 	links {
 		"DataVisualizer",
 		"ImGui",
+		"python39"
 	}
 
 	filter "system:windows"

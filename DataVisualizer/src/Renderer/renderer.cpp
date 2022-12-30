@@ -227,39 +227,39 @@ bool renderer::update()
 				0);
 		}
 
-		ImGui_ImplVulkan_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
-
-		ImGui::Begin("Debug Menu");
-
-		static float f = 0.0f;
-		static int counter = 0;
-		static int selected = 0;
-
-		ImGui::Text("Change Graph");
-
-		std::vector<const char*> stocks = { "AAPL", "TSLA" };
-
-		if(ImGui::ListBox("Stock", &selected, stocks.data(), stocks.size()))
-		{
-			selected_stock = stocks[selected];
-		}
-
-		static float col[3] = { selected_color.x, selected_color.y, selected_color.z };
-		if (ImGui::ColorPicker3("Graph Color", col))
-		{
-			selected_color = glm::vec3{ col[0], col[1], col[2] };
-		}
-
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::End();
-
-
-		ImGui::Render();
-
-		draw_data = ImGui::GetDrawData();
-
+		// ImGui_ImplVulkan_NewFrame();
+		// ImGui_ImplWin32_NewFrame();
+		// ImGui::NewFrame();
+		//
+		// ImGui::Begin("Debug Menu");
+		//
+		// static float f = 0.0f;
+		// static int counter = 0;
+		// static int selected = 0;
+		//
+		// ImGui::Text("Change Graph");
+		//
+		// std::vector<const char*> stocks = { "AAPL", "TSLA" };
+		//
+		// if(ImGui::ListBox("Stock", &selected, stocks.data(), stocks.size()))
+		// {
+		// 	selected_stock = stocks[selected];
+		// }
+		//
+		// static float col[3] = { selected_color.x, selected_color.y, selected_color.z };
+		// if (ImGui::ColorPicker3("Graph Color", col))
+		// {
+		// 	selected_color = glm::vec3{ col[0], col[1], col[2] };
+		// }
+		//
+		// ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		// ImGui::End();
+		//
+		//
+		// ImGui::Render();
+		//
+		// draw_data = ImGui::GetDrawData();
+		//
 		if (draw_data)
 		{
 			ImGui_ImplVulkan_RenderDrawData(draw_data, command_buffers_[0]);

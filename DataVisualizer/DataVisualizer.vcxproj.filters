@@ -285,6 +285,9 @@
     <ClInclude Include="src\Core\main.h">
       <Filter>src\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\python_caller.h">
+      <Filter>src\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Renderer\LineMesh.h">
       <Filter>src\Renderer</Filter>
     </ClInclude>
@@ -319,6 +322,9 @@
     </ClCompile>
     <ClCompile Include="src\Core\Components\line_component.cpp">
       <Filter>src\Core\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\python_caller.cpp">
+      <Filter>src\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\LineMesh.cpp">
       <Filter>src\Renderer</Filter>

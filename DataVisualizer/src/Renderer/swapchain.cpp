@@ -117,16 +117,6 @@ vk::SurfaceFormatKHR swapchain::get_swapchain_format() const
 	//Look for a specific surface_format, if not found just use the first available.
 	for (const auto& available_surface_format : available_surface_formats)
 	{
-		vk::ImageFormatProperties fp = vulkan_context_->get_physical_device().getImageFormatProperties(available_surface_format.format,
-			vk::ImageType::e2D,
-			vk::ImageTiling::eOptimal,
-			vk::ImageUsageFlagBits::eColorAttachment,
-			{}
-		);
-		LOG_INFO("IMAGE: %i, %i, %i", fp.maxArrayLayers, fp.maxExtent.width, fp.maxResourceSize);
-		LOG_INFO("IMAGEf: %i", available_surface_format.format);
-		LOG_INFO("IMAGEf: %i", vk::Format::eB8G8R8A8Sint);
-
 		if (available_surface_format.format == vk::Format::eB8G8R8A8Sint &&
 			available_surface_format.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear)
 		{

@@ -5,6 +5,7 @@
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
 // INCLUDES
+#include <Python.h>
 #include "glm.hpp"
 #include "ext/matrix_transform.hpp"
 #include "ext/matrix_clip_space.hpp"
