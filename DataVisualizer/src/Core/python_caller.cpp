@@ -10,7 +10,8 @@ python_caller::python_caller(const std::string& name)
 	if (!p_name_)
 	{
 		LOG_ERROR("COULDNT FIND PYTHON PROGRAM");
-		exit(1);
+		// exit(1);
+		return;
 	}
 	
 	p_module_ = PyImport_Import(p_name_);
