@@ -80,45 +80,45 @@ protected:
 		// FIRST GRAPH END
 		
 		// SECOND GRAPH
-		std::string stock = "./data/AAPL-Year.csv";
-
-		data_table data = load_data(stock);
-
-		std::vector<float> x_vals = {};
-		for (int i = data.size() * (start_date/100); i < data["Date"].size() * (end_date/100); i++)
-		{
-			x_vals.push_back(i);
-		}
-
-		plot second_plot = plot(x_vals, data["Low"], { 1, 1, 1 });
-
-		const auto small_graph = new graph(this, { second_plot });
-		
-		small_graph->get_transform().position = glm::vec2(2.0f, 0.25f);
-		small_graph->get_transform().scale = 0.5f;
-		
-		small_graph->show();
+		// std::string stock = "./data/AAPL.csv";
+		//
+		// data_table data = load_data(stock);
+		//
+		// std::vector<float> x_vals = {};
+		// for (int i = data.size() * (start_date/100); i < 100; i++)
+		// {
+		// 	x_vals.push_back(i);
+		// }
+		//
+		// plot second_plot = plot(x_vals, data["Low"], { 1, 1, 1 });
+		//
+		// const auto small_graph = new graph(this, { second_plot });
+		//
+		// small_graph->get_transform().position = glm::vec2(2.0f, 0.25f);
+		// small_graph->get_transform().scale = 0.5f;
+		//
+		// small_graph->show();
 
 		// SECOND GRAPH END
 		
 		// THIRD GRAPH
 		
-		data_table data_third = load_data("./data/AAPL-Max.csv");
-		
-		std::vector<float> x_vals_third = {};
-		for (int i = 0; i < data_third["Date"].size(); i++)
-		{
-			x_vals_third.push_back(i);
-		}
-		
-		plot third_plot = plot(x_vals_third, data_third["Low"], { 1, 1, 1 });
-		
-		const auto small_graph_2 = new graph(this, { third_plot });
-		
-		small_graph_2->get_transform().position = glm::vec2(2.0f, 1.25f);
-		small_graph_2->get_transform().scale = 0.5f;
-		
-		small_graph_2->show();
+		// data_table data_third = load_data("./data/AAPL.csv");
+		//
+		// std::vector<float> x_vals_third = {};
+		// for (int i = 0; i < 100; i++)
+		// {
+		// 	x_vals_third.push_back(i);
+		// }
+		//
+		// plot third_plot = plot(x_vals_third, data_third["Low"], { 1, 1, 1 });
+		//
+		// const auto small_graph_2 = new graph(this, { third_plot });
+		//
+		// small_graph_2->get_transform().position = glm::vec2(2.0f, 1.25f);
+		// small_graph_2->get_transform().scale = 0.5f;
+		//
+		// small_graph_2->show();
 		// THIRD GRAPH END
 
 		std::string date_time_format = "%Y-%m-%d";
@@ -152,7 +152,7 @@ protected:
 			stock = t + selected_stock;
 		} else
 		{
-			stock = "./data/AAPL-Year.csv";
+			stock = "./data/AAPL.csv";
 		}
 		data_table data = load_data(stock);
 
@@ -215,11 +215,6 @@ protected:
 			{
 				stocks.push_back(entry.path().filename().string());
 			}
-
-			for (const auto& stock : stocks)
-			{
-				LOG_INFO("%s", stock.c_str());
-			}
 		}
 
 		std::vector<const char*> stock_p = {};
@@ -241,10 +236,20 @@ protected:
 			need_to_load = true;
 
 
-		if (ImGui::Button("Python", {200, 20}))
+		if (ImGui::Button("Train Model", {400, 20}))
 		{
 			static python_caller pyth("pytest");
-			pyth.call_function("func1");
+			pyth.call_function("train");
+		}
+		if (ImGui::Button("Predict For Current Date", { 400, 20 }))
+		{
+			static python_caller pyth("pytest");
+			pyth.call_function("predict_today");
+		}
+		if (ImGui::Button("Predict All", { 400, 20 }))
+		{
+			static python_caller pyth("pytest");
+			pyth.call_function("predict_all");
 		}
 
 		static float col_arr[3] = { 1, 1, 1 };
