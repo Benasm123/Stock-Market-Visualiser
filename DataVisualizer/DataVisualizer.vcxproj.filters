@@ -279,6 +279,9 @@
     <ClInclude Include="src\Core\Component.h">
       <Filter>src\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Components\bar_component.h">
+      <Filter>src\Core\Components</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Components\line_component.h">
       <Filter>src\Core\Components</Filter>
     </ClInclude>
@@ -309,7 +312,6 @@
     <ClInclude Include="src\pcHeader.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Components\bar_component.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Actor.cpp">
@@ -320,6 +322,9 @@
     </ClCompile>
     <ClCompile Include="src\Core\Component.cpp">
       <Filter>src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Components\bar_component.cpp">
+      <Filter>src\Core\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Components\line_component.cpp">
       <Filter>src\Core\Components</Filter>
@@ -348,6 +353,5 @@
     <ClCompile Include="src\pcHeader.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Components\bar_component.cpp" />
   </ItemGroup>
 </Project>

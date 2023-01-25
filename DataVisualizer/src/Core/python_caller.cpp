@@ -1,14 +1,18 @@
 #include "pcHeader.h"
 #include "python_caller.h"
 
+#include <filesystem>
 #include <iostream>
 #include <map>
 
 python_caller::python_caller(const std::string& name)
 {
+	std::filesystem::path cwd = std::filesystem::current_path() / "Models" / "Python" / "";
+	std::cout << "FILE: " << cwd.string() << "\n";
+	// return;
 	Py_Initialize();
 	PyObject* sysPath = PySys_GetObject((char*)"path");
-	PyList_Append(sysPath, PyUnicode_FromString("D:/PracticeCode/C++/DataVisualizer/Test/Models/Python/"));
+	PyList_Append(sysPath, PyUnicode_FromString(cwd.string().c_str()));
 	return;
 	PyConfig config;
 	PyConfig_InitPythonConfig(&config);
