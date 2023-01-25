@@ -109,6 +109,7 @@ void application::process_input(float delta_time)
 void application::update(float delta_time)
 {
 	is_running_ &= vulkan_context_.update();
+
 	on_update(delta_time);
 
 	for (const auto& actor : actors_)

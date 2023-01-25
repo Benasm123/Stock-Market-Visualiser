@@ -12,7 +12,7 @@ public:
 	bool update() const;
 
 private:
-	HWND create_window(const LPCWSTR title);
+	HWND create_window(const LPCWSTR title, int width, int height);
 
 	static LRESULT events(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 

@@ -144,12 +144,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Visualisation\GraphPlot.h" />
+    <ClInclude Include="src\Visualisation\AGraph.h" />
     <ClInclude Include="src\data_manager.h" />
     <ClInclude Include="src\graph.h" />
     <ClInclude Include="src\plot.h" />
     <ClInclude Include="src\test_actor.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Visualisation\GraphPlot.cpp" />
+    <ClCompile Include="src\Visualisation\AGraph.cpp" />
     <ClCompile Include="src\data_manager.cpp" />
     <ClCompile Include="src\graph.cpp" />
     <ClCompile Include="src\plot.cpp" />

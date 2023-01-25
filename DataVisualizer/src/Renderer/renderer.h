@@ -16,8 +16,8 @@ public:
 	bool update();
 	void shutdown();
 
-	[[nodiscard]] vk::Buffer create_vertex_buffer(const std::vector<vertex>& points) const;
-	[[nodiscard]] vk::DeviceMemory bind_vertex_buffer_memory(const vk::Buffer vertex_buffer, const std::vector<vertex>& points) const;
+	[[nodiscard]] vk::Buffer create_vertex_buffer(const std::vector<PMATH::vertex> points) const;
+	[[nodiscard]] vk::DeviceMemory bind_vertex_buffer_memory(const vk::Buffer vertex_buffer, const std::vector<PMATH::vertex> points) const;
 	void destroy_buffer(vk::Buffer buffer) const;
 	void free_memory(vk::DeviceMemory memory) const;
 

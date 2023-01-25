@@ -309,6 +309,7 @@
     <ClInclude Include="src\pcHeader.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Components\bar_component.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Actor.cpp">
@@ -347,5 +348,6 @@
     <ClCompile Include="src\pcHeader.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Components\bar_component.cpp" />
   </ItemGroup>
 </Project>

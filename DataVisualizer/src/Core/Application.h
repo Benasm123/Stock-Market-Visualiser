@@ -13,6 +13,8 @@ public:
 	void run();
 	void shutdown();
 
+	PMATH::vec2<uint32_t> GetWindowSize() { return { vulkan_context_.get_window().get_width(), vulkan_context_.get_window().get_height() }; }
+
 	void add_actor(class actor* actor);
 	void remove_actor(class actor* actor);
 

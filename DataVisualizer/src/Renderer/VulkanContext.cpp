@@ -25,7 +25,7 @@ bool vulkan_context::init()
 
 	graphics_queue_ = logical_device_.getQueue(graphics_queue_index_, 0);
 
-	window_.init(L"Data Visualization", 1200, 1000);
+	window_.init(L"Data Visualization", 1920, 1080);
 
 	surface_ = create_surface();
 	if (!surface_)

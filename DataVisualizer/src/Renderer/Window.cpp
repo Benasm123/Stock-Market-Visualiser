@@ -9,7 +9,7 @@ bool window::init(const LPCWSTR title, uint32_t width, uint32_t height)
 	width_ = width;
 	height_ = height;
 
-	window_ = create_window(title);
+	window_ = create_window(title, width, height);
 	if (!window_)
 	{
 		return false;
@@ -69,7 +69,7 @@ LRESULT CALLBACK window::events(const HWND hwnd, const UINT msg, const WPARAM wp
 	return 0;
 }
 
-HWND window::create_window(const LPCWSTR title)
+HWND window::create_window(const LPCWSTR title, int width, int height)
 {
 	hinstance_ = GetModuleHandle(nullptr);
 
@@ -104,8 +104,8 @@ HWND window::create_window(const LPCWSTR title)
 		WS_OVERLAPPEDWINDOW | WS_VISIBLE,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
+		width,
+		height,
 		nullptr,
 		nullptr,
 		hinstance_,

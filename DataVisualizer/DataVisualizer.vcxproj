@@ -150,6 +150,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\Components\bar_component.h" />
     <ClInclude Include="ext\Vulkan\Include\dxc\dxcapi.h" />
     <ClInclude Include="ext\Vulkan\Include\glslang\Include\BaseTypes.h" />
     <ClInclude Include="ext\Vulkan\Include\glslang\Include\Common.h" />
@@ -233,6 +234,7 @@
     <ClInclude Include="src\pcHeader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\Components\bar_component.cpp" />
     <ClCompile Include="src\Core\Actor.cpp" />
     <ClCompile Include="src\Core\Application.cpp" />
     <ClCompile Include="src\Core\Component.cpp" />

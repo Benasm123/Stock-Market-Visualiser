@@ -28,21 +28,13 @@ bool renderer::init(vulkan_context* vulkan_context)
 	};
 
 	main_viewport_ = vk::Viewport{
-		static_cast<float>(vulkan_context_->get_window().get_width()) * 0.2f,
 		0.0f,
-		static_cast<float>(vulkan_context_->get_window().get_width()) * 0.8f,
+		0.0f,
+		static_cast<float>(vulkan_context_->get_window().get_width()),
 		static_cast<float>(vulkan_context_->get_window().get_height()),
 		0.0f, 1.0f
 	};
-
-	sidebar_viewport_ = vk::Viewport{
-		static_cast<float>(vulkan_context_->get_window().get_width()) * 0.0f,
-		0.0f,
-		static_cast<float>(vulkan_context_->get_window().get_width()) * 0.2f,
-		static_cast<float>(vulkan_context_->get_window().get_height()),
-		0.0f, 1.0f
-	};
-
+	
 	scissor = vk::Rect2D{
 		{
 			0,
@@ -125,7 +117,7 @@ bool renderer::update()
 		nullptr
 	);
 
-	constexpr vk::ClearValue clear_value(std::array<float, 4>({ { 0.0f, 0.0f, 0.0f, 0.0f } }));
+	constexpr vk::ClearValue clear_value(std::array<float, 4>({ { 0.16f, 0.16f, 0.16f, 1.0f } }));
 	vk::ClearValue depth_value{};
 	depth_value.depthStencil.depth = 1.0f;
 	const std::vector<vk::ClearValue> clear_values = {
@@ -144,12 +136,12 @@ bool renderer::update()
 		clear_values.data()
 	);
 
-	float aspect_ratio = static_cast<float>(vulkan_context_->get_window().get_width()) * 0.8f / static_cast<float>(vulkan_context_->get_window().get_height());
+	float aspect_ratio = static_cast<float>(vulkan_context_->get_window().get_width()) / static_cast<float>(vulkan_context_->get_window().get_height());
 
 	glm::mat4 p = glm::ortho(
 		0.0f,
-		aspect_ratio * 2,
-		2.0f,
+		1.0f,
+		1.0f,
 		0.0f,
 		0.1f,
 		1000.0f
@@ -186,10 +178,10 @@ bool renderer::update()
 	view[3][1] = -glm::dot(up, position);
 	view[3][2] = -glm::dot(forward, position);
 
-	const uniform_buffer_object mvp{ p * view * glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 2.0f, 2.0f)) };
+	const PMATH::uniform_buffer_object mvp{ p * view * glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) };
 
-	void* data = vulkan_context_->get_logical_device().mapMemory(uniform_buffer_memory_, 0, sizeof(uniform_buffer_object), {});
-	memcpy(data, &mvp, sizeof(uniform_buffer_object));
+	void* data = vulkan_context_->get_logical_device().mapMemory(uniform_buffer_memory_, 0, sizeof(PMATH::uniform_buffer_object), {});
+	memcpy(data, &mvp, sizeof(PMATH::uniform_buffer_object));
 	vulkan_context_->get_logical_device().unmapMemory(uniform_buffer_memory_);
 
 	//TODO::Add List of meshes to draw and loop them in here.
@@ -207,15 +199,16 @@ bool renderer::update()
 		for (auto& line : lines_to_draw_)
 		{
 			//TODO::Pass Something useful to push constant including mvp.
-			push_constant pc{};
+			PMATH::push_constant pc{};
 			pc.color = glm::vec4(line->get_color(), 1.0f);
 			pc.mvp = glm::translate(glm::mat4(1.0f), glm::vec3(line->get_transform().position, -line->get_transform().depth));
 			pc.mvp = glm::rotate(pc.mvp, glm::radians(line->get_transform().rotation), glm::vec3(0, 0, 1));
-			pc.mvp = p * view * glm::scale(pc.mvp, glm::vec3(line->get_transform().scale));
-			command_buffers_[0].pushConstants(pipeline_layout_, vk::ShaderStageFlagBits::eVertex, 0, sizeof(push_constant), &pc);
+			pc.mvp = p * view * glm::scale(pc.mvp, glm::vec3(line->get_transform().scale.x, line->get_transform().scale.y, 1.0f));
+			command_buffers_[0].pushConstants(pipeline_layout_, vk::ShaderStageFlagBits::eVertex, 0, sizeof(PMATH::push_constant), &pc);
 
 			//TODO::Bind Index Buffer, Bind Descriptor Set.
 			constexpr vk::DeviceSize offsets[] = { 0 };
+
 			command_buffers_[0].bindVertexBuffers(0, 1, &line->get_vertex_buffer(), offsets);
 
 			command_buffers_[0].bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipeline_layout_, 0, 1, descriptor_sets_.data(), 0, nullptr);
@@ -227,39 +220,6 @@ bool renderer::update()
 				0);
 		}
 
-		// ImGui_ImplVulkan_NewFrame();
-		// ImGui_ImplWin32_NewFrame();
-		// ImGui::NewFrame();
-		//
-		// ImGui::Begin("Debug Menu");
-		//
-		// static float f = 0.0f;
-		// static int counter = 0;
-		// static int selected = 0;
-		//
-		// ImGui::Text("Change Graph");
-		//
-		// std::vector<const char*> stocks = { "AAPL", "TSLA" };
-		//
-		// if(ImGui::ListBox("Stock", &selected, stocks.data(), stocks.size()))
-		// {
-		// 	selected_stock = stocks[selected];
-		// }
-		//
-		// static float col[3] = { selected_color.x, selected_color.y, selected_color.z };
-		// if (ImGui::ColorPicker3("Graph Color", col))
-		// {
-		// 	selected_color = glm::vec3{ col[0], col[1], col[2] };
-		// }
-		//
-		// ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		// ImGui::End();
-		//
-		//
-		// ImGui::Render();
-		//
-		// draw_data = ImGui::GetDrawData();
-		//
 		if (draw_data)
 		{
 			ImGui_ImplVulkan_RenderDrawData(draw_data, command_buffers_[0]);
@@ -451,7 +411,7 @@ vk::PipelineLayout renderer::create_pipeline_layout() const
 		{
 			vk::ShaderStageFlagBits::eVertex,
 		   0,
-		   sizeof(push_constant)
+		   sizeof(PMATH::push_constant)
 		}
 	};
 
@@ -568,7 +528,7 @@ vk::CommandPool renderer::create_command_pool() const
 
 vk::Buffer renderer::create_uniform_buffer() const
 {
-	constexpr vk::DeviceSize buffer_size = sizeof(uniform_buffer_object);
+	constexpr vk::DeviceSize buffer_size = sizeof(PMATH::uniform_buffer_object);
 
 	const vk::BufferCreateInfo buffer_info(
 		{},
@@ -621,22 +581,22 @@ vk::DescriptorPool renderer::create_descriptor_pool() const
 vk::DescriptorPool renderer::create_im_gui_descriptor_pool() const
 {
 	const std::vector<vk::DescriptorPoolSize> pool_sizes{
-			{ vk::DescriptorType::eSampler, 1000 },
-			{ vk::DescriptorType::eCombinedImageSampler, 1000 },
-			{ vk::DescriptorType::eSampledImage, 1000 },
-			{ vk::DescriptorType::eStorageImage, 1000 },
-			{ vk::DescriptorType::eUniformTexelBuffer, 1000 },
-			{ vk::DescriptorType::eStorageTexelBuffer, 1000 },
-			{ vk::DescriptorType::eUniformBuffer, 1000 },
-			{ vk::DescriptorType::eStorageBuffer, 1000 },
-			{ vk::DescriptorType::eUniformBufferDynamic, 1000 },
-			{ vk::DescriptorType::eStorageBufferDynamic, 1000 },
-			{ vk::DescriptorType::eInputAttachment, 1000 }
+			{ vk::DescriptorType::eSampler, 100 },
+			{ vk::DescriptorType::eCombinedImageSampler, 100 },
+			{ vk::DescriptorType::eSampledImage, 100 },
+			{ vk::DescriptorType::eStorageImage, 100 },
+			{ vk::DescriptorType::eUniformTexelBuffer, 100 },
+			{ vk::DescriptorType::eStorageTexelBuffer, 100 },
+			{ vk::DescriptorType::eUniformBuffer, 100 },
+			{ vk::DescriptorType::eStorageBuffer, 100 },
+			{ vk::DescriptorType::eUniformBufferDynamic, 100 },
+			{ vk::DescriptorType::eStorageBufferDynamic, 100 },
+			{ vk::DescriptorType::eInputAttachment, 100 }
 	};
 
 	const vk::DescriptorPoolCreateInfo descriptor_pool_info(
 		vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet,
-		1000 * pool_sizes.size(),
+		100 * pool_sizes.size(),
 		pool_sizes.size(),
 		pool_sizes.data()
 	);
@@ -662,7 +622,7 @@ void renderer::update_descriptor_sets()
 		{
 			uniform_buffer_,
 			0,
-			sizeof(uniform_buffer_object)
+			sizeof(PMATH::uniform_buffer_object)
 		}
 	};
 
@@ -718,7 +678,7 @@ vk::Fence renderer::create_fence() const
 	return vulkan_context_->get_logical_device().createFence(fence_info);
 }
 
-vk::Buffer renderer::create_vertex_buffer(const std::vector<vertex>& points) const
+vk::Buffer renderer::create_vertex_buffer(const std::vector<PMATH::vertex> points) const
 {
 	if (points.empty())
 	{
@@ -735,7 +695,7 @@ vk::Buffer renderer::create_vertex_buffer(const std::vector<vertex>& points) con
 	return vulkan_context_->get_logical_device().createBuffer(buffer_info);
 }
 
-vk::DeviceMemory renderer::bind_vertex_buffer_memory(const vk::Buffer vertex_buffer, const std::vector<vertex>& points) const
+vk::DeviceMemory renderer::bind_vertex_buffer_memory(const vk::Buffer vertex_buffer, const std::vector<PMATH::vertex> points) const
 {
 	if (points.empty())
 	{

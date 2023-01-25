@@ -13,13 +13,19 @@ line_component::~line_component()
 {
 	owner_->get_application()->get_renderer().destroy_buffer(vertex_buffer_);
 	owner_->get_application()->get_renderer().free_memory(vertex_buffer_memory_);
+
+	vertex_buffer_ = VK_NULL_HANDLE;
+	vertex_buffer_memory_ = VK_NULL_HANDLE;
 }
 
-void line_component::init(std::vector<vertex> points)
+void line_component::init(const std::vector<PMATH::vertex> points)
 {
-	points_ = std::move(points);
+	points_ = points;
+
 	vertex_buffer_ = owner_->get_application()->get_renderer().create_vertex_buffer(points_);
 	vertex_buffer_memory_ = owner_->get_application()->get_renderer().bind_vertex_buffer_memory(vertex_buffer_, points_);
+
+	initialised = true;
 }
 
 void line_component::init(const char* csv_file_name, const std::string& value_title, double min_val, double max_val)
@@ -95,9 +101,11 @@ void line_component::init(const char* csv_file_name, const std::string& value_ti
 
 	vertex_buffer_ = owner_->get_application()->get_renderer().create_vertex_buffer(points_);
 	vertex_buffer_memory_ = owner_->get_application()->get_renderer().bind_vertex_buffer_memory(vertex_buffer_, points_);
+
+	initialised = true;
 }
 
-void line_component::init(const std::vector<float>& x_values, const std::vector<float>& y_values, float min_x, float max_x, float min_y, float max_y)
+void line_component::init(const std::vector<int>& x_values, const std::vector<float>& y_values, float min_x, float max_x, float min_y, float max_y)
 {
 	for (uint32_t index = 0; index < x_values.size(); index++)
 	{
@@ -109,10 +117,13 @@ void line_component::init(const std::vector<float>& x_values, const std::vector<
 
 	vertex_buffer_ = owner_->get_application()->get_renderer().create_vertex_buffer(points_);
 	vertex_buffer_memory_ = owner_->get_application()->get_renderer().bind_vertex_buffer_memory(vertex_buffer_, points_);
+
+	initialised = true;
 }
 
 void line_component::update(const float delta_time)
 {
 	component::update(delta_time);
-	owner_->get_application()->get_renderer().draw(this);
+	if ( initialised && !points_.empty())
+		owner_->get_application()->get_renderer().draw(this);
 }

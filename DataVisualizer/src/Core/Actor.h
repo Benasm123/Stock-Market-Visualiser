@@ -25,7 +25,7 @@ private:
 
 public:
 	[[nodiscard]] const state& get_state() const { return state_; }
-	[[nodiscard]] transform& get_transform() { return transform_; }
+	[[nodiscard]] PMATH::transform& get_transform() { return transform_; }
 	[[nodiscard]] class application* get_application() const { return application_; }
 
 private:
@@ -33,6 +33,6 @@ private:
 	std::vector<class component*> components_{};
 	class application* application_{};
 
-	transform transform_{};
+	PMATH::transform transform_{};
 };
 

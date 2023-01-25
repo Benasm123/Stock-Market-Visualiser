@@ -154,7 +154,7 @@ std::vector<vk::VertexInputBindingDescription> graphics_pipeline::create_vertex_
 	return std::vector<vk::VertexInputBindingDescription> {
 		   {
 			   0,
-			   sizeof(vertex),
+			   sizeof(PMATH::vertex),
 			   vk::VertexInputRate::eVertex
 		   }
 	};

@@ -5,6 +5,7 @@
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
 // INCLUDES
+#define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #include "glm.hpp"
 #include "ext/matrix_transform.hpp"
@@ -74,23 +75,7 @@ inline void end_log_message(const char* vars...)
 
 #endif
 
-// STRUCTS
-struct vec2
-{
-	float x{};
-	float y{};
-};
 
-struct push_constant
-{
-	glm::vec4 color{1.0f};
-	glm::mat4 mvp{};
-};
-
-struct uniform_buffer_object
-{
-	glm::mat4 mvp;
-};
 
 struct shader_info
 {
@@ -112,15 +97,45 @@ struct graphics_pipeline_create_info
 	std::vector<vk::DynamicState> dynamic_states{};
 };
 
-struct vertex
+namespace PMATH
 {
-	vec2 position;
-};
+	// STRUCTS
+	template <typename T = float>
+	struct vec2
+	{
+		T x{};
+		T y{};
+	};
 
-struct transform
-{
-	glm::vec2 position{ 0.0f };
-	float depth{ 1.0f };
-	float rotation{ 0.0f };
-	float scale{ 1.0f };
-};
+	template <typename T = float>
+	struct vec3
+	{
+		T x{};
+		T y{};
+		T z{};
+	};
+
+	struct push_constant
+	{
+		glm::vec4 color{ 1.0f };
+		glm::mat4 mvp{};
+	};
+
+	struct uniform_buffer_object
+	{
+		glm::mat4 mvp;
+	};
+
+	struct vertex
+	{
+		vec2<float> position;
+	};
+
+	struct transform
+	{
+		glm::vec2 position{ 0.0f };
+		float depth{ 1.0f };
+		float rotation{ 0.0f };
+		glm::vec2 scale{ 1.0f, 1.0f };
+	};
+}

@@ -3,7 +3,7 @@
 
 #include "renderer.h"
 
-bool line_mesh::init(renderer* renderer, const std::vector<vertex>& points)
+bool line_mesh::init(renderer* renderer, const std::vector<PMATH::vertex>& points)
 {
 	renderer_ = renderer;
 

@@ -1,6 +1,6 @@
 #include "test_actor.h"
 
-test_actor::test_actor(application* app, const std::vector<vertex>& points)
+test_actor::test_actor(application* app, const std::vector<PMATH::vertex>& points)
 	: actor(app)
 {
 	lines_.push_back(new line_component(this));

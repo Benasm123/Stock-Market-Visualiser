@@ -1,0 +1,2 @@
+model_checkpoint_path: "Neural Network With Dropout"
+all_model_checkpoint_paths: "Neural Network With Dropout"

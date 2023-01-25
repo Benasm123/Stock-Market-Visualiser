@@ -1,14 +1,16 @@
 #include "graph.h"
 
-graph::graph(application* app, const std::vector<plot>& plots)
+graph::graph(application* app, const std::vector<plot>& plots, GraphType type)
 	: actor(app)
 	, graph_border_(this)
+	, type(type)
 {
-	const std::vector<vertex> points = {
+	const std::vector<PMATH::vertex> points = {
 		{0.0f, 1.0f},
 		{0.0f, 0.0f},
 		{1.0f, 0.0f},
 	};
+	graph_border_.set_color(glm::vec3{ 0.86f, 0.43f, 0.1f });
 	graph_border_.init(points);
 
 	for (auto& plot : plots)
@@ -19,7 +21,10 @@ graph::graph(application* app, const std::vector<plot>& plots)
 
 graph::~graph()
 {
-
+	for (const auto& plot : plot_lines_)
+	{
+		delete plot;
+	}
 }
 
 void graph::update_actor(float delta_time)
@@ -50,8 +55,25 @@ void graph::show()
 {
 	for (auto& plot : plots_)
 	{
-		plot_lines_.push_back(new line_component(this));
-		plot_lines_.back()->init(plot.get_x_values(), plot.get_y_values(), min_x_, max_x_, min_y_, max_y_);
+		line_component* bar_plot = nullptr;
+		if (type == Bar)
+		{
+			bar_plot = new bar_component(this);
+		} else
+		{
+			bar_plot = new line_component(this);
+		}
+
+		auto xs = plot.get_x_values();
+		std::vector<int> valsx = {};
+
+		for (auto x : xs)
+		{
+			valsx.push_back((int)x);
+		}
+
+		bar_plot->init(valsx, plot.get_y_values(), min_x_, max_x_, min_y_, max_y_);
+		plot_lines_.push_back(bar_plot);
 		plot_lines_.back()->set_color(plot.get_color());
 	}
 }

@@ -11,7 +11,7 @@ public:
 
 	[[nodiscard]] int get_update_order() const { return update_order_; }
 	[[nodiscard]] actor& get_owner() const { return *owner_; }
-	[[nodiscard]] const transform& get_transform() const { return owner_->get_transform(); }
+	[[nodiscard]] const PMATH::transform& get_transform() const { return owner_->get_transform(); }
 
 protected:
 	class actor* owner_;
