@@ -3,8 +3,9 @@
 
 #include "Window.h"
 
-bool vulkan_context::init()
+bool VulkanContext::init()
 {
+	LOG_FUNC_START();
 	instance_ = create_instance();
 	if (!instance_)
 	{
@@ -25,7 +26,7 @@ bool vulkan_context::init()
 
 	graphics_queue_ = logical_device_.getQueue(graphics_queue_index_, 0);
 
-	window_.init(L"Data Visualization", 1920, 1080);
+	window_.init(L"Data Visualization", 1800, 900);
 
 	surface_ = create_surface();
 	if (!surface_)
@@ -33,11 +34,11 @@ bool vulkan_context::init()
 		return false;
 	}
 
-	LOG_INFO("Initialized Vulkan Context");
+	LOG_FUNC_END();
 	return true;
 }
 
-bool vulkan_context::update() const
+bool VulkanContext::update() const
 {
 	bool successful = true;
 
@@ -46,8 +47,9 @@ bool vulkan_context::update() const
 	return successful;
 }
 
-void vulkan_context::shutdown() const
+void VulkanContext::shutdown() const
 {
+	LOG_FUNC_START();
 	logical_device_.waitIdle();
 
 	instance_.destroySurfaceKHR(surface_);
@@ -55,12 +57,12 @@ void vulkan_context::shutdown() const
 	logical_device_.destroy();
 	instance_.destroy();
 
-	LOG_INFO("Shutdown Vulkan Context");
+	LOG_FUNC_END();
 }
 
-vk::Instance vulkan_context::create_instance() const
+vk::Instance VulkanContext::create_instance() const
 {
-
+	LOG_FUNC_START();
 	const std::vector<const char*> layer_names = {
 
 #ifndef DV_RELEASE
@@ -104,12 +106,13 @@ vk::Instance vulkan_context::create_instance() const
 		extension_names.data()
 	);
 
-	LOG_INFO("Created Instance");
+	LOG_FUNC_END();
 	return vk::createInstance(instance_info);
 }
 
-bool vulkan_context::verify_layers(const std::vector<const char*>& layer_names) const
+bool VulkanContext::verify_layers(const std::vector<const char*>& layer_names) const
 {
+	LOG_FUNC_START();
 	std::vector<vk::LayerProperties> supported_layers = vk::enumerateInstanceLayerProperties();
 
 	for (const auto& layer_name : layer_names)
@@ -129,11 +132,13 @@ bool vulkan_context::verify_layers(const std::vector<const char*>& layer_names) 
 		}
 	}
 
+	LOG_FUNC_END();
 	return true;
 }
 
-bool vulkan_context::verify_extensions(const std::vector<const char*>& extension_names) const
+bool VulkanContext::verify_extensions(const std::vector<const char*>& extension_names) const
 {
+	LOG_FUNC_START();
 	//TODO::This currently checks all base layer extensions, but there are more available at each layer.
 	//TODO::Need to pass layers used and add extensions for those layers here as well.
 	std::vector<vk::ExtensionProperties> supported_extensions = vk::enumerateInstanceExtensionProperties();
@@ -157,11 +162,13 @@ bool vulkan_context::verify_extensions(const std::vector<const char*>& extension
 		}
 	}
 
+	LOG_FUNC_END();
 	return true;
 }
 
-vk::PhysicalDevice vulkan_context::get_best_physical_device() const
+vk::PhysicalDevice VulkanContext::get_best_physical_device() const
 {
+	LOG_FUNC_START();
 	const std::vector<vk::PhysicalDevice> physical_devices_available = instance_.enumeratePhysicalDevices();
 
 	if (physical_devices_available.empty())
@@ -191,14 +198,16 @@ vk::PhysicalDevice vulkan_context::get_best_physical_device() const
 			break;
 		}
 	}
-
+	
 	LOG_INFO("Using GPU: %s", best_device.getProperties().deviceName.data());
+	LOG_FUNC_END();
 	return best_device;
 }
 
 
-vk::Device vulkan_context::create_logical_device()
+vk::Device VulkanContext::create_logical_device()
 {
+	LOG_FUNC_START();
 	const std::vector<vk::QueueFamilyProperties> queue_family_properties = physical_device_.getQueueFamilyProperties();
 
 	uint32_t graphics_queue_family_index = ~0u;
@@ -259,18 +268,19 @@ vk::Device vulkan_context::create_logical_device()
 		&features
 	);
 
-	LOG_INFO("Created Logical Device");
+	LOG_FUNC_END();
 	return physical_device_.createDevice(device_info);
 }
 
-vk::SurfaceKHR vulkan_context::create_surface() const
+vk::SurfaceKHR VulkanContext::create_surface() const
 {
+	LOG_FUNC_START();
 	const vk::Win32SurfaceCreateInfoKHR surface_info(
 		{},
 		window_.get_hinstance(),
 		window_.get_hwnd()
 	);
 
-	LOG_INFO("Created Win32 Surface");
+	LOG_FUNC_END();
 	return instance_.createWin32SurfaceKHR(surface_info);
 }

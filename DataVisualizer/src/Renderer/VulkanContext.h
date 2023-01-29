@@ -3,12 +3,12 @@
 
 #include "Window.h"
 
-class vulkan_context
+class VulkanContext
 {
 // PUBLIC FUNCTIONS
 public:
-	vulkan_context() = default;
-	~vulkan_context() = default;
+	VulkanContext() = default;
+	~VulkanContext() = default;
 
 	bool init();
 	bool update() const;

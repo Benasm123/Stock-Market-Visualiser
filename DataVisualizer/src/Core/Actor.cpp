@@ -3,37 +3,37 @@
 #include "Application.h"
 #include "Component.h"
 
-actor::actor(application* application)
+Actor::Actor(Application* application)
 	:application_(application)
 {
-	application_->add_actor(this);
+	application_->AddActor(this);
 }
 
-actor::~actor()
+Actor::~Actor()
 {
-	application_->remove_actor(this);
+	application_->RemoveActor(this);
 	while(!components_.empty())
 	{
 		delete components_.back();
 	}
 }
 
-void actor::update(const float delta_time)
+void Actor::Update(const float deltaTime)
 {
-	if (state_ == active)
+	if (state_ == ACTIVE)
 	{
-		update_actor(delta_time);
-		update_components(delta_time);
+		UpdateActor(deltaTime);
+		UpdateComponents(deltaTime);
 	}
 }
 
-void actor::add_component(component* component)
+void Actor::AddComponent(Component* component)
 {
-	const int my_order = component->get_update_order();
+	const int myOrder = component->GetUpdateOrder();
 	auto iterator = components_.begin();
 	for (iterator = components_.begin(); iterator != components_.end(); ++iterator)
 	{
-		if (my_order < (*iterator)->get_update_order())
+		if (myOrder < (*iterator)->GetUpdateOrder())
 		{
 			break;
 		}
@@ -41,7 +41,7 @@ void actor::add_component(component* component)
 	components_.insert(iterator, component);
 }
 
-void actor::remove_component(component* component)
+void Actor::RemoveComponent(Component* component)
 {
 	const auto iterator = std::ranges::find(components_, component);
 	if (iterator != components_.end())
@@ -52,14 +52,14 @@ void actor::remove_component(component* component)
 	LOG_WARN("Could not find a component you tried to delete.");
 }
 
-void actor::update_actor(float delta_time)
+void Actor::UpdateActor(float deltaTime)
 {
 }
 
-void actor::update_components(const float delta_time) const
+void Actor::UpdateComponents(const float deltaTime) const
 {
 	for (auto& component : components_)
 	{
-		component->update(delta_time);
+		component->Update(deltaTime);
 	}
 }

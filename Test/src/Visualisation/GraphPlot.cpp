@@ -1,10 +1,10 @@
 #include "GraphPlot.h"
 
-#include "Core/Components/bar_component.h"
-#include "Core/Components/line_component.h"
+#include "Core/Components/CBarChart.h"
+#include "Core/Components/CLineChart.h"
 
-GraphPlot::GraphPlot(actor* owner, std::vector<int> xValues, std::vector<float> yValues, const PMATH::vec3<float> colour)
-	: component(owner)
+GraphPlot::GraphPlot(Actor* owner, std::vector<int> xValues, std::vector<float> yValues, const PMATH::vec3<float> colour)
+	: Component(owner)
 	, xValues_(xValues)
 	, yValues_(yValues)
 	, colour_(colour)
@@ -13,16 +13,16 @@ GraphPlot::GraphPlot(actor* owner, std::vector<int> xValues, std::vector<float> 
 
 void GraphPlot::Draw(const float minY, const float maxY, const float minX, const float maxX) const
 {
-	line_component* line = nullptr;
+	LineComponent* line = nullptr;
 
 	if (graphType_ == LINE)
 	{
-		line = new line_component(owner_);
+		line = new LineComponent(owner_);
 	} else
 	{
-		line = new bar_component(owner_);
+		line = new BarComponent(owner_);
 	}
 
-	line->init(xValues_, yValues_, minX, maxX, minY, maxY);
-	line->set_color(glm::vec3{ colour_.x, colour_.y, colour_.z });
+	line->Init(xValues_, yValues_, minX, maxX, minY, maxY);
+	line->SetColor(glm::vec3{ colour_.x, colour_.y, colour_.z });
 }

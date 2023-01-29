@@ -3,22 +3,22 @@
 
 #include "Actor.h"
 
-component::component(actor* owner, int update_order)
+Component::Component(Actor* owner, int updateOrder)
 	:owner_(owner)
-	,update_order_(static_cast<uint8_t>(update_order))
+	,updateOrder_(static_cast<uint8_t>(updateOrder))
 {
-	if (update_order > 100)
+	if (updateOrder > 100)
 	{
 		LOG_WARN("Component update order should not be more than 100");
 	}
-	owner->add_component(this);
+	owner->AddComponent(this);
 }
 
-component::~component()
+Component::~Component()
 {
-	owner_->remove_component(this);
+	owner_->RemoveComponent(this);
 }
 
-void component::update(float delta_time)
+void Component::Update(float deltaTime)
 {
 }

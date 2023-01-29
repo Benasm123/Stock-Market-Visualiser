@@ -1,12 +1,18 @@
 #pragma once
 
+// ReSharper disable once CppNonInlineFunctionDefinitionInHeaderFile
 int main()
 {
-	auto* app = create_application();
-	if (app->init())
+	LOG_FUNC_START();
+	auto* app = CreateApplication();
+
+	if (app->Init())
 	{
-		app->run();
+		app->Run();
 	}
-	app->shutdown();
+
+	app->Shutdown();
+
 	delete app;
+	LOG_FUNC_END();
 }

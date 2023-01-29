@@ -221,15 +221,15 @@
     <ClInclude Include="src\Core\Actor.h" />
     <ClInclude Include="src\Core\Application.h" />
     <ClInclude Include="src\Core\Component.h" />
-    <ClInclude Include="src\Core\Components\bar_component.h" />
-    <ClInclude Include="src\Core\Components\line_component.h" />
+    <ClInclude Include="src\Core\Components\CBarChart.h" />
+    <ClInclude Include="src\Core\Components\CLineChart.h" />
+    <ClInclude Include="src\Core\DataUtilities.h" />
     <ClInclude Include="src\Core\main.h" />
-    <ClInclude Include="src\Core\python_caller.h" />
-    <ClInclude Include="src\Renderer\LineMesh.h" />
+    <ClInclude Include="src\Core\PythonUtilities.h" />
     <ClInclude Include="src\Renderer\VulkanContext.h" />
     <ClInclude Include="src\Renderer\Window.h" />
-    <ClInclude Include="src\Renderer\graphics_pipeline.h" />
-    <ClInclude Include="src\Renderer\renderer.h" />
+    <ClInclude Include="src\Renderer\GraphicsPipeline.h" />
+    <ClInclude Include="src\Renderer\Renderer.h" />
     <ClInclude Include="src\Renderer\swapchain.h" />
     <ClInclude Include="src\pcHeader.h" />
   </ItemGroup>
@@ -237,14 +237,13 @@
     <ClCompile Include="src\Core\Actor.cpp" />
     <ClCompile Include="src\Core\Application.cpp" />
     <ClCompile Include="src\Core\Component.cpp" />
-    <ClCompile Include="src\Core\Components\bar_component.cpp" />
-    <ClCompile Include="src\Core\Components\line_component.cpp" />
-    <ClCompile Include="src\Core\python_caller.cpp" />
-    <ClCompile Include="src\Renderer\LineMesh.cpp" />
+    <ClCompile Include="src\Core\Components\CBarChart.cpp" />
+    <ClCompile Include="src\Core\Components\CLineChart.cpp" />
+    <ClCompile Include="src\Core\PythonUtilities.cpp" />
     <ClCompile Include="src\Renderer\VulkanContext.cpp" />
     <ClCompile Include="src\Renderer\Window.cpp" />
-    <ClCompile Include="src\Renderer\graphics_pipeline.cpp" />
-    <ClCompile Include="src\Renderer\renderer.cpp" />
+    <ClCompile Include="src\Renderer\GraphicsPipeline.cpp" />
+    <ClCompile Include="src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Renderer\swapchain.cpp" />
     <ClCompile Include="src\pcHeader.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

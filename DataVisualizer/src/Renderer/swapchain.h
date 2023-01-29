@@ -1,7 +1,7 @@
 #pragma once
 #include "pcHeader.h"
 
-class vulkan_context;
+class VulkanContext;
 
 class swapchain
 {
@@ -9,7 +9,7 @@ public:
 	swapchain() = default;
 	~swapchain() = default;
 
-	bool init(vulkan_context* vulkan_context);
+	bool init(VulkanContext* vulkan_context);
 	void recreate();
 	void shutdown();
 
@@ -43,7 +43,7 @@ public:
 	[[nodiscard]] swapchain_details get_details() const { return swapchain_details_; }
 
 private:
-	vulkan_context* vulkan_context_{};
+	VulkanContext* vulkan_context_{};
 
 	vk::SwapchainKHR swapchain_;
 	vk::SwapchainKHR old_swapchain_{};

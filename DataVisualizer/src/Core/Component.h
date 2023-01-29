@@ -1,19 +1,19 @@
 #pragma once
 #include "Actor.h"
 
-class component
+class Component
 {
 public:
-	explicit component(class actor* owner, int update_order = 100);
-	virtual ~component();
+	explicit Component(class Actor* owner, int updateOrder = 100);
+	virtual ~Component();
 	
-	virtual void update(float delta_time);
+	virtual void Update(float deltaTime);
 
-	[[nodiscard]] int get_update_order() const { return update_order_; }
-	[[nodiscard]] actor& get_owner() const { return *owner_; }
-	[[nodiscard]] const PMATH::transform& get_transform() const { return owner_->get_transform(); }
+	[[nodiscard]] int GetUpdateOrder() const { return updateOrder_; }
+	[[nodiscard]] Actor& GetOwner() const { return *owner_; }
+	[[nodiscard]] const PMATH::transform& GetTransform() const { return owner_->GetTransform(); }
 
 protected:
-	class actor* owner_;
-	uint8_t update_order_;
+	class Actor* owner_;
+	uint8_t updateOrder_;
 };

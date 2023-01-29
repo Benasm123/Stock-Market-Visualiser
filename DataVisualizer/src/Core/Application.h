@@ -1,48 +1,45 @@
 #pragma once
-#include "Renderer/renderer.h"
+#include "Renderer/Renderer.h"
 #include "Renderer/VulkanContext.h"
 #include "Renderer/Window.h"
 
-class application
+class Application
 {
 public:
-	application();
-	virtual ~application();
+	Application();
+	virtual ~Application();
 
-	bool init();
-	void run();
-	void shutdown();
+	bool Init();
+	void Run();
+	void Shutdown();
 
-	PMATH::vec2<uint32_t> GetWindowSize() { return { vulkan_context_.get_window().get_width(), vulkan_context_.get_window().get_height() }; }
-
-	void add_actor(class actor* actor);
-	void remove_actor(class actor* actor);
+	void AddActor(class Actor* actor);
+	void RemoveActor(class Actor* actor);
 
 private:
-	void process_input(float delta_time);
-	void update(float delta_time);
-	void generate_output(float delta_time);
+	void ProcessInput(float deltaTime);
+	void Update(float deltaTime);
+	void GenerateOutput(float deltaTime);
 
 protected:
-	virtual void on_update(float delta_time) = 0;
-	virtual void on_ui(float delta_time) = 0;
-	virtual void on_startup() = 0;
-	virtual void on_shutdown() = 0;
+	virtual void OnUpdate(float deltaTime) = 0;
+	virtual void OnStartup() = 0;
+	virtual void OnShutdown() = 0;
 
 public:
-	[[nodiscard]] renderer& get_renderer() { return renderer_; }
+	[[nodiscard]] Renderer& GetRenderer() { return renderer_; }
+	[[nodiscard]] PMATH::vec2<uint32_t> GetWindowSize() { return { vulkanContext_.get_window().get_width(), vulkanContext_.get_window().get_height() }; }
 
 protected:
-	bool is_running_ = true;
-	int test_rum_;
-	bool updating_actors_{ false };
+	bool isRunning_{ true };
+	bool updatingActors_{ false };
 
-	std::vector<class actor*> actors_;
-	std::vector<class actor*> pending_actors_;
+	std::vector<Actor*> actors_;
+	std::vector<Actor*> pendingActors_;
 
-	vulkan_context vulkan_context_;
-	renderer renderer_;
+	VulkanContext vulkanContext_;
+	Renderer renderer_;
 };
 
-application* create_application();
+Application* CreateApplication();
 

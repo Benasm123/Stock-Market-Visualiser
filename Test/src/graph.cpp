@@ -1,7 +1,7 @@
 #include "graph.h"
 
-graph::graph(application* app, const std::vector<plot>& plots, GraphType type)
-	: actor(app)
+graph::graph(Application* app, const std::vector<plot>& plots, GraphType type)
+	: Actor(app)
 	, graph_border_(this)
 	, type(type)
 {
@@ -10,8 +10,8 @@ graph::graph(application* app, const std::vector<plot>& plots, GraphType type)
 		{0.0f, 0.0f},
 		{1.0f, 0.0f},
 	};
-	graph_border_.set_color(glm::vec3{ 0.86f, 0.43f, 0.1f });
-	graph_border_.init(points);
+	graph_border_.SetColor(glm::vec3{ 0.86f, 0.43f, 0.1f });
+	graph_border_.Init(points);
 
 	for (auto& plot : plots)
 	{
@@ -27,7 +27,7 @@ graph::~graph()
 	}
 }
 
-void graph::update_actor(float delta_time)
+void graph::UpdateActor(float delta_time)
 {
 }
 
@@ -55,13 +55,13 @@ void graph::show()
 {
 	for (auto& plot : plots_)
 	{
-		line_component* bar_plot = nullptr;
+		LineComponent* bar_plot = nullptr;
 		if (type == Bar)
 		{
-			bar_plot = new bar_component(this);
+			bar_plot = new BarComponent(this);
 		} else
 		{
-			bar_plot = new line_component(this);
+			bar_plot = new LineComponent(this);
 		}
 
 		auto xs = plot.get_x_values();
@@ -72,8 +72,8 @@ void graph::show()
 			valsx.push_back((int)x);
 		}
 
-		bar_plot->init(valsx, plot.get_y_values(), min_x_, max_x_, min_y_, max_y_);
+		bar_plot->Init(valsx, plot.get_y_values(), min_x_, max_x_, min_y_, max_y_);
 		plot_lines_.push_back(bar_plot);
-		plot_lines_.back()->set_color(plot.get_color());
+		plot_lines_.back()->SetColor(plot.get_color());
 	}
 }

@@ -5,84 +5,83 @@
 #include "backends/imgui_impl_vulkan.h"
 #include "backends/imgui_impl_win32.h"
 
-application::application()
+Application::Application()
 = default;
 
-application::~application()
+Application::~Application()
 = default;
 
-bool application::init()
+bool Application::Init()
 {
-	bool successful_init = true;
+	LOG_FUNC_START();
+	if (!vulkanContext_.init()) return false;
+	if (!renderer_.Init(&vulkanContext_)) return false;
 
-	successful_init &= vulkan_context_.init();
-	successful_init &= renderer_.init(&vulkan_context_);
+	OnStartup();
 
-	on_startup();
-
-	LOG_INFO("Initialized Application");
-	return successful_init;
+	LOG_FUNC_END();
+	return true;
 }
 
 
-void application::run()
+void Application::Run()
 {
-	LOG_INFO("Started Running Application");
+	LOG_FUNC_START();
+	
+	float deltaTime = 0;
 
-	//TODO::Add a way to calculate delta time and pass through.
-	double delta_time = 0;
+	auto lastFrame = std::chrono::steady_clock::now();
+	auto thisFrame = std::chrono::steady_clock::now();
 
-	auto last_frame = std::chrono::steady_clock::now();
-	auto this_frame = std::chrono::steady_clock::now();
-	//TODO::Add a way to calculate delta time and pass through.
-
-	while (is_running_)
+	while (isRunning_)
 	{
-		this_frame = std::chrono::steady_clock::now();
-		delta_time = std::chrono::duration<double>((this_frame - last_frame)).count();
-		last_frame = this_frame;
+		thisFrame = std::chrono::steady_clock::now();
+		deltaTime = static_cast<float>(std::chrono::duration<double>((thisFrame - lastFrame)).count());
+		lastFrame = thisFrame;
 
-		process_input(delta_time);
-		update(delta_time);
-		generate_output(delta_time);
+		ProcessInput(deltaTime);
+		Update(deltaTime);
+		GenerateOutput(deltaTime);
 	}
-	LOG_INFO("Ended Running Application");
+
+	LOG_FUNC_END();
 }
 
-void application::shutdown()
+void Application::Shutdown()
 {
-	on_shutdown();
+	LOG_FUNC_START();
+	OnShutdown();
 
-	vulkan_context_.get_logical_device().waitIdle();
+	vulkanContext_.get_logical_device().waitIdle();
 
 	while (!actors_.empty())
 	{
 		delete actors_.back();
 	}
 
-	renderer_.shutdown();
-	vulkan_context_.shutdown();
+	renderer_.Shutdown();
+	vulkanContext_.shutdown();
 
-	LOG_INFO("Shutdown Application");
+	LOG_FUNC_END();
 }
 
-void application::add_actor(actor* actor)
+void Application::AddActor(Actor* actor)
 {
-	if (updating_actors_)
+	if (updatingActors_)
 	{
-		pending_actors_.emplace_back(actor);
+		pendingActors_.emplace_back(actor);
 		return;
 	}
 	actors_.emplace_back(actor);
 }
 
-void application::remove_actor(actor* actor)
+void Application::RemoveActor(Actor* actor)
 {
-	auto iterator = std::ranges::find(pending_actors_, actor);
-	if (iterator != pending_actors_.end())
+	auto iterator = std::ranges::find(pendingActors_, actor);
+	if (iterator != pendingActors_.end())
 	{
-		std::iter_swap(iterator, pending_actors_.end() - 1);
-		pending_actors_.pop_back();
+		std::iter_swap(iterator, pendingActors_.end() - 1);
+		pendingActors_.pop_back();
 		return;
 	}
 
@@ -93,7 +92,7 @@ void application::remove_actor(actor* actor)
 		actors_.pop_back();
 		return;
 	}
-
+	
 	LOG_WARN("Could not find an actor you were trying to remove.");
 }
 
@@ -101,25 +100,25 @@ void application::remove_actor(actor* actor)
 // ReSharper disable once CppMemberFunctionMayBeStatic
 // Have no event system yet to use this.
 //Process all user inputs here.
-void application::process_input(float delta_time)
+void Application::ProcessInput(float deltaTime)
 {
 }
 
-//Process all application loop actions here.
-void application::update(float delta_time)
+//Process all Application loop actions here.
+void Application::Update(float deltaTime)
 {
-	is_running_ &= vulkan_context_.update();
+	isRunning_ &= vulkanContext_.update();
 
-	on_update(delta_time);
+	OnUpdate(deltaTime);
 
 	for (const auto& actor : actors_)
 	{
-		actor->update(delta_time);
+		actor->Update(deltaTime);
 	}
 }
 
 //Process all rendering and output here.
-void application::generate_output(float delta_time)
+void Application::GenerateOutput(float deltaTime)
 {
-	is_running_ &= renderer_.update();
+	isRunning_ &= renderer_.Update();
 }

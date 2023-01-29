@@ -3,7 +3,7 @@
 
 #include "VulkanContext.h"
 
-bool swapchain::init(vulkan_context* vulkan_context)
+bool swapchain::init(VulkanContext* vulkan_context)
 {
 	vulkan_context_ = vulkan_context;
 
@@ -160,6 +160,7 @@ vk::PresentModeKHR swapchain::get_swapchain_present_mode() const
 			return available_present_mode;
 		}
 	}
+	return available_present_modes[0];
 	return vk::PresentModeKHR::eFifo;
 }
 

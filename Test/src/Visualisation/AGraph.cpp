@@ -1,12 +1,12 @@
 #include "AGraph.h"
 
 #include "Core/Application.h"
-#include "Core/Components/line_component.h"
+#include "Core/Components/CLineChart.h"
 
-AGraph::AGraph(application* app, const std::string x_plot)
-	: actor(app)
+AGraph::AGraph(Application* app, const std::string x_plot)
+	: Actor(app)
 	, graphAxis_(this)
-	, x_plot_(x_plot)
+	, xPlot_(x_plot)
 	, graphPlots_({})
 {
 	const std::vector<PMATH::vertex> points = {
@@ -14,21 +14,25 @@ AGraph::AGraph(application* app, const std::string x_plot)
 		{0.0f, 0.0f},
 		{1.0f, 0.0f},
 	};
-	graphAxis_.set_color(glm::vec3{ 0.86f, 1.43f, 1.1f });
-	graphAxis_.init(points);
+	graphAxis_.SetColor(glm::vec3{ 0.86f, 1.43f, 1.1f });
+	graphAxis_.Init(points);
 }
 
-void AGraph::AddPlot(const std::string stockName, const std::string y_plot, const PMATH::vec3<float> colour, GraphType type)
+AGraph::~AGraph()
+{
+}
+
+void AGraph::AddPlot(const std::string& stockName, const std::string& yPlot, const PMATH::vec3<float>& colour, const GRAPH_TYPE type)
 {
 	PlotInfo plotInfo{};
 	plotInfo.stockName = stockName;
-	plotInfo.y_plot = y_plot;
+	plotInfo.y_plot = yPlot;
 	plotInfo.colour = colour;
 	plotInfo.type = type;
 	toPlot_.push_back(plotInfo);
 }
 
-void AGraph::AddPlot(std::vector<int> xValues, std::vector<float> yValues, const PMATH::vec3<float> colour, GraphType type)
+void AGraph::AddPlot(const std::vector<int>& xValues, const std::vector<float>& yValues, const PMATH::vec3<float> colour, const GRAPH_TYPE type)
 {
 	graphPlots_.emplace_back(this, xValues, yValues, colour);
 	graphPlots_.back().setGraphType(type);
@@ -40,9 +44,9 @@ void AGraph::Draw()
 
 	for (auto [stockName, y_plot, colour, type] : toPlot_)
 	{
-		data_table data = load_data(stockName);
+		DataTable data = LoadData(stockName);
 		 
-		std::vector<uint64_t> dates = data.dates_int();
+		std::vector<uint64_t> dates = data.DatesInt();
 		auto start = std::ranges::find(dates, range_.x);
 		auto end = std::ranges::find(dates, range_.y);
 
@@ -51,26 +55,19 @@ void AGraph::Draw()
 			start = dates.begin();
 		}
 
-		const int start_ind = static_cast<int>(start - dates.begin());
-		const int end_ind = static_cast<int>(start_ind + (end - start));
+		const int startInd = static_cast<int>(start - dates.begin());
+		const int endInd = static_cast<int>(startInd + (end - start));
 
-		std::vector<int> x_vals(dates.begin() + start_ind, dates.begin() + end_ind);
+		std::vector<int> xVals(dates.begin() + startInd, dates.begin() + endInd);
 
-		std::vector<float> y_vals(data.values[y_plot].begin() + start_ind, data.values[y_plot].begin() + end_ind);
+		std::vector<float> yVals(data.values[y_plot].begin() + startInd, data.values[y_plot].begin() + endInd);
 
-		for (auto& val : y_vals)
+		for (auto& val : yVals)
 		{
 			max = max(max, val);
 		}
-
-		std::vector<int> datesx = {};
-
-		for (auto x : dates)
-		{
-			datesx.push_back((int)x);
-		}
-
-		graphPlots_.emplace_back(this, x_vals, y_vals, colour);
+		
+		graphPlots_.emplace_back(this, xVals, yVals, colour);
 		graphPlots_.back().setGraphType(type);
 	}
 

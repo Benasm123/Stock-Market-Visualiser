@@ -1,10 +1,10 @@
 #pragma once
 #include "plot.h"
 #include "Core/Actor.h"
-#include "Core/Components/line_component.h"
-#include "Core/Components/bar_component.h"
+#include "Core/Components/CLineChart.h"
+#include "Core/Components/CBarChart.h"
 
-class graph : public actor
+class graph : public Actor
 {
 public:
 	enum GraphType
@@ -13,10 +13,10 @@ public:
 		Bar
 	};
 
-	graph(application* app, const std::vector<plot>& plots, GraphType type);
+	graph(Application* app, const std::vector<plot>& plots, GraphType type);
 	~graph() override;
 
-	void update_actor(float delta_time) override;
+	void UpdateActor(float delta_time) override;
 
 	void add_plot(const plot& plot, glm::vec3 color={ 0.86f, 0.43f, 0.1f });
 
@@ -28,9 +28,9 @@ public:
 private:
 	// Need to store a vector of plots.
 	std::vector<plot> plots_;
-	std::vector<line_component*> plot_lines_;
+	std::vector<LineComponent*> plot_lines_;
 
-	line_component graph_border_;
+	LineComponent graph_border_;
 
 	GraphType type{};
 

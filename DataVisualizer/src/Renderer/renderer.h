@@ -1,94 +1,94 @@
 #pragma once
-#include "graphics_pipeline.h"
+#include "GraphicsPipeline.h"
 #include "imgui.h"
-#include "LineMesh.h"
 #include "swapchain.h"
 
-class vulkan_context;
-
-class renderer
+class Renderer
 {
 public:
-	renderer() = default;
-	~renderer() = default;
+	Renderer() = default;
+	~Renderer() = default;
 
-	bool init(vulkan_context* vulkan_context);
-	bool update();
-	void shutdown();
+	bool Init(VulkanContext* vulkanContext);
+	bool Update();
+	void Shutdown();
 
-	[[nodiscard]] vk::Buffer create_vertex_buffer(const std::vector<PMATH::vertex> points) const;
-	[[nodiscard]] vk::DeviceMemory bind_vertex_buffer_memory(const vk::Buffer vertex_buffer, const std::vector<PMATH::vertex> points) const;
-	void destroy_buffer(vk::Buffer buffer) const;
-	void free_memory(vk::DeviceMemory memory) const;
+	[[nodiscard]] vk::Buffer CreateVertexBuffer(const std::vector<PMATH::vertex> points) const;
+	[[nodiscard]] vk::DeviceMemory BindVertexBufferMemory(const vk::Buffer vertexBuffer, const std::vector<PMATH::vertex> points) const;
+	void DestroyBuffer(vk::Buffer buffer) const;
+	void FreeMemory(vk::DeviceMemory memory) const;
 
-	void draw(class line_component* line_component);
-
-	[[nodiscard]] vk::RenderPass get_render_pass() const { return render_pass_; }
-	[[nodiscard]] vk::DescriptorPool get_descriptor_pool() const { return descriptor_pool_; }
+	void Draw(class LineComponent* lineComponent);
 
 private:
-	[[nodiscard]] vk::RenderPass create_render_pass() const;
-	[[nodiscard]] vk::DescriptorSetLayout create_descriptor_set_layout() const;
-	[[nodiscard]] vk::PipelineLayout create_pipeline_layout() const;
-	[[nodiscard]] vk::Image create_depth_image() const;
-	[[nodiscard]] vk::DeviceMemory bind_depth_image() const;
-	[[nodiscard]] vk::ImageView create_depth_image_view() const;
-	[[nodiscard]] std::vector<vk::Framebuffer> create_frame_buffers() const;
-	[[nodiscard]] vk::CommandPool create_command_pool() const;
-	[[nodiscard]] vk::Buffer create_uniform_buffer() const;
-	[[nodiscard]] vk::DeviceMemory bind_uniform_buffer_memory() const;
-	[[nodiscard]] vk::DescriptorPool create_descriptor_pool() const;
-	vk::DescriptorPool create_im_gui_descriptor_pool() const;
-	[[nodiscard]] std::vector < vk::DescriptorSet> create_descriptor_set() const;
-	void update_descriptor_sets();
-	[[nodiscard]] std::vector <vk::CommandBuffer> create_command_buffer() const;
-	[[nodiscard]] vk::Semaphore create_semaphore() const;
-	[[nodiscard]] vk::Fence create_fence() const;
+	[[nodiscard]] vk::RenderPass CreateRenderPass() const;
+	[[nodiscard]] vk::DescriptorSetLayout CreateDescriptorSetLayout() const;
+	[[nodiscard]] vk::PipelineLayout CreatePipelineLayout() const;
+	[[nodiscard]] vk::Image CreateDepthImage() const;
+	[[nodiscard]] vk::DeviceMemory BindDepthImage() const;
+	[[nodiscard]] vk::ImageView CreateDepthImageView() const;
+	[[nodiscard]] std::vector<vk::Framebuffer> CreateFrameBuffers() const;
+	[[nodiscard]] vk::CommandPool CreateCommandPool() const;
+	[[nodiscard]] vk::Buffer CreateUniformBuffer() const;
+	[[nodiscard]] vk::DeviceMemory BindUniformBufferMemory() const;
+	[[nodiscard]] vk::DescriptorPool CreateDescriptorPool() const;
+	[[nodiscard]] vk::DescriptorPool CreateImGuiDescriptorPool() const;
+	[[nodiscard]] std::vector < vk::DescriptorSet> CreateDescriptorSet() const;
+	[[nodiscard]] std::vector <vk::CommandBuffer> CreateCommandBuffer() const;
+	[[nodiscard]] vk::Semaphore CreateSemaphore() const;
+	[[nodiscard]] vk::Fence CreateFence() const;
 
+	void UpdateDescriptorSets();
 
 public:
-	vulkan_context* vulkan_context_{};
+	void SetDrawData(ImDrawData* drawData) { drawData_ = drawData; }
+
+	[[nodiscard]] VulkanContext* GetVulkanContext() const { return vulkanContext_; }
+	[[nodiscard]] vk::DescriptorPool& GetImGuiDescriptorPool() { return imGuiDescriptorPool_; }
+	[[nodiscard]] vk::RenderPass& GetRenderPass() { return renderPass_; }
+	[[nodiscard]] vk::DescriptorPool& GetDescriptorPool() { return descriptorPool_; }
+	[[nodiscard]] swapchain& GetSwapChain() { return swapchain_; }
+	[[nodiscard]] vk::CommandPool& GetCommandPool() { return commandPool_; }
+	[[nodiscard]] std::vector<vk::CommandBuffer>& GetCommandBuffers() { return commandBuffers_; }
+	[[nodiscard]] vk::Fence& GetInFlightFence() { return inFlightFence_; }
+
+private:
+	VulkanContext* vulkanContext_{};
 
 	swapchain swapchain_;
 
-	vk::RenderPass render_pass_;
-	vk::DescriptorSetLayout descriptor_set_layout_;
-	vk::PipelineLayout pipeline_layout_;
+	vk::RenderPass renderPass_;
+	vk::DescriptorSetLayout descriptorSetLayout_;
+	vk::PipelineLayout pipelineLayout_;
 
-	graphics_pipeline line_pipeline_;
+	GraphicsPipeline linePipeline_;
 
-	vk::Image depth_image_;
-	vk::DeviceMemory depth_image_memory_;
-	vk::ImageView depth_image_view_;
+	vk::Image depthImage_;
+	vk::DeviceMemory depthImageMemory_;
+	vk::ImageView depthImageView_;
 
-	std::vector<vk::Framebuffer> frame_buffers_;
+	std::vector<vk::Framebuffer> frameBuffers_;
 
-	vk::CommandPool command_pool_;
+	vk::CommandPool commandPool_;
 
-	vk::Buffer uniform_buffer_;
-	vk::DeviceMemory uniform_buffer_memory_;
+	vk::Buffer uniformBuffer_;
+	vk::DeviceMemory uniformBufferMemory_;
 
-	vk::DescriptorPool descriptor_pool_;
-	vk::DescriptorPool im_gui_descriptor_pool_;
-	ImDrawData* draw_data;
-	std::vector < vk::DescriptorSet> descriptor_sets_;
+	vk::DescriptorPool descriptorPool_;
+	std::vector<vk::DescriptorSet> descriptorSets_;
 
-	std::vector <vk::CommandBuffer> command_buffers_;
+	std::vector<vk::CommandBuffer> commandBuffers_;
 
-	vk::Semaphore image_available_semaphore_;
-	vk::Semaphore render_finished_semaphore_;
-	vk::Fence in_flight_fence_;
+	vk::Semaphore imageAvailableSemaphore_;
+	vk::Semaphore renderFinishedSemaphore_;
+	vk::Fence inFlightFence_;
 
-	std::vector<line_component*> lines_to_draw_;
+	std::vector<LineComponent*> linesToDraw_;
 
-	vk::Viewport main_viewport_;
-	vk::Viewport sidebar_viewport_;
-	vk::Rect2D scissor;
+	vk::Viewport mainViewport_;
+	vk::Rect2D scissor_;
 
-	int count = 0;
-
-	//TEST
-	const char* selected_stock{};
-	glm::vec3 selected_color{1.0f};
+	vk::DescriptorPool imGuiDescriptorPool_;
+	ImDrawData* drawData_{};
 };
 

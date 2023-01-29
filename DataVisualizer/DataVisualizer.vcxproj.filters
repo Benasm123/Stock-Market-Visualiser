@@ -279,20 +279,17 @@
     <ClInclude Include="src\Core\Component.h">
       <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Components\bar_component.h">
+    <ClInclude Include="src\Core\Components\CBarChart.h">
       <Filter>src\Core\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Components\line_component.h">
+    <ClInclude Include="src\Core\Components\CLineChart.h">
       <Filter>src\Core\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\main.h">
       <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\python_caller.h">
+    <ClInclude Include="src\Core\PythonUtilities.h">
       <Filter>src\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\LineMesh.h">
-      <Filter>src\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\VulkanContext.h">
       <Filter>src\Renderer</Filter>
@@ -300,10 +297,10 @@
     <ClInclude Include="src\Renderer\Window.h">
       <Filter>src\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\graphics_pipeline.h">
+    <ClInclude Include="src\Renderer\GraphicsPipeline.h">
       <Filter>src\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\renderer.h">
+    <ClInclude Include="src\Renderer\Renderer.h">
       <Filter>src\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\swapchain.h">
@@ -312,6 +309,7 @@
     <ClInclude Include="src\pcHeader.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\DataUtilities.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Actor.cpp">
@@ -323,17 +321,14 @@
     <ClCompile Include="src\Core\Component.cpp">
       <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Components\bar_component.cpp">
+    <ClCompile Include="src\Core\Components\CBarChart.cpp">
       <Filter>src\Core\Components</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Components\line_component.cpp">
+    <ClCompile Include="src\Core\Components\CLineChart.cpp">
       <Filter>src\Core\Components</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\python_caller.cpp">
+    <ClCompile Include="src\Core\PythonUtilities.cpp">
       <Filter>src\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Renderer\LineMesh.cpp">
-      <Filter>src\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\VulkanContext.cpp">
       <Filter>src\Renderer</Filter>
@@ -341,10 +336,10 @@
     <ClCompile Include="src\Renderer\Window.cpp">
       <Filter>src\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\graphics_pipeline.cpp">
+    <ClCompile Include="src\Renderer\GraphicsPipeline.cpp">
       <Filter>src\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\renderer.cpp">
+    <ClCompile Include="src\Renderer\Renderer.cpp">
       <Filter>src\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\swapchain.cpp">

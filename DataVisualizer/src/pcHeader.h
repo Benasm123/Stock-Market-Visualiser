@@ -13,6 +13,7 @@
 #include "vulkan/vulkan.hpp"
 #include "windowsx.h"
 #include <fstream>
+#include <iostream>
 
 // CONSTEXPR
 constexpr auto ENGINE_NAME = "DataVisualizer";
@@ -25,32 +26,59 @@ enum log_type
 	l_error = 4,
 	l_warn = 14,
 	l_info = 10,
-	l_vulk = 13
+	l_vulk = 13,
+	l_func_start = 11,
+	l_func_end = 12
 };
 
 // LOGGING TODO::MOVE TO CLASS
 #define CONSOLE_COLOR(ConsoleColors) (SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (ConsoleColors)))
 
-inline void start_log_message(const log_type type, const int line_number, const char* file_name)
+inline void StartLogMessage(const log_type type, const int line_number, const char* file_name)
 {
 	CONSOLE_COLOR(type);
+	if (type == l_func_start || type == l_func_end)
+	{
+		CONSOLE_COLOR(l_info);
+	}
+
+	static int tabs = 0;
+	if (tabs > 0)
+	{
+		int i = 0;
+		if (type == l_func_end) i = 1;
+		for (i; i < tabs; i++)
+		{
+			std::cout << "|";
+			std::cout << "   ";
+		}
+	}
 	switch (type)
 	{
 	case l_error:
-		printf("[ERRO]\tfile: %s    line: %i\n\tmessage: ", file_name, line_number);
+		printf("[ERRO] file: %s    line: %i\n message: ", file_name, line_number);
 		break;
 	case l_warn:
-		printf("[WARN]\tfile: %s    line: %i\n\tmessage: ", file_name, line_number);
+		printf("[WARN] file: %s    line: %i\n message: ", file_name, line_number);
 		break;
 	case l_info:
-		printf("[INFO]\t");
+		printf("[INFO] ");
 		break;
 	case l_vulk:
-		printf("[VULK]\t");
+		printf("[VULK] ");
+		break;
+	case l_func_start:
+		tabs++;
+		printf("[STRT] ");
+		break;
+	case l_func_end:
+		tabs--;
+		// std::cout << std::string(tabs * 4, ' ');
+		printf("[END_]\t");
 	}
 }
 
-inline void end_log_message(const char* vars...)
+inline void EndLogMessage(const char* vars...)
 {
 	printf(vars);
 	printf("\n");
@@ -66,12 +94,19 @@ inline void end_log_message(const char* vars...)
 #define LOG_WARN(...)
 #define LOG_ERROR(...)
 
+#define LOG_FUNC_START()
+#define LOG_FUNC_END()
+
 #else
 
-#define LOG_VULK(...) start_log_message(l_vulk, __LINE__, __FILE__); end_log_message(__VA_ARGS__)
-#define LOG_INFO(...) start_log_message(l_info, __LINE__, __FILE__); end_log_message(__VA_ARGS__)
-#define LOG_WARN(...) start_log_message(l_warn, __LINE__, __FILE__); end_log_message(__VA_ARGS__)
-#define LOG_ERROR(...) start_log_message(l_error, __LINE__, __FILE__); end_log_message(__VA_ARGS__)
+#define LOG_VULK(...) StartLogMessage(l_vulk, __LINE__, __FILE__); EndLogMessage(__VA_ARGS__)
+#define LOG_INFO(...) StartLogMessage(l_info, __LINE__, __FILE__); EndLogMessage(__VA_ARGS__)
+#define LOG_WARN(...) StartLogMessage(l_warn, __LINE__, __FILE__); EndLogMessage(__VA_ARGS__)
+#define LOG_ERROR(...) StartLogMessage(l_error, __LINE__, __FILE__); EndLogMessage(__VA_ARGS__)
+
+#define LOG_FUNC_START() StartLogMessage(l_func_start, __LINE__, __FILE__); EndLogMessage("%s", __FUNCTION__)
+#define LOG_FUNC_END() StartLogMessage(l_func_end, __LINE__, __FILE__); EndLogMessage("%s", __FUNCTION__)
+
 
 #endif
 

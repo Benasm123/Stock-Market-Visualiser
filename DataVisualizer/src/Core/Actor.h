@@ -1,37 +1,37 @@
 #pragma once
 #include "pcHeader.h"
 
-class actor
+class Actor
 {
 public:
-	enum state
+	enum STATE
 	{
-		active,
-		paused,
-		dead
+		ACTIVE,
+		PAUSED,
+		DEAD
 	};
 
-	explicit actor(class application* application);
-	virtual ~actor();
+	explicit Actor(class Application* application);
+	virtual ~Actor();
 
-	void update(float delta_time);
+	void Update(float deltaTime);
 
-	void add_component(class component* component);
-	void remove_component(class component* component);
+	void AddComponent(class Component* component);
+	void RemoveComponent(class Component* component);
 
 private:
-	virtual void update_actor(float delta_time);
-	void update_components(float delta_time) const;
+	virtual void UpdateActor(float deltaTime);
+	void UpdateComponents(float deltaTime) const;
 
 public:
-	[[nodiscard]] const state& get_state() const { return state_; }
-	[[nodiscard]] PMATH::transform& get_transform() { return transform_; }
-	[[nodiscard]] class application* get_application() const { return application_; }
+	[[nodiscard]] const STATE& GetState() const { return state_; }
+	[[nodiscard]] PMATH::transform& GetTransform() { return transform_; }
+	[[nodiscard]] class Application* GetApplication() const { return application_; }
 
 private:
-	state state_{active};
-	std::vector<class component*> components_{};
-	class application* application_{};
+	STATE state_{ACTIVE};
+	std::vector<class Component*> components_{};
+	class Application* application_{};
 
 	PMATH::transform transform_{};
 };
