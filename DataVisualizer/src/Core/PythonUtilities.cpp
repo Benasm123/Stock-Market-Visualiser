@@ -99,7 +99,6 @@ void PythonCaller::LoadNewModule(const std::string& name)
 // Helper function to call the python interface with needed inputs.
 bool PythonCaller::SaveWeights(const std::string& saveName)
 {
-	LOG_FUNC_START();
 	if ( pModule_ )
 	{
 		pValue_ = PyObject_CallMethod(pObject_, "SaveModel", "s", saveName.c_str());
@@ -107,7 +106,6 @@ bool PythonCaller::SaveWeights(const std::string& saveName)
 		{
 			const bool returnValue = PyLong_AsLong(pValue_) == 1l;
 			Py_DECREF(pValue_);
-			LOG_FUNC_END();
 			return returnValue;
 		}
 
@@ -123,7 +121,6 @@ bool PythonCaller::SaveWeights(const std::string& saveName)
 // Helper function to call the python interface with needed inputs.
 bool PythonCaller::LoadWeights(const std::string& loadName)
 {
-	LOG_FUNC_START();
 	if ( pModule_ )
 	{
 		pValue_ = PyObject_CallMethod(pObject_, "LoadModel", "s", loadName.c_str());
@@ -131,7 +128,6 @@ bool PythonCaller::LoadWeights(const std::string& loadName)
 		{
 			const bool returnValue = PyLong_AsLong(pValue_) == 1l;
 			Py_DECREF(pValue_);
-			LOG_FUNC_END();
 			return returnValue;
 		}
 
@@ -147,7 +143,6 @@ bool PythonCaller::LoadWeights(const std::string& loadName)
 // Helper function to call the python interface with needed inputs.
 bool PythonCaller::Initialise()
 {
-	LOG_FUNC_START();
 	if ( pModule_ )
 	{
 		pValue_ = PyObject_CallMethod(pObject_, "Initialise", "");
@@ -155,7 +150,6 @@ bool PythonCaller::Initialise()
 		{
 			const bool returnValue = PyLong_AsLong(pValue_) == 1l;
 			Py_DECREF(pValue_);
-			LOG_FUNC_END();
 			return returnValue;
 		}
 
@@ -171,7 +165,6 @@ bool PythonCaller::Initialise()
 // Helper function to call the python interface with needed inputs.
 float PythonCaller::Train(const int epochs)
 {
-	LOG_FUNC_START();
 	if ( pModule_ )
 	{
 		pValue_ = PyObject_CallMethod(pObject_, "Train", "i", epochs);
@@ -179,7 +172,6 @@ float PythonCaller::Train(const int epochs)
 		{
 			const float returnValue = static_cast<float>(PyFloat_AsDouble(pValue_));
 			Py_DECREF(pValue_);
-			LOG_FUNC_END();
 			return returnValue;
 		}
 
@@ -195,7 +187,6 @@ float PythonCaller::Train(const int epochs)
 // Helper function to call the python interface with needed inputs.
 std::map<std::string, float> PythonCaller::GetHyperParameters()
 {
-	LOG_FUNC_START();
 	if ( pModule_ )
 	{
 		pValue_ = PyObject_CallMethod(pObject_, "Initialise", "");
@@ -203,7 +194,6 @@ std::map<std::string, float> PythonCaller::GetHyperParameters()
 		{
 			const std::map<std::string, float> returnValue{};
 			Py_DECREF(pValue_);
-			LOG_FUNC_END();
 			return returnValue;
 		}
 
@@ -219,7 +209,6 @@ std::map<std::string, float> PythonCaller::GetHyperParameters()
 // Helper function to call the python interface with needed inputs.
 float PythonCaller::Evaluate(std::vector<float> vals)
 {
-	LOG_FUNC_START();
 	if ( pModule_ )
 	{
 		pValue_ = PyObject_CallMethod(pObject_, "EvaluateModel", ("(" + std::string(vals.size(), 'f') + ")").c_str(), vals.data());
@@ -227,7 +216,6 @@ float PythonCaller::Evaluate(std::vector<float> vals)
 		{
 			const float returnValue = static_cast<float>(PyFloat_AsDouble(pValue_));
 			Py_DECREF(pValue_);
-			LOG_FUNC_END();
 			return returnValue;
 		}
 
@@ -243,7 +231,6 @@ float PythonCaller::Evaluate(std::vector<float> vals)
 // Helper function to call the python interface with needed inputs.
 int PythonCaller::Predict(const std::vector<float>& vals)
 {
-	LOG_FUNC_START();
 	if ( pModule_ )
 	{
 		PyObject* pXVec = PyTuple_New(vals.size());
@@ -253,7 +240,6 @@ int PythonCaller::Predict(const std::vector<float>& vals)
 			test = PyFloat_FromDouble((double)vals[i]);
 			if ( !test ) {
 				fprintf(stderr, "Cannot convert array value\n");
-				LOG_FUNC_END();
 				return 1;
 			}
 			PyTuple_SetItem(pXVec, i, test);

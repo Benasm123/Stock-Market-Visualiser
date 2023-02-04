@@ -8,8 +8,8 @@ import sys
 sys.path.append('../')
 from StockAlgorithm import StockAlgorithm
 
-DATA_VALUES_SAVE_NAME = "formated_data_values.pickle"
-DATA_LABELS_SAVE_NAME = "formated_data_labels.pickle"
+DATA_VALUES_SAVE_NAME = "formatted_data_values.pickle"
+DATA_LABELS_SAVE_NAME = "formatted_data_labels.pickle"
 MODEL_SAVE_FOLDER = "nn_model_with_dropout"
 
 
@@ -34,10 +34,14 @@ class StockPredictor(StockAlgorithm):
         return self.evaluation_results[0]
 
     def MakePrediction(self, inputValues: list) -> int:
-        vals = np.reshape(inputValues, (1, 15, 1))
-        vals = np.divide(vals, np.max(inputValues))
+        vals = np.subtract(inputValues, np.min(inputValues))
+        vals = np.divide(vals, np.max(vals))
+        vals = np.reshape(vals, (1, 15, 1))
         val = (self.make_prediction(vals))
-        return np.argmax(val)
+        prediction = np.argmax(val)
+        if prediction == 0:
+            return StockPredictor.PredictionType.BUY
+        return StockPredictor.PredictionType.SELL
 
     def __init__(self):
         self.model_name = "Neural Network With Dropout"

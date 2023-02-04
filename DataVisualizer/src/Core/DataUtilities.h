@@ -11,10 +11,11 @@ struct DataTable
 {
 	std::vector<std::string> dates{};
 	std::map<std::string, std::vector<float>> values{};
+	std::vector<uint64_t> datesInts{};
 
-	[[nodiscard]] std::vector<uint64_t> DatesInt() const
+	[[nodiscard]] std::vector<uint64_t> DatesInt()
 	{
-		std::vector<uint64_t> vals{};
+		if ( !datesInts.empty() ) return datesInts;
 
 		for ( auto& dateString : dates )
 		{
@@ -26,10 +27,10 @@ struct DataTable
 
 			const auto value = std::chrono::sys_days{ date }.time_since_epoch().count();
 
-			vals.push_back(value);
+			datesInts.push_back(value);
 		}
 
-		return vals;
+		return datesInts;
 	}
 };
 

@@ -258,9 +258,6 @@ protected:
 
 		const std::vector<float> volumePlotVals(startVolume, endVolume);
 
-		std::cout << "X SIZE: " << x_vals.size() << std::endl;
-		std::cout << "Y SIZE: " << data_.values["Volume"].size() << std::endl;
-
 		const auto volumePlot = plot(x_vals, volumePlotVals, col_);
 
 		delete volumeGraph_;
@@ -507,6 +504,7 @@ protected:
 		static int sellCount = 0;
 		static int buyCount = 0;
 		static bool isBuying = false;
+		static int startingDate = 0;
 
 		if ( newPortfolioSim_ )
 		{
@@ -516,7 +514,7 @@ protected:
 			isBuying = false;
 			xValsModel_.clear();
 			yValsModel_.clear();
-
+			startingDate = static_cast<int>(data_.dates.size() * (startDate_ / 100.0f));
 		}
 
 		static int i = 0;
@@ -527,26 +525,26 @@ protected:
 	
 			if (i < 15)
 			{
-				yValsModel_.push_back(data_.values["High"][15]);
+				yValsModel_.push_back(data_.values["High"][startingDate + 15]);
 			}
 			else
 			{
 				if ( isBuying )
 				{
-					yValsModel_.push_back(yValsModel_[i - 1] + (data_.values["High"][i] - data_.values["High"][i - 1]));
+					yValsModel_.push_back(yValsModel_[i - 1] + (data_.values["High"][startingDate + i] - data_.values["High"][startingDate + i - 1]));
 				}
 				else
 				{
 					yValsModel_.push_back(yValsModel_[i - 1]);
 				}
 	
-				const std::vector<float>::const_iterator first = data_.values["High"].begin() + (i - 15);
+				const std::vector<float>::const_iterator first = data_.values["High"].begin() + (startingDate + i - 15);
 				const auto last = first + 15;
 	
 				const std::vector<float> new_vec(first, last);
 	
-				// const int prediction = static_cast<int>(python_class.Predict(new_vec));
-				int prediction = std::rand() % 2 + 1;  // NOLINT(concurrency-mt-unsafe)
+				// const int prediction = static_cast<int>(pythonClass_.Predict(new_vec));
+				int prediction = (std::rand() % 3) + 1;  // NOLINT(concurrency-mt-unsafe)
 				if (prediction == 1)
 				{
 					buyCount++;
@@ -555,7 +553,7 @@ protected:
 					{
 						isBuying = true;
 					}
-				} else if (prediction == 2)
+				} else if (prediction == 3)
 				{
 					sellCount++;
 					buyCount = 0;
