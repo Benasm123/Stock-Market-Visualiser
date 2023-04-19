@@ -3,137 +3,137 @@
 
 #include "VulkanContext.h"
 
-bool swapchain::init(VulkanContext* vulkan_context)
+bool Swapchain::Init(VulkanContext* vulkanContext)
 {
-	vulkan_context_ = vulkan_context;
+	vulkanContext_ = vulkanContext;
 
-	swapchain_ = create_swapchain();
+	swapchain_ = CreateSwapchain();
 
-	images_ = get_swapchain_images();
+	images_ = GetSwapchainImages();
 
-	image_views_ = create_swapchain_image_views();
+	imageViews_ = CreateSwapchainImageViews();
 
 	LOG_INFO("Initialized Swapchain");
 	return true;
 }
 
-void swapchain::recreate()
+void Swapchain::Recreate()
 {
-	vulkan_context_->get_logical_device().waitIdle();
+	vulkanContext_->GetLogicalDevice().waitIdle();
 
-	destroy_old_swapchain();
+	DestroyOldSwapchain();
 
-	old_swapchain_ = swapchain_;
+	oldSwapchain_ = swapchain_;
 
-	swapchain_ = create_swapchain();
-	images_ = get_swapchain_images();
-	image_views_ = create_swapchain_image_views();
+	swapchain_ = CreateSwapchain();
+	images_ = GetSwapchainImages();
+	imageViews_ = CreateSwapchainImageViews();
 
 	LOG_INFO("Recreated Swapchain");
 }
 
-void swapchain::shutdown()
+void Swapchain::Shutdown()
 {
-	destroy_old_swapchain();
+	DestroyOldSwapchain();
 
-	vulkan_context_->get_logical_device().destroySwapchainKHR(swapchain_);
+	vulkanContext_->GetLogicalDevice().destroySwapchainKHR(swapchain_);
 
 	LOG_INFO("Shutdown Swapchain");
 }
 
-void swapchain::destroy_old_swapchain()
+void Swapchain::DestroyOldSwapchain()
 {
-	for (const auto& image_view : image_views_)
+	for (const auto& imageView : imageViews_)
 	{
-		vulkan_context_->get_logical_device().destroyImageView(image_view);
+		vulkanContext_->GetLogicalDevice().destroyImageView(imageView);
 	}
-	image_views_.clear();
+	imageViews_.clear();
 	images_.clear();
 
-	vulkan_context_->get_logical_device().destroySwapchainKHR(old_swapchain_);
+	vulkanContext_->GetLogicalDevice().destroySwapchainKHR(oldSwapchain_);
 }
 
-vk::SwapchainKHR swapchain::create_swapchain()
+vk::SwapchainKHR Swapchain::CreateSwapchain()
 {
-	swapchain_details_ = get_swapchain_details();
+	swapchainDetails_ = GetSwapchainDetails();
 
-	const vk::SwapchainCreateInfoKHR swapchain_info(
+	const vk::SwapchainCreateInfoKHR swapchainInfo(
 		{},
-		vulkan_context_->get_surface(),
-		swapchain_details_.image_count,
-		swapchain_details_.surface_format.format,
-		swapchain_details_.surface_format.colorSpace,
-		swapchain_details_.extent,
+		vulkanContext_->GetSurface(),
+		swapchainDetails_.imageCount,
+		swapchainDetails_.surfaceFormat.format,
+		swapchainDetails_.surfaceFormat.colorSpace,
+		swapchainDetails_.extent,
 		1,
 		vk::ImageUsageFlagBits::eColorAttachment,
 		vk::SharingMode::eExclusive,
 		0,
 		nullptr,
-		swapchain_details_.surface_transform,
+		swapchainDetails_.surfaceTransform,
 		vk::CompositeAlphaFlagBitsKHR::eOpaque,
-		swapchain_details_.present_mode,
+		swapchainDetails_.presentMode,
 		VK_TRUE,
-		old_swapchain_
+		oldSwapchain_
 	);
 
 	LOG_VULK("Created Swapchain");
-	return vulkan_context_->get_logical_device().createSwapchainKHR(swapchain_info);
+	return vulkanContext_->GetLogicalDevice().createSwapchainKHR(swapchainInfo);
 }
 
-swapchain::swapchain_details swapchain::get_swapchain_details() const
+Swapchain::SwapchainDetails Swapchain::GetSwapchainDetails() const
 {
-	swapchain_details swapchain_details{};
+	SwapchainDetails swapchainDetails{};
 
-	swapchain_details.image_count = get_swapchain_image_count();
+	swapchainDetails.imageCount = GetSwapchainImageCount();
 
-	swapchain_details.surface_format = get_swapchain_format();
+	swapchainDetails.surfaceFormat = GetSwapchainFormat();
 
-	swapchain_details.extent = get_swapchain_extent();
+	swapchainDetails.extent = GetSwapchainExtent();
 
-	swapchain_details.surface_transform = get_swapchain_surface_transform();
+	swapchainDetails.surfaceTransform = GetSwapchainSurfaceTransform();
 
-	swapchain_details.present_mode = get_swapchain_present_mode();
+	swapchainDetails.presentMode = GetSwapchainPresentMode();
 
-	return swapchain_details;
+	return swapchainDetails;
 }
 
-uint32_t swapchain::get_swapchain_image_count() const
+uint32_t Swapchain::GetSwapchainImageCount() const
 {
-	const vk::SurfaceCapabilitiesKHR surface_capabilities = vulkan_context_->get_physical_device().getSurfaceCapabilitiesKHR(vulkan_context_->get_surface());
+	const vk::SurfaceCapabilitiesKHR surfaceCapabilities = vulkanContext_->GetPhysicalDevice().getSurfaceCapabilitiesKHR(vulkanContext_->GetSurface());
 
-	uint32_t image_count = surface_capabilities.minImageCount + 1;
+	uint32_t imageCount = surfaceCapabilities.minImageCount + 1;
 
-	if (image_count > surface_capabilities.maxImageCount)
+	if (imageCount > surfaceCapabilities.maxImageCount)
 	{
-		image_count = surface_capabilities.maxImageCount;
+		imageCount = surfaceCapabilities.maxImageCount;
 	}
 	
-	return image_count;
+	return imageCount;
 }
 
-vk::SurfaceFormatKHR swapchain::get_swapchain_format() const
+vk::SurfaceFormatKHR Swapchain::GetSwapchainFormat() const
 {
-	const std::vector<vk::SurfaceFormatKHR> available_surface_formats = vulkan_context_->get_physical_device().getSurfaceFormatsKHR(vulkan_context_->get_surface());
+	const std::vector<vk::SurfaceFormatKHR> availableSurfaceFormats = vulkanContext_->GetPhysicalDevice().getSurfaceFormatsKHR(vulkanContext_->GetSurface());
 	//Look for a specific surface_format, if not found just use the first available.
-	for (const auto& available_surface_format : available_surface_formats)
+	for (const auto& availableSurfaceFormat : availableSurfaceFormats)
 	{
-		if (available_surface_format.format == vk::Format::eB8G8R8A8Sint &&
-			available_surface_format.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear)
+		if (availableSurfaceFormat.format == vk::Format::eB8G8R8A8Sint &&
+			availableSurfaceFormat.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear)
 		{
-			return available_surface_format;
+			return availableSurfaceFormat;
 		}
 	}
 	
-	return available_surface_formats[0];
+	return availableSurfaceFormats[0];
 }
 
-vk::Extent2D swapchain::get_swapchain_extent() const
+vk::Extent2D Swapchain::GetSwapchainExtent() const
 {
-	const vk::SurfaceCapabilitiesKHR surface_capabilities = vulkan_context_->get_physical_device().getSurfaceCapabilitiesKHR(vulkan_context_->get_surface());
+	const vk::SurfaceCapabilitiesKHR surfaceCapabilities = vulkanContext_->GetPhysicalDevice().getSurfaceCapabilitiesKHR(vulkanContext_->GetSurface());
 
-	if (surface_capabilities.currentExtent.height != ~0u)
+	if (surfaceCapabilities.currentExtent.height != ~0u)
 	{
-		return surface_capabilities.currentExtent;
+		return surfaceCapabilities.currentExtent;
 	}
 	else
 	{
@@ -142,51 +142,51 @@ vk::Extent2D swapchain::get_swapchain_extent() const
 	}
 }
 
-vk::SurfaceTransformFlagBitsKHR swapchain::get_swapchain_surface_transform() const
+vk::SurfaceTransformFlagBitsKHR Swapchain::GetSwapchainSurfaceTransform() const
 {
-	const vk::SurfaceCapabilitiesKHR surface_capabilities = vulkan_context_->get_physical_device().getSurfaceCapabilitiesKHR(vulkan_context_->get_surface());
+	const vk::SurfaceCapabilitiesKHR surfaceCapabilities = vulkanContext_->GetPhysicalDevice().getSurfaceCapabilitiesKHR(vulkanContext_->GetSurface());
 
-	return surface_capabilities.currentTransform;
+	return surfaceCapabilities.currentTransform;
 }
 
-vk::PresentModeKHR swapchain::get_swapchain_present_mode() const
+vk::PresentModeKHR Swapchain::GetSwapchainPresentMode() const
 {
-	const std::vector<vk::PresentModeKHR> available_present_modes = vulkan_context_->get_physical_device().getSurfacePresentModesKHR(vulkan_context_->get_surface());
+	const std::vector<vk::PresentModeKHR> availablePresentModes = vulkanContext_->GetPhysicalDevice().getSurfacePresentModesKHR(vulkanContext_->GetSurface());
 
-	for (const auto& available_present_mode : available_present_modes)
+	for (const auto& availablePresentMode : availablePresentModes)
 	{
-		if (available_present_mode == vk::PresentModeKHR::eMailbox)
+		if (availablePresentMode == vk::PresentModeKHR::eMailbox)
 		{
-			return available_present_mode;
+			return availablePresentMode;
 		}
 	}
-	return available_present_modes[0];
+	return availablePresentModes[0];
 	return vk::PresentModeKHR::eFifo;
 }
 
-std::vector<vk::Image> swapchain::get_swapchain_images() const
+std::vector<vk::Image> Swapchain::GetSwapchainImages() const
 {
-	return vulkan_context_->get_logical_device().getSwapchainImagesKHR(swapchain_);
+	return vulkanContext_->GetLogicalDevice().getSwapchainImagesKHR(swapchain_);
 }
 
-std::vector<vk::ImageView> swapchain::create_swapchain_image_views() const
+std::vector<vk::ImageView> Swapchain::CreateSwapchainImageViews() const
 {
-	std::vector<vk::ImageView> image_views = {};
+	std::vector<vk::ImageView> imageViews = {};
 	
 	for (const auto& image : images_)
 	{
-		vk::ImageViewCreateInfo image_view_info(
+		vk::ImageViewCreateInfo imageViewInfo(
 			{},
 			image,
 			vk::ImageViewType::e2D,
-			swapchain_details_.surface_format.format,
+			swapchainDetails_.surfaceFormat.format,
 			{ // Components
 				vk::ComponentSwizzle::eIdentity,
 				vk::ComponentSwizzle::eIdentity,
 				vk::ComponentSwizzle::eIdentity,
 				vk::ComponentSwizzle::eIdentity
 			},
-			{ // Subresource Range
+			{ // Sub resource Range
 				vk::ImageAspectFlagBits::eColor,
 				0,
 				1,
@@ -195,8 +195,8 @@ std::vector<vk::ImageView> swapchain::create_swapchain_image_views() const
 			}
 		);
 
-		image_views.push_back(vulkan_context_->get_logical_device().createImageView(image_view_info));
+		imageViews.push_back(vulkanContext_->GetLogicalDevice().createImageView(imageViewInfo));
 	}
 
-	return image_views;
+	return imageViews;
 }

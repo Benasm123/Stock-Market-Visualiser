@@ -1,4 +1,7 @@
 #pragma once
+#include "Application.h"
+#include "pcHeader.h"
+#include "StockAid.h"
 
 // ReSharper disable once CppNonInlineFunctionDefinitionInHeaderFile
 int main()

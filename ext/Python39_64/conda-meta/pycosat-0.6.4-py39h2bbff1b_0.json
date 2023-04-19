@@ -1,0 +1,51 @@
+{
+  "build": "py39h2bbff1b_0",
+  "build_number": 0,
+  "channel": "https://repo.anaconda.com/pkgs/main/win-64",
+  "constrains": [],
+  "depends": [
+    "python >=3.9,<3.10.0a0",
+    "vc >=14.1,<15.0a0",
+    "vs2015_runtime >=14.16.27012,<15.0a0"
+  ],
+  "extracted_package_dir": "C:\\Users\\Benas\\miniconda3\\pkgs\\pycosat-0.6.4-py39h2bbff1b_0",
+  "features": "",
+  "files": [
+    "Lib/site-packages/__pycache__/test_pycosat.cpython-37.pyc",
+    "Lib/site-packages/__pycache__/test_pycosat.cpython-39.pyc",
+    "Lib/site-packages/pycosat-0.6.4.dist-info/INSTALLER",
+    "Lib/site-packages/pycosat-0.6.4.dist-info/LICENSE",
+    "Lib/site-packages/pycosat-0.6.4.dist-info/METADATA",
+    "Lib/site-packages/pycosat-0.6.4.dist-info/RECORD",
+    "Lib/site-packages/pycosat-0.6.4.dist-info/REQUESTED",
+    "Lib/site-packages/pycosat-0.6.4.dist-info/WHEEL",
+    "Lib/site-packages/pycosat-0.6.4.dist-info/direct_url.json",
+    "Lib/site-packages/pycosat-0.6.4.dist-info/top_level.txt",
+    "Lib/site-packages/pycosat.cp39-win_amd64.pyd",
+    "Lib/site-packages/test_pycosat.py"
+  ],
+  "fn": "pycosat-0.6.4-py39h2bbff1b_0.conda",
+  "legacy_bz2_md5": "05f8051099ab9a2ffa43bec1ae0cf923",
+  "legacy_bz2_size": 102803,
+  "license": "MIT",
+  "license_family": "MIT",
+  "link": {
+    "source": "C:\\Users\\Benas\\miniconda3\\pkgs\\pycosat-0.6.4-py39h2bbff1b_0",
+    "type": 1
+  },
+  "md5": "073d17a38148df077e9223d9acf1ed84",
+  "name": "pycosat",
+  "package_tarball_full_path": "C:\\Users\\Benas\\miniconda3\\pkgs\\pycosat-0.6.4-py39h2bbff1b_0.conda",
+  "paths_data": {
+    "paths": [],
+    "paths_version": 1
+  },
+  "requested_spec": "defaults/win-64::pycosat==0.6.4=py39h2bbff1b_0[md5=073d17a38148df077e9223d9acf1ed84]",
+  "sha256": "9901ee0b9028fe83821f486756c1a639f0ffe546e764cdd457add9e4459bb8d6",
+  "size": 75717,
+  "subdir": "win-64",
+  "timestamp": 1666814319000,
+  "track_features": "",
+  "url": "https://repo.anaconda.com/pkgs/main/win-64/pycosat-0.6.4-py39h2bbff1b_0.conda",
+  "version": "0.6.4"
+}

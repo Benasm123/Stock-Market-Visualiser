@@ -10,107 +10,130 @@ PythonCaller::PythonCaller()
 {
 	LOG_FUNC_START();
 
-	// Create a config and set it to look for added module paths.
-	PyConfig config;
-	PyConfig_InitPythonConfig(&config);
-	PyConfig_Read(&config);
-	config.module_search_paths_set = 1;
-
-	// Add all required Module paths including python paths, and also the base class files.
-	std::filesystem::path algorithmPythonFolderPath = std::filesystem::current_path() / "Models" / "Python";
-	PyWideStringList_Append(&config.module_search_paths, algorithmPythonFolderPath.wstring().c_str());
-	
-	std::filesystem::path pythonLibFolderPath = std::filesystem::current_path().parent_path() / "ext" / "Python39_64" / "Lib";	
-	PyWideStringList_Append(&config.module_search_paths, pythonLibFolderPath.wstring().c_str());
-	
-	std::filesystem::path pythonDLLFolderPath = std::filesystem::current_path().parent_path() / "ext" / "Python39_64" / "DLLs";
-	PyWideStringList_Append(&config.module_search_paths, pythonDLLFolderPath.wstring().c_str());
-
-	// Initialise with out config. 
-	PyStatus status = Py_InitializeFromConfig(&config);
-
-	if (PyStatus_Exception(status)) {
-		Py_ExitStatusException(status);
+	if (Py_IsInitialized())
+	{
+		return;
 	}
 
-	PyConfig_Clear(&config);
+	const std::filesystem::path currentPath = std::filesystem::absolute(".");
+	const std::filesystem::path pythonPath = currentPath.parent_path() / "ext" / "Python39_64";
+	const std::filesystem::path pythonDLLPath = pythonPath / "DLLs";
+	const std::filesystem::path pythonLibPath = pythonPath / "Lib";
+	const std::filesystem::path moduleFilePath = std::filesystem::current_path() / "Models" / "Python";
+	const std::filesystem::path sitePackagesPath = pythonLibPath / "site-packages";
+	
+	const std::wstring p = currentPath.wstring() + L";" + pythonPath.wstring() + L";" + pythonDLLPath.wstring() + L";" + pythonLibPath.wstring()+ L";" + moduleFilePath.wstring() + L";" + sitePackagesPath.wstring();
+	Py_SetPath(p.c_str());
+
+	Py_Initialize();
+
+	PyEval_SaveThread();
 
 	LOG_FUNC_END();
 }
 
 PythonCaller::~PythonCaller()
 {
+
+	save_ = PyGILState_Ensure();
 	Py_Finalize();
+
 }
 
 // Load a new python module/file.
-void PythonCaller::LoadNewModule(const std::string& name)
+void PythonCaller::LoadNewModule(const std::string name)
 {
 	LOG_FUNC_START();
-	// If we already have a module loaded we want to decrement references to it so it is destroyed.
-	if (pObject_)
-	{
-		Py_DECREF(pObject_);
-	}
 
-	// Load the folder into the python module path to make it visible to python.
-	PyObject* sysPath = PySys_GetObject("path");
-	if (std::ranges::find(loadedModules_, name) == loadedModules_.end())
+	LOG_INFO("Loading python module: %s", name.c_str());
+
+	// if haven't already loaded this module Load the folder into the python module path to make it visible to python.
+	if (!loadedModules_.contains(name))
 	{
+		save_ = PyGILState_Ensure();
+
+		PyObject* sysPath = PySys_GetObject("path");
 		const std::filesystem::path moduleFilePath = std::filesystem::current_path() / "Models" / "Python" / name;
 		PyList_Append(sysPath, PyUnicode_FromString(moduleFilePath.string().c_str()));
-		loadedModules_.push_back(name);
+		loadedModules_[name] = PyImport_ImportModule(name.c_str());
+		PyErr_Print();
+		Py_CLEAR(sysPath);
+
+		PyGILState_Release(save_);
+
+		if ( !loadedModules_[name] )
+		{
+			LOG_ERROR("Failed Loading python module! %s", name.c_str());
+		}
+
 	}
 
 	// Check if this module is already loaded, if so we do not need to reload it, just need to get it and set as module.
-	pModule_ = PyImport_GetModule(PyUnicode_FromString(name.c_str()));
-	if (!pModule_)
+	selectedModule_ = name;
+
+	LoadObject(name);
+
+	LOG_FUNC_END();
+}
+
+void PythonCaller::LoadObject(const std::string name)
+{
+	LOG_FUNC_START();
+
+	if (!loadedObjects_.contains(name))
 	{
-		pModule_ = PyImport_ImportModule(name.c_str());
-		if (!pModule_)
+		save_ = PyGILState_Ensure();
+
+		PyObject* pObjectClass = PyObject_GetAttrString(loadedModules_[selectedModule_], "StockPredictor");
+		loadedObjects_[name] = PyObject_CallObject(pObjectClass, nullptr);
+		PyErr_Print();
+		Py_CLEAR(pObjectClass);
+
+		PyGILState_Release(save_);
+
+		if ( !loadedModules_[name] )
 		{
-			LOG_ERROR("COULDNT LOAD MODULE: %s", name.c_str());
-			return;
+			LOG_ERROR("Failed Loading python module! %s", name.c_str());
 		}
 	}
 
-	// Get modules dict to be able to get the objects we want to call.
-	pDict_ = PyModule_GetDict(pModule_);
-	if ( !pDict_ )
-	{
-		LOG_ERROR("COULDNT LOAD MODULE DICT FOR MODULE: %s", name.c_str());
-		return;
-	}
-
-	// Get the class for the stock predictor using the dict.
-	pClass_ = PyDict_GetItemString(pDict_, "StockPredictor");
-	if ( !pClass_ )
-	{
-		LOG_ERROR("COULDNT FIND CLASS MAKE SURE TO NAME IT 'StockPredictor'");
-		return;
-	}
-
-	// Create the object of type stock predictor.
-	pObject_ = PyObject_CallObject(pClass_, nullptr);
 
 	LOG_FUNC_END();
+}
+
+void PythonCaller::ReloadModule(const std::string& name)
+{
+	if (!loadedModules_.contains(name))
+	{
+		LOG_WARN("Trying to reload a module which is not loaded! this should not happen and is likely a bug!");
+	}
+
+	PyImport_ReloadModule(loadedModules_[name]);
+	PyErr_Print();
 }
 
 // Helper function to call the python interface with needed inputs.
 bool PythonCaller::SaveWeights(const std::string& saveName)
 {
-	if ( pModule_ )
+	if ( loadedModules_.contains(selectedModule_) && loadedObjects_.contains(selectedModule_) )
 	{
-		pValue_ = PyObject_CallMethod(pObject_, "SaveModel", "s", saveName.c_str());
-		if ( pValue_ )
+		save_ = PyGILState_Ensure();
+		PyObject* pValue = PyObject_CallMethod(loadedObjects_[selectedModule_], "SaveModel", "s", saveName.c_str());
+		PyErr_Print();
+
+		if (pValue)
 		{
-			const bool returnValue = PyLong_AsLong(pValue_) == 1l;
-			Py_DECREF(pValue_);
+			const bool returnValue = PyLong_AsLong(pValue) == 1l;
+			Py_CLEAR(pValue);
+			PyGILState_Release(save_);
 			return returnValue;
 		}
 
+		Py_CLEAR(pValue);
+
 		LOG_WARN("CANT FIND FUNCTION");
 		PyErr_Print();
+		PyGILState_Release(save_);
 		return false;
 	}
 	LOG_WARN("CANT FIND MODULE");
@@ -121,18 +144,26 @@ bool PythonCaller::SaveWeights(const std::string& saveName)
 // Helper function to call the python interface with needed inputs.
 bool PythonCaller::LoadWeights(const std::string& loadName)
 {
-	if ( pModule_ )
+	if ( loadedModules_.contains(selectedModule_) && loadedObjects_.contains(selectedModule_) )
 	{
-		pValue_ = PyObject_CallMethod(pObject_, "LoadModel", "s", loadName.c_str());
-		if ( pValue_ )
+		save_ = PyGILState_Ensure();
+
+		PyObject_CallMethod(loadedObjects_[selectedModule_], "LoadModel", "s", loadName.c_str());
+		PyErr_Print();
+
+		// if (pValue)
 		{
-			const bool returnValue = PyLong_AsLong(pValue_) == 1l;
-			Py_DECREF(pValue_);
-			return returnValue;
+			// const bool returnValue = PyLong_AsLong(pValue) == 1l;
+			// Py_CLEAR(pValue);
+			PyGILState_Release(save_);
+			return true;
 		}
+
+		// Py_CLEAR(pValue);
 
 		LOG_WARN("CANT FIND FUNCTION");
 		PyErr_Print();
+		PyGILState_Release(save_);
 		return false;
 	}
 	LOG_WARN("CANT FIND MODULE");
@@ -143,18 +174,24 @@ bool PythonCaller::LoadWeights(const std::string& loadName)
 // Helper function to call the python interface with needed inputs.
 bool PythonCaller::Initialise()
 {
-	if ( pModule_ )
+	if ( loadedModules_.contains(selectedModule_) && loadedObjects_.contains(selectedModule_) )
 	{
-		pValue_ = PyObject_CallMethod(pObject_, "Initialise", "");
-		if ( pValue_ )
+		save_ = PyGILState_Ensure();
+		PyObject* pValue = PyObject_CallMethod(loadedObjects_[selectedModule_], "Initialise", "");
+
+		if (pValue)
 		{
-			const bool returnValue = PyLong_AsLong(pValue_) == 1l;
-			Py_DECREF(pValue_);
+			const bool returnValue = PyLong_AsLong(pValue) == 1l;
+			Py_CLEAR(pValue);
+			PyGILState_Release(save_);
 			return returnValue;
 		}
 
+		Py_CLEAR(pValue);
+
 		LOG_WARN("CANT FIND FUNCTION");
 		PyErr_Print();
+		PyGILState_Release(save_);
 		return false;
 	}
 	LOG_WARN("CANT FIND MODULE");
@@ -163,42 +200,50 @@ bool PythonCaller::Initialise()
 }
 
 // Helper function to call the python interface with needed inputs.
-float PythonCaller::Train(const int epochs)
+std::thread* PythonCaller::Train(const int epochs)
 {
-	if ( pModule_ )
+	if ( loadedModules_.contains(selectedModule_) && loadedObjects_.contains(selectedModule_))
 	{
-		pValue_ = PyObject_CallMethod(pObject_, "Train", "i", epochs);
-		if ( pValue_ )
+		auto function = [this](const std::string& object, const int epoch) -> void
 		{
-			const float returnValue = static_cast<float>(PyFloat_AsDouble(pValue_));
-			Py_DECREF(pValue_);
-			return returnValue;
-		}
+			save_ = PyGILState_Ensure();
+			// Py_BEGIN_ALLOW_THREADS
+			PyObject_CallMethod(loadedObjects_[object], "Train", "i", epoch);
+			// Py_END_ALLOW_THREADS
+			LOG_INFO("EXIT EARLY");
+			PyErr_Print();
+			PyGILState_Release(save_);
+		};
 
-		LOG_WARN("CANT FIND FUNCTION");
-		PyErr_Print();
-		return 0.0f;
+		std::thread* thread = new std::thread(function, selectedModule_, epochs);
+
+		return thread;
 	}
-	LOG_WARN("CANT FIND MODULE");
-	PyErr_Print();
-	return 0.0f;
+
+	return nullptr;
 }
 
 // Helper function to call the python interface with needed inputs.
 std::map<std::string, float> PythonCaller::GetHyperParameters()
 {
-	if ( pModule_ )
+	if ( loadedModules_.contains(selectedModule_) && loadedObjects_.contains(selectedModule_) )
 	{
-		pValue_ = PyObject_CallMethod(pObject_, "Initialise", "");
-		if ( pValue_ )
+		save_ = PyGILState_Ensure();
+		PyObject* pValue = PyObject_CallMethod(loadedObjects_[selectedModule_], "Initialise", "");
+
+		if (pValue)
 		{
-			const std::map<std::string, float> returnValue{};
-			Py_DECREF(pValue_);
+			std::map<std::string, float> returnValue{};
+			Py_CLEAR(pValue);
+			PyGILState_Release(save_);
 			return returnValue;
 		}
 
+		Py_CLEAR(pValue);
+
 		LOG_WARN("CANT FIND FUNCTION");
 		PyErr_Print();
+		PyGILState_Release(save_);
 		return {};
 	}
 	LOG_WARN("CANT FIND MODULE");
@@ -209,18 +254,24 @@ std::map<std::string, float> PythonCaller::GetHyperParameters()
 // Helper function to call the python interface with needed inputs.
 float PythonCaller::Evaluate(std::vector<float> vals)
 {
-	if ( pModule_ )
+	if ( loadedModules_.contains(selectedModule_) && loadedObjects_.contains(selectedModule_) )
 	{
-		pValue_ = PyObject_CallMethod(pObject_, "EvaluateModel", ("(" + std::string(vals.size(), 'f') + ")").c_str(), vals.data());
-		if ( pValue_ )
+		save_ = PyGILState_Ensure();
+		PyObject* pValue = PyObject_CallMethod(loadedObjects_[selectedModule_], "EvaluateModel", ("(" + std::string(vals.size(), 'f') + ")").c_str(), vals.data());
+
+		if ( pValue )
 		{
-			const float returnValue = static_cast<float>(PyFloat_AsDouble(pValue_));
-			Py_DECREF(pValue_);
+			const float returnValue = static_cast<float>(PyFloat_AsDouble(pValue));
+			Py_CLEAR(pValue);
+			PyGILState_Release(save_);
 			return returnValue;
 		}
 
+		Py_CLEAR(pValue);
+
 		LOG_WARN("CANT FIND FUNCTION");
 		PyErr_Print();
+		PyGILState_Release(save_);
 		return 0.0f;
 	}
 	LOG_WARN("CANT FIND MODULE");
@@ -229,43 +280,130 @@ float PythonCaller::Evaluate(std::vector<float> vals)
 }
 
 // Helper function to call the python interface with needed inputs.
-int PythonCaller::Predict(const std::vector<float>& vals)
+std::vector<int> PythonCaller::Predict(const std::string& stockName, const std::string& startDate, const std::string& endDate)
 {
-	if ( pModule_ )
+	static bool onlyOnce = true;
+	if ( loadedModules_.contains(selectedModule_) and loadedObjects_.contains(selectedModule_) )
 	{
-		PyObject* pXVec = PyTuple_New(vals.size());
-		PyObject* test = nullptr;
+		save_ = PyGILState_Ensure();
 
-		for (int i = 0; i < vals.size(); ++i ) {
-			test = PyFloat_FromDouble((double)vals[i]);
-			if ( !test ) {
-				fprintf(stderr, "Cannot convert array value\n");
-				return 1;
-			}
-			PyTuple_SetItem(pXVec, i, test);
-		}
-		
-		PyObject* name = PyUnicode_FromString("MakePrediction");
-		pValue_ = PyObject_CallMethodOneArg(pObject_, name, pXVec);
+		PyObject* pyStockName = PyUnicode_FromString(stockName.c_str());
+		PyObject* pyStartDate = PyUnicode_FromString(startDate.c_str());
+		PyObject* pyEndDate = PyUnicode_FromString(endDate.c_str());
 
-		Py_DECREF(name);
-		Py_DECREF(test);
-		Py_DECREF(pXVec);
+		PyObject* pXVec = PyTuple_Pack(3, pyStockName, pyStartDate, pyEndDate);
 
-		if ( pValue_ )
-		{
-			const int returnValue = _PyLong_AsInt(pValue_);
-			Py_DECREF(pValue_);
-			return returnValue;
-		}
-
-		LOG_WARN("CANT FIND FUNCTION");
 		PyErr_Print();
-		return 0;
+		PyObject* name = PyUnicode_FromString("MakePrediction");
+		PyErr_Print();
+		PyObject* pListValue = PyObject_CallMethodOneArg(loadedObjects_[selectedModule_], name, pXVec);
+		PyErr_Print();
+
+		Py_CLEAR(name);
+		Py_CLEAR(pyStockName);
+		Py_CLEAR(pyStartDate);
+		Py_CLEAR(pyEndDate);
+		Py_CLEAR(pXVec);
+
+		if (!pListValue)
+		{
+			PyErr_Print();
+			PyGILState_Release(save_);
+			return {};
+		}
+
+		if (PyList_Check(pListValue))
+		{
+			std::vector<int> vals(PyList_Size(pListValue));
+			for (int i = 0; i < PyList_Size(pListValue); ++i)
+			{
+				PyObject* val = PyList_GetItem(pListValue, i);
+
+				vals[i] = _PyLong_AsInt(val);
+
+				Py_CLEAR(val);
+			}
+			PyGILState_Release(save_);
+			return vals;
+		}
+
+		if ( pListValue )
+		{
+			const int returnValue = _PyLong_AsInt(pListValue);
+			Py_CLEAR(pListValue);
+			PyGILState_Release(save_);
+			return {returnValue};
+		}
+
+		Py_CLEAR(pListValue);
+
+		if ( onlyOnce )
+		{
+			LOG_WARN("CANT FIND FUNCTION");
+			PyErr_Print();
+			onlyOnce = false;
+		}
+		PyGILState_Release(save_);
+		return {};
 	}
 
-	LOG_WARN("CANT FIND MODULE");
-	PyErr_Print();
-	return 0;
+	if (onlyOnce)
+	{
+		LOG_WARN("CANT FIND MODULE");
+		PyErr_Print();
+		onlyOnce = false;
+	}
+	return {};
 }
 
+std::vector<float> PythonCaller::GetAccuracyList()
+{
+	return ListToVectorFromFunction("GetAccuracyValues");
+}
+
+std::vector<float> PythonCaller::GetLossList()
+{
+	return ListToVectorFromFunction("GetLossValues");
+}
+
+std::vector<float> PythonCaller::GetRewardList()
+{
+	return ListToVectorFromFunction("GetRewardValues");
+}
+
+std::vector<float> PythonCaller::ListToVectorFromFunction(const std::string& functionName)
+{
+	if ( !loadedObjects_.contains(selectedModule_) or !loadedModules_.contains(selectedModule_) )
+	{
+		LOG_ERROR("No python object or module loaded! Load an algorithm before getting values!");
+		return {};
+	}
+
+	save_ = PyGILState_Ensure();
+
+	PyObject* name = PyUnicode_FromString(functionName.c_str());
+
+	PyObject* pListValue = PyObject_CallMethodNoArgs(loadedObjects_[selectedModule_], name);
+
+	Py_CLEAR(name);
+
+	if ( !PyList_Check(pListValue) )
+	{
+		LOG_ERROR("Expected return type from python function: List. Got non list type!");
+		PyGILState_Release(save_);
+		return {};
+	}
+
+	std::vector<float> values(PyList_Size(pListValue));
+	for ( int i = 0; i < PyList_Size(pListValue); ++i )
+	{
+		PyObject* value = PyList_GetItem(pListValue, i);
+
+		values[i] = static_cast<float>(PyFloat_AsDouble(value));
+
+		Py_CLEAR(value);
+	}
+
+	PyGILState_Release(save_);
+	return values;
+}

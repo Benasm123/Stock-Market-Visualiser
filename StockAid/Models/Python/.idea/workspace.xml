@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2d2d7d09-bec5-4110-b9be-17f1656010df" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../data/A.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AAL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AAP.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AAPL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ABBV.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ABC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ABMD.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ABT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ACN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ADBE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ADI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ADM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ADP.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ADSK.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AEE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AEP.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AES.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AFL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AIG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AIZ.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AJG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AKAM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ALB.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ALGN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ALK.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ALL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ALLE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AMAT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AMCR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AMD.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AME.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AMGN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AMP.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AMT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AMZN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ANET.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ANSS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AON.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AOS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/APA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/APD.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/APH.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/APTV.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ARE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ATO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ATVI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AVB.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AVGO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AVY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AWK.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AXP.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/AZO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BAC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BAX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BBWI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BBY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BDX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BEN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BIIB.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BIO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BK.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BKNG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BKR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BLK.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BMY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BRO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BSX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BWA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/BXP.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/C.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CAG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CAH.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CARR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CAT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CB.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CBOE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CBRE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CCI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CCL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CDAY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CDNS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CDW.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CF.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CFG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CHD.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CHRW.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CHTR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CINF.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CLX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CMA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CMCSA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CME.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CMG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CMI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CMS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CNC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CNP.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/COF.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/COO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/COP.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/COST.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CPB.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CPRT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CRL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CRM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CSCO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CSX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CTAS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CTLT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CTRA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CTSH.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CTVA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CVS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CVX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/CZR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/D.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DAL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DD.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DFS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DGX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DHI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DHR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DIS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DISH.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DLR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DLTR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DOV.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DOW.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DPZ.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DRI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DTE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DUK.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DVA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DVN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DXC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/DXCM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/EA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/EBAY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ECL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ED.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/EFX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/EIX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/EL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/EMN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/EMR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ENPH.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/EOG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/EQIX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/EQR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ES.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ESS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ETN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ETR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ETSY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/EVRG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/EW.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/EXC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/EXPD.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/EXPE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/EXR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/F.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FANG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FAST.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FCX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FDX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FFIV.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FIS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FISV.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FITB.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FLT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FMC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FOX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FOXA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FRC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FRT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FTNT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/FTV.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/GD.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/GE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/GILD.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/GIS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/GL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/GLW.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/GM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/GNRC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/GOOG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/GOOGL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/GPC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/GPN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/GPS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/GRMN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/GS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/GWW.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HAL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HAS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HBAN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HBI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HCA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HD.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HES.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HIG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HII.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HLT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HOLX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HON.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HPE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HPQ.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HRL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HSIC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HST.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HSY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HUM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/HWM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/IBM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ICE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/IDXX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/IEX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/IFF.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ILMN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/INCY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/INTC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/INTU.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/IP.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/IPG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/IPGP.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/IQV.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/IR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/IRM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ISRG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/IT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ITW.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/IVZ.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/J.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/JBHT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/JCI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/JKHY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/JNJ.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/JNPR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/JPM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/K.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/KEY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/KEYS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/KHC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/KIM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/KLAC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/KMB.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/KMI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/KMX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/KO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/KR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/L.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LDOS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LEG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LEN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LH.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LHX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LIN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LKQ.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LLY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LMT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LNC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LNT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LOW.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LRCX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LUMN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LUV.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LVS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LW.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LYB.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/LYV.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MAA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MAR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MAS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MCD.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MCHP.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MCK.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MCO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MDLZ.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MDT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MET.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MGM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MHK.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MKC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MKTX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MLM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MMC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MMM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MNST.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MOS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MPC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MPWR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MRK.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MRNA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MRO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MSCI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MSFT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MSI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MTB.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MTCH.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MTD.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/MU.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NCLH.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NDAQ.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NEE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NEM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NFLX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NKE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NOC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NOW.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NRG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NSC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NTAP.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NTRS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NUE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NVDA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NVR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NWL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NWS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NWSA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/NXPI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/O.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ODFL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/OGN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/OKE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/OMC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ORCL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ORLY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/OTIS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/OXY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PAYC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PAYX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PCAR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PEAK.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PEG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PENN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PEP.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PFE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PFG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PGR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PH.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PHM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PKG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PKI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PLD.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PNC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PNR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PNW.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/POOL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PPG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PPL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PRU.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PSA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PSX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PTC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PVH.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PWR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PXD.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/PYPL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/QCOM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/QRVO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/RCL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/RE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/REG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/REGN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/RF.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/RHI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/RJF.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/RL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/RMD.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ROK.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ROL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ROP.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ROST.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/RSG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/RTX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SBAC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SBUX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SCHW.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SEE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SHW.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SIVB.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SJM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SLB.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SNA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SNPS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SPG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SPGI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SRE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/STE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/STT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/STX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/STZ.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SWK.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SWKS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SYF.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SYK.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/SYY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/T.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TAP.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TDG.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TDY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TECH.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TEL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TER.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TFC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TFX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TGT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TJX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TMO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TMUS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TPR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TRMB.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TROW.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TRV.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TSCO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TSN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TTWO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TXN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TXT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/TYL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/UA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/UAA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/UAL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/UDR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/UHS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ULTA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/UNH.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/UNP.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/UPS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/URI.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/USB.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/V.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/VFC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/VLO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/VMC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/VNO.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/VRSK.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/VRSN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/VRTX.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/VTR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/VTRS.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/VZ.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WAB.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WAT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WBA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WDC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WEC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WELL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WFC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WHR.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WMB.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WMT.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WRB.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WRK.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WST.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WU.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/WYNN.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/XEL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/XOM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/XRAY.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/XYL.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/YUM.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ZBH.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ZBRA.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../data/ZION.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Python.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/other.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Deep_Q_Learning/Deep_Q_Learning.py" beforeDir="false" afterPath="$PROJECT_DIR$/Deep_Q_Learning/Deep_Q_Learning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q Learning/Q Learning.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q Learning/Q Learning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../data/TSLA.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../../data/TSLA.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../imgui.ini" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/anaconda3/Lib/site-packages/gensim/test/test_datatype.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$USER_HOME$/anaconda3/Lib/site-packages/jedi/third_party/django-stubs/django-stubs/contrib/admin/options.pyi" root0="SKIP_INSPECTION" />
+    <setting file="file://$USER_HOME$/anaconda3/Lib/site-packages/tensorflow/python/keras/engine/training.py" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="ProjectId" id="2OPZcXY0UcKeEH45F17nlxor9FT" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "Merging master",
+    "last_opened_file_path": "D:/PracticeCode/C++/DataVisualizer/StockAid/Models/Python",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="Q Learning New" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Python" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Q Learning New" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Q Learning New/Q Learning New.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.Q Learning New" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2d2d7d09-bec5-4110-b9be-17f1656010df" name="Changes" comment="" />
+      <created>1681464256680</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1681464256680</updated>
+      <workItem from="1681464257646" duration="8832000" />
+      <workItem from="1681556545628" duration="10718000" />
+      <workItem from="1681640072379" duration="16894000" />
+      <workItem from="1681717060158" duration="22457000" />
+      <workItem from="1681809921203" duration="2375000" />
+      <workItem from="1681893354908" duration="8366000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Python$NN_with_new_Dataset.coverage" NAME="NN with new Dataset Coverage Results" MODIFIED="1681568261183" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/NN with new Dataset" />
+    <SUITE FILE_PATH="coverage/Python$Q_Learning_New.coverage" NAME="Q Learning New Coverage Results" MODIFIED="1681896849120" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Q Learning New" />
+  </component>
+</project>

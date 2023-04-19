@@ -136,8 +136,8 @@ project "DataVisualizer"
 
 	
 
-project "Test"
-	location "Test"
+project "StockAid"
+	location "StockAid"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "c++20"

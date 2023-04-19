@@ -1,0 +1,41 @@
+{
+  "build": "haa95532_0",
+  "build_number": 0,
+  "channel": "https://repo.anaconda.com/pkgs/main/win-64",
+  "constrains": [
+    "anaconda-navigator >=1.9.8"
+  ],
+  "depends": [
+    "python"
+  ],
+  "extracted_package_dir": "C:\\Users\\Benas\\miniconda3\\pkgs\\console_shortcut_miniconda-0.1.1-haa95532_0",
+  "features": "",
+  "files": [
+    "Menu/Iconleak-Atrous-Console.ico",
+    "Menu/console_shortcut.json"
+  ],
+  "fn": "console_shortcut_miniconda-0.1.1-haa95532_0.conda",
+  "legacy_bz2_md5": "af49b3daaab7be31369c987d87b79791",
+  "legacy_bz2_size": 62023,
+  "license": "BSD-3-Clause",
+  "license_family": "BSD",
+  "link": {
+    "source": "C:\\Users\\Benas\\miniconda3\\pkgs\\console_shortcut_miniconda-0.1.1-haa95532_0",
+    "type": 1
+  },
+  "md5": "1b568e2b4f9b2edd15d78dfee0797f2f",
+  "name": "console_shortcut_miniconda",
+  "package_tarball_full_path": "C:\\Users\\Benas\\miniconda3\\pkgs\\console_shortcut_miniconda-0.1.1-haa95532_0.conda",
+  "paths_data": {
+    "paths": [],
+    "paths_version": 1
+  },
+  "requested_spec": "defaults/win-64::console_shortcut_miniconda==0.1.1=haa95532_0[md5=1b568e2b4f9b2edd15d78dfee0797f2f]",
+  "sha256": "9092bc5a84d2ace6dee8f51530bd4b17dd1d49b4666e571b206529eae323c41c",
+  "size": 111499,
+  "subdir": "win-64",
+  "timestamp": 1671576267695,
+  "track_features": "",
+  "url": "https://repo.anaconda.com/pkgs/main/win-64/console_shortcut_miniconda-0.1.1-haa95532_0.conda",
+  "version": "0.1.1"
+}

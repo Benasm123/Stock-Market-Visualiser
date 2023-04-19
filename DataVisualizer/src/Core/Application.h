@@ -3,6 +3,8 @@
 #include "Renderer/VulkanContext.h"
 #include "Renderer/Window.h"
 
+class Actor;
+
 class Application
 {
 public:
@@ -13,8 +15,8 @@ public:
 	void Run();
 	void Shutdown();
 
-	void AddActor(class Actor* actor);
-	void RemoveActor(class Actor* actor);
+	void AddActor(Actor* actor);
+	void RemoveActor(Actor* actor);
 
 private:
 	void ProcessInput(float deltaTime);
@@ -28,7 +30,7 @@ protected:
 
 public:
 	[[nodiscard]] Renderer& GetRenderer() { return renderer_; }
-	[[nodiscard]] PMATH::vec2<uint32_t> GetWindowSize() { return { vulkanContext_.get_window().get_width(), vulkanContext_.get_window().get_height() }; }
+	[[nodiscard]] dv_math::Vec2<uint32_t> GetWindowSize() { return { vulkanContext_.GetWindow().GetWidth(), vulkanContext_.GetWindow().GetHeight() }; }
 
 protected:
 	bool isRunning_{ true };

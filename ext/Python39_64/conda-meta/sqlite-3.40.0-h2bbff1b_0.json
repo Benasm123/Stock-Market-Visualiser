@@ -1,0 +1,43 @@
+{
+  "build": "h2bbff1b_0",
+  "build_number": 0,
+  "channel": "https://repo.anaconda.com/pkgs/main/win-64",
+  "constrains": [],
+  "depends": [
+    "vc >=14.1,<15.0a0",
+    "vs2015_runtime >=14.16.27012,<15.0a0"
+  ],
+  "extracted_package_dir": "C:\\Users\\Benas\\miniconda3\\pkgs\\sqlite-3.40.0-h2bbff1b_0",
+  "features": "",
+  "files": [
+    "Library/bin/sqlite3.dll",
+    "Library/bin/sqlite3.exe",
+    "Library/include/sqlite3.h",
+    "Library/include/sqlite3ext.h",
+    "Library/lib/sqlite3.lib"
+  ],
+  "fn": "sqlite-3.40.0-h2bbff1b_0.conda",
+  "legacy_bz2_md5": "befb67213d17c1ea33b06a2c202551f0",
+  "legacy_bz2_size": 1307822,
+  "license": "blessing",
+  "license_family": "Other",
+  "link": {
+    "source": "C:\\Users\\Benas\\miniconda3\\pkgs\\sqlite-3.40.0-h2bbff1b_0",
+    "type": 1
+  },
+  "md5": "0dbcc7f2175e0cee59218487d619599f",
+  "name": "sqlite",
+  "package_tarball_full_path": "C:\\Users\\Benas\\miniconda3\\pkgs\\sqlite-3.40.0-h2bbff1b_0.conda",
+  "paths_data": {
+    "paths": [],
+    "paths_version": 1
+  },
+  "requested_spec": "defaults/win-64::sqlite==3.40.0=h2bbff1b_0[md5=0dbcc7f2175e0cee59218487d619599f]",
+  "sha256": "66dc806320864e5b71d5c7abb370a74da1586764c675515a83db97c4409f51ab",
+  "size": 912665,
+  "subdir": "win-64",
+  "timestamp": 1669138341647,
+  "track_features": "",
+  "url": "https://repo.anaconda.com/pkgs/main/win-64/sqlite-3.40.0-h2bbff1b_0.conda",
+  "version": "3.40.0"
+}

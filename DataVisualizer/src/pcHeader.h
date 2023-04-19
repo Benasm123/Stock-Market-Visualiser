@@ -6,6 +6,7 @@
 
 // INCLUDES
 #define PY_SSIZE_T_CLEAN
+#undef Py_REF_DEBUG
 #include <Python.h>
 #include "glm.hpp"
 #include "ext/matrix_transform.hpp"
@@ -16,65 +17,63 @@
 #include <iostream>
 
 // CONSTEXPR
-constexpr auto ENGINE_NAME = "DataVisualizer";
-constexpr auto APPLICATION_VERSION = 1;
-constexpr auto ENGINE_VERSION = 1;
+constexpr auto kEngineName = "DataVisualizer";
+constexpr auto kApplicationVersion = 1;
+constexpr auto kEngineVersion = 1;
 
 // ENUMS
-enum log_type
+enum LogType
 {
-	l_error = 4,
-	l_warn = 14,
-	l_info = 10,
-	l_vulk = 13,
-	l_func_start = 11,
-	l_func_end = 12
+	kLError = 4,
+	kLWarn = 14,
+	kLInfo = 10,
+	kLVulk = 13,
+	kLFuncStart = 11,
+	kLFuncEnd = 12
 };
 
 // LOGGING TODO::MOVE TO CLASS
 #define CONSOLE_COLOR(ConsoleColors) (SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (ConsoleColors)))
 
-inline void StartLogMessage(const log_type type, const int line_number, const char* file_name)
+inline void StartLogMessage(const LogType type, const int lineNumber, const char* fileName)
 {
 	CONSOLE_COLOR(type);
-	if (type == l_func_start || type == l_func_end)
+	if (type == kLFuncStart || type == kLFuncEnd)
 	{
-		CONSOLE_COLOR(l_info);
+		CONSOLE_COLOR(kLInfo);
 	}
 
 	static int tabs = 0;
 	if (tabs > 0)
 	{
 		int i = 0;
-		if (type == l_func_end) i = 1;
-		for (i; i < tabs; i++)
+		if (type == kLFuncEnd) i = 1;
+		for (; i < tabs; i++)
 		{
-			std::cout << "|";
-			std::cout << "   ";
+			std::cout << "| ";
 		}
 	}
 	switch (type)
 	{
-	case l_error:
-		printf("[ERRO] file: %s    line: %i\n message: ", file_name, line_number);
+	case kLError:
+		printf("[ERRO] file: %s    line: %i\n message: ", fileName, lineNumber);
 		break;
-	case l_warn:
-		printf("[WARN] file: %s    line: %i\n message: ", file_name, line_number);
+	case kLWarn:
+		printf("[WARN] file: %s    line: %i\n message: ", fileName, lineNumber);
 		break;
-	case l_info:
+	case kLInfo:
 		printf("[INFO] ");
 		break;
-	case l_vulk:
+	case kLVulk:
 		printf("[VULK] ");
 		break;
-	case l_func_start:
+	case kLFuncStart:
 		tabs++;
 		printf("[STRT] ");
 		break;
-	case l_func_end:
+	case kLFuncEnd:
 		tabs--;
-		// std::cout << std::string(tabs * 4, ' ');
-		printf("[END_]\t");
+		printf("[END_] ");
 	}
 }
 
@@ -99,74 +98,74 @@ inline void EndLogMessage(const char* vars...)
 
 #else
 
-#define LOG_VULK(...) StartLogMessage(l_vulk, __LINE__, __FILE__); EndLogMessage(__VA_ARGS__)
-#define LOG_INFO(...) StartLogMessage(l_info, __LINE__, __FILE__); EndLogMessage(__VA_ARGS__)
-#define LOG_WARN(...) StartLogMessage(l_warn, __LINE__, __FILE__); EndLogMessage(__VA_ARGS__)
-#define LOG_ERROR(...) StartLogMessage(l_error, __LINE__, __FILE__); EndLogMessage(__VA_ARGS__)
+#define LOG_VULK(...) StartLogMessage(kLVulk, __LINE__, __FILE__); EndLogMessage(__VA_ARGS__)
+#define LOG_INFO(...) StartLogMessage(kLInfo, __LINE__, __FILE__); EndLogMessage(__VA_ARGS__)
+#define LOG_WARN(...) StartLogMessage(kLWarn, __LINE__, __FILE__); EndLogMessage(__VA_ARGS__)
+#define LOG_ERROR(...) StartLogMessage(kLError, __LINE__, __FILE__); EndLogMessage(__VA_ARGS__)
 
-#define LOG_FUNC_START() StartLogMessage(l_func_start, __LINE__, __FILE__); EndLogMessage("%s", __FUNCTION__)
-#define LOG_FUNC_END() StartLogMessage(l_func_end, __LINE__, __FILE__); EndLogMessage("%s", __FUNCTION__)
+#define LOG_FUNC_START() StartLogMessage(kLFuncStart, __LINE__, __FILE__); EndLogMessage("%s", __FUNCTION__)
+#define LOG_FUNC_END() StartLogMessage(kLFuncEnd, __LINE__, __FILE__); EndLogMessage("%s", __FUNCTION__)
 
 
 #endif
 
 
 
-struct shader_info
+struct ShaderInfo
 {
 	vk::ShaderStageFlagBits type{};
-	const char* file_name{};
+	const char* fileName{};
 };
 
-struct graphics_pipeline_create_info
+struct GraphicsPipelineCreateInfo
 {
-	vk::Device logical_device{};
-	std::vector<shader_info> shader_infos{};
-	vk::PipelineLayout pipeline_layout{};
-	vk::RenderPass render_pass{};
-	vk::PrimitiveTopology primitive_topology{};
-	vk::PolygonMode polygon_mode{};
-	vk::CullModeFlagBits cull_mode{};
+	vk::Device logicalDevice{};
+	std::vector<ShaderInfo> shaderInfos{};
+	vk::PipelineLayout pipelineLayout{};
+	vk::RenderPass renderPass{};
+	vk::PrimitiveTopology primitiveTopology{};
+	vk::PolygonMode polygonMode{};
+	vk::CullModeFlagBits cullMode{};
 	std::vector<vk::Viewport> viewports{};
 	std::vector<vk::Rect2D> scissors{};
-	std::vector<vk::DynamicState> dynamic_states{};
+	std::vector<vk::DynamicState> dynamicStates{};
 };
 
-namespace PMATH
+namespace dv_math
 {
 	// STRUCTS
 	template <typename T = float>
-	struct vec2
+	struct Vec2
 	{
 		T x{};
 		T y{};
 	};
 
 	template <typename T = float>
-	struct vec3
+	struct Vec3
 	{
 		T x{};
 		T y{};
 		T z{};
 	};
 
-	struct push_constant
+	struct PushConstant
 	{
 		glm::vec4 color{ 1.0f };
 		glm::mat4 mvp{};
 	};
 
-	struct uniform_buffer_object
+	struct UniformBufferObject
 	{
 		glm::mat4 mvp;
 	};
 
-	struct vertex
+	struct Vertex
 	{
-		vec2<float> position;
+		Vec2<float> position;
 	};
 
-	struct transform
+	struct Transform
 	{
 		glm::vec2 position{ 0.0f };
 		float depth{ 1.0f };

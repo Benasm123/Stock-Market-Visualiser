@@ -3,32 +3,32 @@
 
 #include "Window.h"
 
-bool VulkanContext::init()
+bool VulkanContext::Init()
 {
 	LOG_FUNC_START();
-	instance_ = create_instance();
+	instance_ = CreateInstance();
 	if (!instance_)
 	{
 		return false;
 	}
 
-	physical_device_ = get_best_physical_device();
-	if (!physical_device_)
+	physicalDevice_ = GetBestPhysicalDevice();
+	if (!physicalDevice_)
 	{
 		return false;
 	}
 
-	logical_device_ = create_logical_device();
-	if (!logical_device_)
+	logicalDevice_ = CreateLogicalDevice();
+	if (!logicalDevice_)
 	{
 		return false;
 	}
 
-	graphics_queue_ = logical_device_.getQueue(graphics_queue_index_, 0);
+	graphicsQueue_ = logicalDevice_.getQueue(graphicsQueueIndex_, 0);
 
-	window_.init(L"Data Visualization", 1800, 900);
+	window_.Init(L"Data Visualization", 1800, 900);
 
-	surface_ = create_surface();
+	surface_ = CreateSurface();
 	if (!surface_)
 	{
 		return false;
@@ -38,32 +38,32 @@ bool VulkanContext::init()
 	return true;
 }
 
-bool VulkanContext::update() const
+bool VulkanContext::Update() const
 {
 	bool successful = true;
 
-	successful &= window_.update();
+	successful &= window_.Update();
 
 	return successful;
 }
 
-void VulkanContext::shutdown() const
+void VulkanContext::Shutdown() const
 {
 	LOG_FUNC_START();
-	logical_device_.waitIdle();
+	logicalDevice_.waitIdle();
 
 	instance_.destroySurfaceKHR(surface_);
-	window_.shutdown();
-	logical_device_.destroy();
+	window_.Shutdown();
+	logicalDevice_.destroy();
 	instance_.destroy();
 
 	LOG_FUNC_END();
 }
 
-vk::Instance VulkanContext::create_instance() const
+vk::Instance VulkanContext::CreateInstance() const
 {
 	LOG_FUNC_START();
-	const std::vector<const char*> layer_names = {
+	const std::vector<const char*> layerNames = {
 
 #ifndef DV_RELEASE
 
@@ -74,60 +74,60 @@ vk::Instance VulkanContext::create_instance() const
 
 	};
 
-	const std::vector<const char*> extension_names = {
+	const std::vector<const char*> extensionNames = {
 		VK_KHR_SURFACE_EXTENSION_NAME,
 		VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
 	};
 
-	if (!verify_layers(layer_names))
+	if (!VerifyLayers(layerNames))
 	{
 		return nullptr;
 	}
 
-	if (!verify_extensions(extension_names))
+	if (!VerifyExtensions(extensionNames))
 	{
 		return nullptr;
 	}
 
-	constexpr vk::ApplicationInfo app_info(
-		ENGINE_NAME,
-		APPLICATION_VERSION,
-		ENGINE_NAME,
-		ENGINE_VERSION,
+	constexpr vk::ApplicationInfo appInfo(
+		kEngineName,
+		kApplicationVersion,
+		kEngineName,
+		kEngineVersion,
 		VK_API_VERSION_1_1
 	);
 
-	const vk::InstanceCreateInfo instance_info(
+	const vk::InstanceCreateInfo instanceInfo(
 		{},
-		&app_info,
-		static_cast<uint32_t>(layer_names.size()),
-		layer_names.data(),
-		static_cast<uint32_t>(extension_names.size()),
-		extension_names.data()
+		&appInfo,
+		static_cast<uint32_t>(layerNames.size()),
+		layerNames.data(),
+		static_cast<uint32_t>(extensionNames.size()),
+		extensionNames.data()
 	);
 
 	LOG_FUNC_END();
-	return vk::createInstance(instance_info);
+	return vk::createInstance(instanceInfo);
 }
 
-bool VulkanContext::verify_layers(const std::vector<const char*>& layer_names) const
+bool VulkanContext::VerifyLayers(const std::vector<const char*>& layerNames) const
 {
 	LOG_FUNC_START();
-	std::vector<vk::LayerProperties> supported_layers = vk::enumerateInstanceLayerProperties();
+	std::vector<vk::LayerProperties> supportedLayers = vk::enumerateInstanceLayerProperties();
 
-	for (const auto& layer_name : layer_names)
+	for (const auto& layerName : layerNames)
 	{
-		bool layer_found = false;
-		for (auto& supported_layer : supported_layers)
+		bool layerFound = false;
+		for (auto& supportedLayer : supportedLayers)
 		{
-			if (strcmp(layer_name, supported_layer.layerName) == 0)
+			if (strcmp(layerName, supportedLayer.layerName) == 0)
 			{
-				layer_found = true;
+				layerFound = true;
 			}
 		}
-		if (!layer_found)
+		if (!layerFound)
 		{
-			LOG_ERROR("UNSUPPORTED LAYER: %s", layer_name);
+			LOG_ERROR("UNSUPPORTED LAYER: %s", layerName);
 			return false;
 		}
 	}
@@ -136,28 +136,28 @@ bool VulkanContext::verify_layers(const std::vector<const char*>& layer_names) c
 	return true;
 }
 
-bool VulkanContext::verify_extensions(const std::vector<const char*>& extension_names) const
+bool VulkanContext::VerifyExtensions(const std::vector<const char*>& extensionNames) const
 {
 	LOG_FUNC_START();
 	//TODO::This currently checks all base layer extensions, but there are more available at each layer.
 	//TODO::Need to pass layers used and add extensions for those layers here as well.
-	std::vector<vk::ExtensionProperties> supported_extensions = vk::enumerateInstanceExtensionProperties();
+	std::vector<vk::ExtensionProperties> supportedExtensions = vk::enumerateInstanceExtensionProperties();
 
-	std::vector<vk::LayerProperties> supported_layers = vk::enumerateInstanceLayerProperties();
+	std::vector<vk::LayerProperties> supportedLayers = vk::enumerateInstanceLayerProperties();
 
-	for (const auto& extension_name : extension_names)
+	for (const auto& extensionName : extensionNames)
 	{
-		bool extension_found = false;
-		for (auto& supported_extension : supported_extensions)
+		bool extensionFound = false;
+		for (auto& supportedExtension : supportedExtensions)
 		{
-			if (strcmp(extension_name, supported_extension.extensionName) == 0)
+			if (strcmp(extensionName, supportedExtension.extensionName) == 0)
 			{
-				extension_found = true;
+				extensionFound = true;
 			}
 		}
-		if (!extension_found)
+		if (!extensionFound)
 		{
-			LOG_ERROR("UNSUPPORTED EXTENSION: %s", extension_name);
+			LOG_ERROR("UNSUPPORTED EXTENSION: %s", extensionName);
 			return false;
 		}
 	}
@@ -166,121 +166,122 @@ bool VulkanContext::verify_extensions(const std::vector<const char*>& extension_
 	return true;
 }
 
-vk::PhysicalDevice VulkanContext::get_best_physical_device() const
+vk::PhysicalDevice VulkanContext::GetBestPhysicalDevice() const
 {
 	LOG_FUNC_START();
-	const std::vector<vk::PhysicalDevice> physical_devices_available = instance_.enumeratePhysicalDevices();
+	const std::vector<vk::PhysicalDevice> physicalDevicesAvailable = instance_.enumeratePhysicalDevices();
 
-	if (physical_devices_available.empty())
+	if (physicalDevicesAvailable.empty())
 	{
 		LOG_ERROR("FOUND NO VULKAN SUPPORTED DEVICES");
 		return nullptr;
 	}
 
-	vk::PhysicalDevice best_device = nullptr;
+	vk::PhysicalDevice bestDevice = nullptr;
 
 	//TODO::Add better checks here for best GPU, although this is low priority for this application.
-	for (const auto& physical_device : physical_devices_available)
+	for (const auto& physicalDevice : physicalDevicesAvailable)
 	{
-		if (!best_device)
+		if (!bestDevice)
 		{
-			best_device = physical_device;
-			if (best_device.getProperties().deviceType == vk::PhysicalDeviceType::eDiscreteGpu)
+			bestDevice = physicalDevice;
+			if (bestDevice.getProperties().deviceType == vk::PhysicalDeviceType::eDiscreteGpu)
 			{
 				break;
 			}
 			continue;
 		}
 
-		if (physical_device.getProperties().deviceType == vk::PhysicalDeviceType::eDiscreteGpu)
+		if (physicalDevice.getProperties().deviceType == vk::PhysicalDeviceType::eDiscreteGpu)
 		{
-			best_device = physical_device;
+			bestDevice = physicalDevice;
 			break;
 		}
 	}
 	
-	LOG_INFO("Using GPU: %s", best_device.getProperties().deviceName.data());
+	LOG_INFO("Using GPU: %s", bestDevice.getProperties().deviceName.data());
 	LOG_FUNC_END();
-	return best_device;
+	return bestDevice;
 }
 
 
-vk::Device VulkanContext::create_logical_device()
+vk::Device VulkanContext::CreateLogicalDevice()
 {
 	LOG_FUNC_START();
-	const std::vector<vk::QueueFamilyProperties> queue_family_properties = physical_device_.getQueueFamilyProperties();
+	const std::vector<vk::QueueFamilyProperties> queueFamilyProperties = physicalDevice_.getQueueFamilyProperties();
 
-	uint32_t graphics_queue_family_index = ~0u;
+	uint32_t graphicsQueueFamilyIndex = ~0u;
 
 	uint32_t index = 0;
-	for (auto& queue_family_property : queue_family_properties)
+	for (auto& queueFamilyProperty : queueFamilyProperties)
 	{
-		if (queue_family_property.queueFlags & vk::QueueFlagBits::eGraphics &&
-			physical_device_.getWin32PresentationSupportKHR(index))
+		if (queueFamilyProperty.queueFlags & vk::QueueFlagBits::eGraphics &&
+			physicalDevice_.getWin32PresentationSupportKHR(index))
 		{
-			graphics_queue_family_index = index;
+			graphicsQueueFamilyIndex = index;
 			break;
 		}
 		index++;
 	}
 
-	if (graphics_queue_family_index == ~0u)
+	if (graphicsQueueFamilyIndex == ~0u)
 	{
 		LOG_ERROR("NO SUPPORTED GRAPHICS QUEUE FOUND");
 		return nullptr;
 	}
 
-	graphics_queue_index_ = graphics_queue_family_index;
+	graphicsQueueIndex_ = graphicsQueueFamilyIndex;
 
 	float priorities[] = { 1.0f };
 
-	const std::vector<vk::DeviceQueueCreateInfo> queue_infos = {
+	const std::vector<vk::DeviceQueueCreateInfo> queueInfos = {
 		{
 			{},
-			graphics_queue_family_index,
+			graphicsQueueFamilyIndex,
 			1,
 			priorities
 		}
 	};
 
-	const std::vector<const char*> layer_names = {
+	const std::vector<const char*> layerNames = {
 #ifndef DV_RELEASE
 		"VK_LAYER_KHRONOS_validation",
 		"VK_LAYER_LUNARG_monitor"
 #endif
 	};
 
-	const std::vector<const char*> extension_names = {
+	const std::vector<const char*> extensionNames = {
 		VK_KHR_SWAPCHAIN_EXTENSION_NAME
 	};
 
 	vk::PhysicalDeviceFeatures features{};
-	features.multiViewport = VK_TRUE;
+	// features.multiViewport = VK_TRUE;
+	features.setWideLines(VK_TRUE);
 
-	const vk::DeviceCreateInfo device_info(
+	const vk::DeviceCreateInfo deviceInfo(
 		{},
-		static_cast<uint32_t>(queue_infos.size()),
-		queue_infos.data(),
-		static_cast<uint32_t>(layer_names.size()),
-		layer_names.data(),
-		static_cast<uint32_t>(extension_names.size()),
-		extension_names.data(),
+		static_cast<uint32_t>(queueInfos.size()),
+		queueInfos.data(),
+		static_cast<uint32_t>(layerNames.size()),
+		layerNames.data(),
+		static_cast<uint32_t>(extensionNames.size()),
+		extensionNames.data(),
 		&features
 	);
 
 	LOG_FUNC_END();
-	return physical_device_.createDevice(device_info);
+	return physicalDevice_.createDevice(deviceInfo);
 }
 
-vk::SurfaceKHR VulkanContext::create_surface() const
+vk::SurfaceKHR VulkanContext::CreateSurface() const
 {
 	LOG_FUNC_START();
-	const vk::Win32SurfaceCreateInfoKHR surface_info(
+	const vk::Win32SurfaceCreateInfoKHR surfaceInfo(
 		{},
-		window_.get_hinstance(),
-		window_.get_hwnd()
+		window_.GetHInstance(),
+		window_.GetHwnd()
 	);
 
 	LOG_FUNC_END();
-	return instance_.createWin32SurfaceKHR(surface_info);
+	return instance_.createWin32SurfaceKHR(surfaceInfo);
 }

@@ -1,10 +1,10 @@
 #include "pcHeader.h"
 #include "GraphicsPipeline.h"
 
-bool GraphicsPipeline::Init(const graphics_pipeline_create_info& createInfo)
+bool GraphicsPipeline::Init(const GraphicsPipelineCreateInfo& createInfo)
 {
 	LOG_FUNC_START();
-	logicalDevice_ = createInfo.logical_device;
+	logicalDevice_ = createInfo.logicalDevice;
 
 	pipeline_ = CreateGraphicsPipeline(createInfo);
 	if (!pipeline_)
@@ -29,12 +29,12 @@ void GraphicsPipeline::BindPipeline(const vk::CommandBuffer commandBuffer) const
 	commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline_);
 }
 
-vk::Pipeline GraphicsPipeline::CreateGraphicsPipeline(const graphics_pipeline_create_info& createInfo) const
+vk::Pipeline GraphicsPipeline::CreateGraphicsPipeline(const GraphicsPipelineCreateInfo& createInfo) const
 {
 	LOG_FUNC_START();
-	const std::vector<vk::ShaderModule> shaderModules = LoadShaders(logicalDevice_, createInfo.shader_infos);
+	const std::vector<vk::ShaderModule> shaderModules = LoadShaders(logicalDevice_, createInfo.shaderInfos);
 
-	std::vector<vk::PipelineShaderStageCreateInfo> shaderStageInfos = CreateShaderStageInfos(createInfo.logical_device, createInfo.shader_infos, shaderModules);
+	std::vector<vk::PipelineShaderStageCreateInfo> shaderStageInfos = CreateShaderStageInfos(createInfo.logicalDevice, createInfo.shaderInfos, shaderModules);
 	
 	std::vector<vk::VertexInputBindingDescription> vertexInputBindingDescriptions = CreateVertexInputBindingDescriptions();
 
@@ -42,13 +42,13 @@ vk::Pipeline GraphicsPipeline::CreateGraphicsPipeline(const graphics_pipeline_cr
 
 	vk::PipelineVertexInputStateCreateInfo vertexInputStateInfo = CreateVertexInputStateInfo(vertexInputBindingDescriptions, vertexInputAttributeDescriptions);
 
-	vk::PipelineInputAssemblyStateCreateInfo inputAssemblyStateInfo = CreateInputAssemblyStateInfo(createInfo.primitive_topology);
+	vk::PipelineInputAssemblyStateCreateInfo inputAssemblyStateInfo = CreateInputAssemblyStateInfo(createInfo.primitiveTopology);
 
 	vk::PipelineViewportStateCreateInfo viewportStateInfo = CreateViewportStateInfo(createInfo.viewports, createInfo.scissors);
 
-	vk::PipelineRasterizationStateCreateInfo rasterizationStateInfo = CreateRasterizationStateInfo(createInfo.polygon_mode, createInfo.cull_mode);
+	vk::PipelineRasterizationStateCreateInfo rasterStateInfo = CreateRasterStateInfo(createInfo.polygonMode, createInfo.cullMode);
 
-	vk::PipelineDynamicStateCreateInfo dynamicStateInfo = CreateDynamicStateInfo(createInfo.dynamic_states);
+	vk::PipelineDynamicStateCreateInfo dynamicStateInfo = CreateDynamicStateInfo(createInfo.dynamicStates);
 
 	vk::PipelineMultisampleStateCreateInfo multiSampleStateInfo = CreateMultiSampleStateInfo();
 
@@ -60,25 +60,25 @@ vk::Pipeline GraphicsPipeline::CreateGraphicsPipeline(const graphics_pipeline_cr
 
 	const vk::GraphicsPipelineCreateInfo graphicsPipelineInfo(
 		{},
-		static_cast<uint32_t>(shaderStageInfos.size()),
+		(shaderStageInfos.size()),
 		shaderStageInfos.data(),
 		&vertexInputStateInfo,
 		&inputAssemblyStateInfo,
 		nullptr, // Tessellation Stage
 		&viewportStateInfo,
-		&rasterizationStateInfo,
+		&rasterStateInfo,
 		&multiSampleStateInfo,
 		&depthStencilStateInfo,
 		&colorBlendStateInfo,
 		&dynamicStateInfo,
-		createInfo.pipeline_layout,
-		createInfo.render_pass,
+		createInfo.pipelineLayout,
+		createInfo.renderPass,
 		0,
 		VK_NULL_HANDLE,
 		0
 	);
 
-	vk::ResultValue<vk::Pipeline> graphicsPipelineResult = createInfo.logical_device.createGraphicsPipeline(nullptr, graphicsPipelineInfo);
+	vk::ResultValue<vk::Pipeline> graphicsPipelineResult = createInfo.logicalDevice.createGraphicsPipeline(nullptr, graphicsPipelineInfo);
 	if (graphicsPipelineResult.result != vk::Result::eSuccess)
 	{
 		LOG_VULK("Failed To Create Graphics Pipeline");
@@ -95,7 +95,7 @@ vk::Pipeline GraphicsPipeline::CreateGraphicsPipeline(const graphics_pipeline_cr
 }
 
 std::vector<vk::PipelineShaderStageCreateInfo> GraphicsPipeline::CreateShaderStageInfos(
-	const vk::Device& logicalDevice, const std::vector<shader_info>& shaderInfos,
+	const vk::Device& logicalDevice, const std::vector<ShaderInfo>& shaderInfos,
 	const std::vector<vk::ShaderModule>& shaderModules)
 {
 	LOG_FUNC_START();
@@ -120,18 +120,18 @@ std::vector<vk::PipelineShaderStageCreateInfo> GraphicsPipeline::CreateShaderSta
 	return shaderStageInfos;
 }
 
-std::vector<vk::ShaderModule> GraphicsPipeline::LoadShaders(const vk::Device& logicalDevice, const std::vector<shader_info>& shaderInfos)
+std::vector<vk::ShaderModule> GraphicsPipeline::LoadShaders(const vk::Device& logicalDevice, const std::vector<ShaderInfo>& shaderInfos)
 {
 	LOG_FUNC_START();
 	std::vector<vk::ShaderModule> shaderModules;
 
 	for (auto& shaderInfo : shaderInfos)
 	{
-		std::ifstream file(shaderInfo.file_name, std::ios::ate | std::ios::binary);
+		std::ifstream file(shaderInfo.fileName, std::ios::ate | std::ios::binary);
 
 		if (!file.is_open())
 		{
-			LOG_ERROR("Failed To Open File: %s", shaderInfo.file_name);
+			LOG_ERROR("Failed To Open File: %s", shaderInfo.fileName);
 			continue;
 		}
 
@@ -163,7 +163,7 @@ std::vector<vk::VertexInputBindingDescription> GraphicsPipeline::CreateVertexInp
 	return std::vector<vk::VertexInputBindingDescription> {
 		   {
 			   0,
-			   sizeof(PMATH::vertex),
+			   sizeof(dv_math::Vertex),
 			   vk::VertexInputRate::eVertex
 		   }
 	};
@@ -207,7 +207,7 @@ vk::PipelineInputAssemblyStateCreateInfo GraphicsPipeline::CreateInputAssemblySt
 	return {
 		{},
 		primitiveTopology,
-		VK_FALSE
+		VK_TRUE
 	};
 }
 
@@ -225,7 +225,7 @@ vk::PipelineViewportStateCreateInfo GraphicsPipeline::CreateViewportStateInfo(
 	};
 }
 
-vk::PipelineRasterizationStateCreateInfo GraphicsPipeline::CreateRasterizationStateInfo(
+vk::PipelineRasterizationStateCreateInfo GraphicsPipeline::CreateRasterStateInfo(
 	const vk::PolygonMode polygonMode, const vk::CullModeFlagBits cullMode)
 {
 	LOG_FUNC_START();
@@ -241,7 +241,7 @@ vk::PipelineRasterizationStateCreateInfo GraphicsPipeline::CreateRasterizationSt
 		0.0f,
 		0.0f,
 		0.0f,
-		1.0f
+		1.5f
 	};
 }
 
@@ -263,7 +263,7 @@ vk::PipelineMultisampleStateCreateInfo GraphicsPipeline::CreateMultiSampleStateI
 	LOG_FUNC_END();
 	return {
 		{},
-		vk::SampleCountFlagBits::e1,
+		vk::SampleCountFlagBits::e8,
 		VK_FALSE,
 		4.0f,
 		nullptr,

@@ -1,0 +1,57 @@
+{
+  "build": "py39haa95532_0",
+  "build_number": 0,
+  "channel": "https://repo.anaconda.com/pkgs/main/win-64",
+  "constrains": [],
+  "depends": [
+    "python >=3.9,<3.10.0a0"
+  ],
+  "extracted_package_dir": "C:\\Users\\Benas\\miniconda3\\pkgs\\colorama-0.4.5-py39haa95532_0",
+  "features": "",
+  "files": [
+    "Lib/site-packages/colorama-0.4.5.dist-info/INSTALLER",
+    "Lib/site-packages/colorama-0.4.5.dist-info/LICENSE.txt",
+    "Lib/site-packages/colorama-0.4.5.dist-info/METADATA",
+    "Lib/site-packages/colorama-0.4.5.dist-info/RECORD",
+    "Lib/site-packages/colorama-0.4.5.dist-info/REQUESTED",
+    "Lib/site-packages/colorama-0.4.5.dist-info/WHEEL",
+    "Lib/site-packages/colorama-0.4.5.dist-info/direct_url.json",
+    "Lib/site-packages/colorama-0.4.5.dist-info/top_level.txt",
+    "Lib/site-packages/colorama/__init__.py",
+    "Lib/site-packages/colorama/__pycache__/__init__.cpython-39.pyc",
+    "Lib/site-packages/colorama/__pycache__/ansi.cpython-39.pyc",
+    "Lib/site-packages/colorama/__pycache__/ansitowin32.cpython-39.pyc",
+    "Lib/site-packages/colorama/__pycache__/initialise.cpython-39.pyc",
+    "Lib/site-packages/colorama/__pycache__/win32.cpython-39.pyc",
+    "Lib/site-packages/colorama/__pycache__/winterm.cpython-39.pyc",
+    "Lib/site-packages/colorama/ansi.py",
+    "Lib/site-packages/colorama/ansitowin32.py",
+    "Lib/site-packages/colorama/initialise.py",
+    "Lib/site-packages/colorama/win32.py",
+    "Lib/site-packages/colorama/winterm.py"
+  ],
+  "fn": "colorama-0.4.5-py39haa95532_0.conda",
+  "legacy_bz2_md5": "355c60782f16bac386442c4264cccc62",
+  "legacy_bz2_size": 28208,
+  "license": "BSD-3-Clause",
+  "license_family": "BSD",
+  "link": {
+    "source": "C:\\Users\\Benas\\miniconda3\\pkgs\\colorama-0.4.5-py39haa95532_0",
+    "type": 1
+  },
+  "md5": "4dae0d1c996aaff6a362925d43ee6fbd",
+  "name": "colorama",
+  "package_tarball_full_path": "C:\\Users\\Benas\\miniconda3\\pkgs\\colorama-0.4.5-py39haa95532_0.conda",
+  "paths_data": {
+    "paths": [],
+    "paths_version": 1
+  },
+  "requested_spec": "defaults/win-64::colorama==0.4.5=py39haa95532_0[md5=4dae0d1c996aaff6a362925d43ee6fbd]",
+  "sha256": "5d1ce327eba6ffcfc0021fd76207abb42b9ad15398d929d5f9b4b06c9c434e29",
+  "size": 28563,
+  "subdir": "win-64",
+  "timestamp": 1657009311307,
+  "track_features": "",
+  "url": "https://repo.anaconda.com/pkgs/main/win-64/colorama-0.4.5-py39haa95532_0.conda",
+  "version": "0.4.5"
+}

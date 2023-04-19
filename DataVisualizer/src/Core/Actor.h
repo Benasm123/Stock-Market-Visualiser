@@ -1,6 +1,9 @@
 #pragma once
 #include "pcHeader.h"
 
+class Component;
+class Application;
+
 class Actor
 {
 public:
@@ -11,13 +14,13 @@ public:
 		DEAD
 	};
 
-	explicit Actor(class Application* application);
+	explicit Actor(Application* application);
 	virtual ~Actor();
 
 	void Update(float deltaTime);
 
-	void AddComponent(class Component* component);
-	void RemoveComponent(class Component* component);
+	void AddComponent(Component* component);
+	void RemoveComponent(Component* component);
 
 private:
 	virtual void UpdateActor(float deltaTime);
@@ -25,14 +28,14 @@ private:
 
 public:
 	[[nodiscard]] const STATE& GetState() const { return state_; }
-	[[nodiscard]] PMATH::transform& GetTransform() { return transform_; }
-	[[nodiscard]] class Application* GetApplication() const { return application_; }
+	[[nodiscard]] dv_math::Transform& GetTransform() { return transform_; }
+	[[nodiscard]] Application* GetApplication() const { return application_; }
 
 private:
 	STATE state_{ACTIVE};
-	std::vector<class Component*> components_{};
-	class Application* application_{};
+	std::vector<Component*> components_{};
+	Application* application_{};
 
-	PMATH::transform transform_{};
+	dv_math::Transform transform_{};
 };
 

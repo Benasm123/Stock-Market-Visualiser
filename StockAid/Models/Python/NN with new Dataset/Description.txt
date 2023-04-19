@@ -1,0 +1,2 @@
+Neural Network using Tensorflow.
+Trained on Daily stock data, inluding normalised price, 60 day average, and dataset average price for that day.

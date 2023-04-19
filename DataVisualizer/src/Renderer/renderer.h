@@ -13,8 +13,12 @@ public:
 	bool Update();
 	void Shutdown();
 
-	[[nodiscard]] vk::Buffer CreateVertexBuffer(const std::vector<PMATH::vertex> points) const;
-	[[nodiscard]] vk::DeviceMemory BindVertexBufferMemory(const vk::Buffer vertexBuffer, const std::vector<PMATH::vertex> points) const;
+	[[nodiscard]] vk::Buffer CreateVertexBuffer(const std::vector<dv_math::Vertex>& points) const;
+	[[nodiscard]] vk::DeviceMemory BindVertexBufferMemory(const vk::Buffer vertexBuffer, const std::vector<dv_math::Vertex>
+	                                                      & points) const;
+	void* MapMemory(vk::Buffer vertexBuffer, vk::DeviceMemory memory) const;
+	void WriteToVertexBufferMemory(const vk::Buffer vertexBuffer, void* data, const std::vector<dv_math::Vertex>& points) const;
+	void UnMapMemory(vk::DeviceMemory memory) const;
 	void DestroyBuffer(vk::Buffer buffer) const;
 	void FreeMemory(vk::DeviceMemory memory) const;
 
@@ -25,8 +29,11 @@ private:
 	[[nodiscard]] vk::DescriptorSetLayout CreateDescriptorSetLayout() const;
 	[[nodiscard]] vk::PipelineLayout CreatePipelineLayout() const;
 	[[nodiscard]] vk::Image CreateDepthImage() const;
+	[[nodiscard]] vk::Image CreateColourImage() const;
 	[[nodiscard]] vk::DeviceMemory BindDepthImage() const;
+	[[nodiscard]] vk::DeviceMemory BindColourImage() const;
 	[[nodiscard]] vk::ImageView CreateDepthImageView() const;
+	[[nodiscard]] vk::ImageView CreateColourImageView() const;
 	[[nodiscard]] std::vector<vk::Framebuffer> CreateFrameBuffers() const;
 	[[nodiscard]] vk::CommandPool CreateCommandPool() const;
 	[[nodiscard]] vk::Buffer CreateUniformBuffer() const;
@@ -47,7 +54,7 @@ public:
 	[[nodiscard]] vk::DescriptorPool& GetImGuiDescriptorPool() { return imGuiDescriptorPool_; }
 	[[nodiscard]] vk::RenderPass& GetRenderPass() { return renderPass_; }
 	[[nodiscard]] vk::DescriptorPool& GetDescriptorPool() { return descriptorPool_; }
-	[[nodiscard]] swapchain& GetSwapChain() { return swapchain_; }
+	[[nodiscard]] Swapchain& GetSwapChain() { return swapchain_; }
 	[[nodiscard]] vk::CommandPool& GetCommandPool() { return commandPool_; }
 	[[nodiscard]] std::vector<vk::CommandBuffer>& GetCommandBuffers() { return commandBuffers_; }
 	[[nodiscard]] vk::Fence& GetInFlightFence() { return inFlightFence_; }
@@ -55,7 +62,7 @@ public:
 private:
 	VulkanContext* vulkanContext_{};
 
-	swapchain swapchain_;
+	Swapchain swapchain_;
 
 	vk::RenderPass renderPass_;
 	vk::DescriptorSetLayout descriptorSetLayout_;
@@ -64,8 +71,11 @@ private:
 	GraphicsPipeline linePipeline_;
 
 	vk::Image depthImage_;
+	vk::Image colourImage_;
 	vk::DeviceMemory depthImageMemory_;
+	vk::DeviceMemory colourImageMemory_;
 	vk::ImageView depthImageView_;
+	vk::ImageView colourImageView_;
 
 	std::vector<vk::Framebuffer> frameBuffers_;
 
@@ -90,5 +100,8 @@ private:
 
 	vk::DescriptorPool imGuiDescriptorPool_;
 	ImDrawData* drawData_{};
+
+	uint32_t lastWindowHeight_;
+	uint32_t lastWindowWidth_;
 };
 

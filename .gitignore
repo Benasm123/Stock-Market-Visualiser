@@ -372,4 +372,7 @@ FodyWeavers.xsd
 *.vcxproj*
 *.sln
 *\assets
-*\ext
+*\ext\Python39_64
+.\ext
+*\Dataset.csv
+*\data

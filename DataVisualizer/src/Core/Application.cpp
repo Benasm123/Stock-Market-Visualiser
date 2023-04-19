@@ -2,8 +2,6 @@
 #include "Application.h"
 
 #include "Actor.h"
-#include "backends/imgui_impl_vulkan.h"
-#include "backends/imgui_impl_win32.h"
 
 Application::Application()
 = default;
@@ -14,7 +12,7 @@ Application::~Application()
 bool Application::Init()
 {
 	LOG_FUNC_START();
-	if (!vulkanContext_.init()) return false;
+	if (!vulkanContext_.Init()) return false;
 	if (!renderer_.Init(&vulkanContext_)) return false;
 
 	OnStartup();
@@ -52,7 +50,7 @@ void Application::Shutdown()
 	LOG_FUNC_START();
 	OnShutdown();
 
-	vulkanContext_.get_logical_device().waitIdle();
+	vulkanContext_.GetLogicalDevice().waitIdle();
 
 	while (!actors_.empty())
 	{
@@ -60,7 +58,7 @@ void Application::Shutdown()
 	}
 
 	renderer_.Shutdown();
-	vulkanContext_.shutdown();
+	vulkanContext_.Shutdown();
 
 	LOG_FUNC_END();
 }
@@ -105,9 +103,9 @@ void Application::ProcessInput(float deltaTime)
 }
 
 //Process all Application loop actions here.
-void Application::Update(float deltaTime)
+void Application::Update(const float deltaTime)
 {
-	isRunning_ &= vulkanContext_.update();
+	isRunning_ &= vulkanContext_.Update();
 
 	OnUpdate(deltaTime);
 

@@ -1,0 +1,7 @@
+Q Learning Algorithm.
+
+Actions -> Buy, Sell, Hold
+States -> High, 60 Day Average, 500 Stock Average
+
+All states are normalised between 0.0 and 1.0 based on the max value seen at that day.
+All states are rounded to nearest 0.1 to reduce state space.

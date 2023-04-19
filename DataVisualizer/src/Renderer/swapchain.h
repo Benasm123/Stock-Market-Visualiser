@@ -3,54 +3,54 @@
 
 class VulkanContext;
 
-class swapchain
+class Swapchain
 {
 public:
-	swapchain() = default;
-	~swapchain() = default;
+	Swapchain() = default;
+	~Swapchain() = default;
 
-	bool init(VulkanContext* vulkan_context);
-	void recreate();
-	void shutdown();
+	bool Init(VulkanContext* vulkanContext);
+	void Recreate();
+	void Shutdown();
 
 private:
-	struct swapchain_details
+	struct SwapchainDetails
 	{
-		uint32_t image_count;
-		vk::SurfaceFormatKHR surface_format;
+		uint32_t imageCount;
+		vk::SurfaceFormatKHR surfaceFormat;
 		vk::Extent2D extent;
-		vk::SurfaceTransformFlagBitsKHR surface_transform;
-		vk::PresentModeKHR present_mode;
+		vk::SurfaceTransformFlagBitsKHR surfaceTransform;
+		vk::PresentModeKHR presentMode;
 	};
 
-	void destroy_old_swapchain();
+	void DestroyOldSwapchain();
 
-	[[nodiscard]] vk::SwapchainKHR create_swapchain();
-	[[nodiscard]] swapchain_details get_swapchain_details() const;
-	[[nodiscard]] uint32_t get_swapchain_image_count() const;
-	[[nodiscard]] vk::SurfaceFormatKHR get_swapchain_format() const;
-	[[nodiscard]] vk::Extent2D get_swapchain_extent() const;
-	[[nodiscard]] vk::SurfaceTransformFlagBitsKHR get_swapchain_surface_transform() const;
-	[[nodiscard]] vk::PresentModeKHR get_swapchain_present_mode() const;
+	[[nodiscard]] vk::SwapchainKHR CreateSwapchain();
+	[[nodiscard]] SwapchainDetails GetSwapchainDetails() const;
+	[[nodiscard]] uint32_t GetSwapchainImageCount() const;
+	[[nodiscard]] vk::SurfaceFormatKHR GetSwapchainFormat() const;
+	[[nodiscard]] vk::Extent2D GetSwapchainExtent() const;
+	[[nodiscard]] vk::SurfaceTransformFlagBitsKHR GetSwapchainSurfaceTransform() const;
+	[[nodiscard]] vk::PresentModeKHR GetSwapchainPresentMode() const;
 
-	[[nodiscard]] std::vector<vk::Image> get_swapchain_images() const;
-	[[nodiscard]] std::vector<vk::ImageView> create_swapchain_image_views() const;
+	[[nodiscard]] std::vector<vk::Image> GetSwapchainImages() const;
+	[[nodiscard]] std::vector<vk::ImageView> CreateSwapchainImageViews() const;
 
 public:
-	[[nodiscard]] const vk::SwapchainKHR& get_swapchain() const { return swapchain_; }
-	[[nodiscard]] const std::vector<vk::Image>& get_images() const { return images_; }
-	[[nodiscard]] const std::vector<vk::ImageView>& get_image_views() const { return image_views_; }
-	[[nodiscard]] swapchain_details get_details() const { return swapchain_details_; }
+	[[nodiscard]] const vk::SwapchainKHR& GetSwapchain() const { return swapchain_; }
+	[[nodiscard]] const std::vector<vk::Image>& GetImages() const { return images_; }
+	[[nodiscard]] const std::vector<vk::ImageView>& GetImageViews() const { return imageViews_; }
+	[[nodiscard]] SwapchainDetails GetDetails() const { return swapchainDetails_; }
 
 private:
-	VulkanContext* vulkan_context_{};
+	VulkanContext* vulkanContext_{};
 
 	vk::SwapchainKHR swapchain_;
-	vk::SwapchainKHR old_swapchain_{};
+	vk::SwapchainKHR oldSwapchain_{};
 
-	swapchain_details swapchain_details_;
+	SwapchainDetails swapchainDetails_;
 
 	std::vector<vk::Image> images_;
-	std::vector<vk::ImageView> image_views_;
+	std::vector<vk::ImageView> imageViews_;
 };
 

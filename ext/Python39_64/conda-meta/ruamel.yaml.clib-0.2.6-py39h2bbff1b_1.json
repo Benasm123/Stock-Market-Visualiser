@@ -1,0 +1,49 @@
+{
+  "build": "py39h2bbff1b_1",
+  "build_number": 1,
+  "channel": "https://repo.anaconda.com/pkgs/main/win-64",
+  "constrains": [],
+  "depends": [
+    "python >=3.9,<3.10.0a0",
+    "vc >=14.1,<15.0a0",
+    "vs2015_runtime >=14.16.27012,<15.0a0"
+  ],
+  "extracted_package_dir": "C:\\Users\\Benas\\miniconda3\\pkgs\\ruamel.yaml.clib-0.2.6-py39h2bbff1b_1",
+  "features": "",
+  "files": [
+    "Lib/site-packages/_ruamel_yaml.cp39-win_amd64.pyd",
+    "Lib/site-packages/ruamel.yaml.clib-0.2.6.dist-info/INSTALLER",
+    "Lib/site-packages/ruamel.yaml.clib-0.2.6.dist-info/LICENSE",
+    "Lib/site-packages/ruamel.yaml.clib-0.2.6.dist-info/METADATA",
+    "Lib/site-packages/ruamel.yaml.clib-0.2.6.dist-info/RECORD",
+    "Lib/site-packages/ruamel.yaml.clib-0.2.6.dist-info/REQUESTED",
+    "Lib/site-packages/ruamel.yaml.clib-0.2.6.dist-info/WHEEL",
+    "Lib/site-packages/ruamel.yaml.clib-0.2.6.dist-info/direct_url.json",
+    "Lib/site-packages/ruamel.yaml.clib-0.2.6.dist-info/namespace_packages.txt",
+    "Lib/site-packages/ruamel.yaml.clib-0.2.6.dist-info/top_level.txt"
+  ],
+  "fn": "ruamel.yaml.clib-0.2.6-py39h2bbff1b_1.conda",
+  "legacy_bz2_md5": "cd4f39794ddd843eeee5666ed355182f",
+  "legacy_bz2_size": 115122,
+  "license": "MIT",
+  "license_family": "MIT",
+  "link": {
+    "source": "C:\\Users\\Benas\\miniconda3\\pkgs\\ruamel.yaml.clib-0.2.6-py39h2bbff1b_1",
+    "type": 1
+  },
+  "md5": "ac3d03f8c6daa80094f458b59df38424",
+  "name": "ruamel.yaml.clib",
+  "package_tarball_full_path": "C:\\Users\\Benas\\miniconda3\\pkgs\\ruamel.yaml.clib-0.2.6-py39h2bbff1b_1.conda",
+  "paths_data": {
+    "paths": [],
+    "paths_version": 1
+  },
+  "requested_spec": "defaults/win-64::ruamel.yaml.clib==0.2.6=py39h2bbff1b_1[md5=ac3d03f8c6daa80094f458b59df38424]",
+  "sha256": "d5dd57a7f9f8169992f39ed64003a9363550cbd922b4aa3eaf4e2a45c6cd8743",
+  "size": 103341,
+  "subdir": "win-64",
+  "timestamp": 1666302651362,
+  "track_features": "",
+  "url": "https://repo.anaconda.com/pkgs/main/win-64/ruamel.yaml.clib-0.2.6-py39h2bbff1b_1.conda",
+  "version": "0.2.6"
+}

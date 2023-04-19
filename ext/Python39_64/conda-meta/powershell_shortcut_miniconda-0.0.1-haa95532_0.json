@@ -1,0 +1,40 @@
+{
+  "build": "haa95532_0",
+  "build_number": 0,
+  "channel": "https://repo.anaconda.com/pkgs/main/win-64",
+  "constrains": [
+    "anaconda-navigator >=1.9.8"
+  ],
+  "depends": [
+    "python"
+  ],
+  "extracted_package_dir": "C:\\Users\\Benas\\miniconda3\\pkgs\\powershell_shortcut_miniconda-0.0.1-haa95532_0",
+  "features": "",
+  "files": [
+    "Menu/Iconleak-Atrous-PSConsole.ico",
+    "Menu/powershell_shortcut.json"
+  ],
+  "fn": "powershell_shortcut_miniconda-0.0.1-haa95532_0.conda",
+  "legacy_bz2_md5": "e3cf1f8b0a72e8210c3179b058e04ad9",
+  "legacy_bz2_size": 62273,
+  "license": "BSD-3-Clause",
+  "link": {
+    "source": "C:\\Users\\Benas\\miniconda3\\pkgs\\powershell_shortcut_miniconda-0.0.1-haa95532_0",
+    "type": 1
+  },
+  "md5": "ac1f7ae7e90d9bf2f4e60e7e875ea818",
+  "name": "powershell_shortcut_miniconda",
+  "package_tarball_full_path": "C:\\Users\\Benas\\miniconda3\\pkgs\\powershell_shortcut_miniconda-0.0.1-haa95532_0.conda",
+  "paths_data": {
+    "paths": [],
+    "paths_version": 1
+  },
+  "requested_spec": "defaults/win-64::powershell_shortcut_miniconda==0.0.1=haa95532_0[md5=ac1f7ae7e90d9bf2f4e60e7e875ea818]",
+  "sha256": "e422ce619ce261e785ce1e0eb62928afaaf571b87075784972b2c4fb49ae8425",
+  "size": 111512,
+  "subdir": "win-64",
+  "timestamp": 1671575635398,
+  "track_features": "",
+  "url": "https://repo.anaconda.com/pkgs/main/win-64/powershell_shortcut_miniconda-0.0.1-haa95532_0.conda",
+  "version": "0.0.1"
+}

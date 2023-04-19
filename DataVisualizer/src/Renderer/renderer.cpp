@@ -5,6 +5,7 @@
 #include "backends/imgui_impl_win32.h"
 #include "Core/Application.h"
 #include "Core/Components/CLineChart.h"
+#include "Renderer/Window.h"
 
 bool Renderer::Init(VulkanContext* vulkanContext)
 {
@@ -12,13 +13,13 @@ bool Renderer::Init(VulkanContext* vulkanContext)
 
 	vulkanContext_ = vulkanContext;
 
-	swapchain_.init(vulkanContext_);
+	swapchain_.Init(vulkanContext_);
 
 	renderPass_ = CreateRenderPass();
 	descriptorSetLayout_ = CreateDescriptorSetLayout();
 	pipelineLayout_ = CreatePipelineLayout();
 
-	const std::vector<shader_info> shaderInfos = {
+	const std::vector<ShaderInfo> shaderInfos = {
 		{
 			vk::ShaderStageFlagBits::eVertex,
 			"../DataVisualizer/src/Shaders/vert.spv"
@@ -32,8 +33,8 @@ bool Renderer::Init(VulkanContext* vulkanContext)
 	mainViewport_ = vk::Viewport{
 		0.0f,
 		0.0f,
-		static_cast<float>(vulkanContext_->get_window().get_width()),
-		static_cast<float>(vulkanContext_->get_window().get_height()),
+		static_cast<float>(vulkanContext_->GetWindow().GetWidth()),
+		static_cast<float>(vulkanContext_->GetWindow().GetHeight()),
 		0.0f, 1.0f
 	};
 	
@@ -43,28 +44,32 @@ bool Renderer::Init(VulkanContext* vulkanContext)
 			0
 		},
 		{
-			(vulkanContext_->get_window().get_width()),
-			(vulkanContext_->get_window().get_height())
+			(vulkanContext_->GetWindow().GetWidth()),
+			(vulkanContext_->GetWindow().GetHeight())
 		}
 	};
 
-	graphics_pipeline_create_info graphicsPipelineInfo{};
-	graphicsPipelineInfo.logical_device = vulkanContext_->get_logical_device();
-	graphicsPipelineInfo.shader_infos = shaderInfos;
-	graphicsPipelineInfo.pipeline_layout = pipelineLayout_;
-	graphicsPipelineInfo.render_pass = renderPass_;
-	graphicsPipelineInfo.primitive_topology = vk::PrimitiveTopology::eLineStrip;
-	graphicsPipelineInfo.polygon_mode = vk::PolygonMode::eFill;
-	graphicsPipelineInfo.cull_mode = vk::CullModeFlagBits::eNone;
+	GraphicsPipelineCreateInfo graphicsPipelineInfo{};
+	graphicsPipelineInfo.logicalDevice = vulkanContext_->GetLogicalDevice();
+	graphicsPipelineInfo.shaderInfos = shaderInfos;
+	graphicsPipelineInfo.pipelineLayout = pipelineLayout_;
+	graphicsPipelineInfo.renderPass = renderPass_;
+	graphicsPipelineInfo.primitiveTopology = vk::PrimitiveTopology::eLineStrip;
+	graphicsPipelineInfo.polygonMode = vk::PolygonMode::eFill;
+	graphicsPipelineInfo.cullMode = vk::CullModeFlagBits::eNone;
 	graphicsPipelineInfo.viewports = { mainViewport_};
 	graphicsPipelineInfo.scissors = { scissor_ };
-	graphicsPipelineInfo.dynamic_states = { vk::DynamicState::eViewport, vk::DynamicState::eScissor };
+	graphicsPipelineInfo.dynamicStates = { vk::DynamicState::eViewport, vk::DynamicState::eScissor };
 
 	linePipeline_.Init(graphicsPipelineInfo);
 
 	depthImage_ = CreateDepthImage();
 	depthImageMemory_ = BindDepthImage();
 	depthImageView_ = CreateDepthImageView();
+
+	colourImage_ = CreateColourImage();
+	colourImageMemory_ = BindColourImage();
+	colourImageView_ = CreateColourImageView();
 
 	frameBuffers_ = CreateFrameBuffers();
 
@@ -87,24 +92,79 @@ bool Renderer::Init(VulkanContext* vulkanContext)
 	renderFinishedSemaphore_ = CreateSemaphore();
 	inFlightFence_ = CreateFence();
 
+	lastWindowHeight_ = vulkanContext_->GetWindow().GetHeight();
+	lastWindowWidth_ = vulkanContext_->GetWindow().GetWidth();
+
 	LOG_FUNC_END();
 	return true;
 }
 
 bool Renderer::Update()
 {
-	if (vulkanContext_->get_logical_device().waitForFences(1, &inFlightFence_, VK_TRUE, 0) != vk::Result::eSuccess)
+	if (vulkanContext_->GetLogicalDevice().waitForFences(1, &inFlightFence_, VK_TRUE, 0) != vk::Result::eSuccess)
 	{
 		return true;
 	}
 	
-	if (vulkanContext_->get_logical_device().resetFences(1, &inFlightFence_) != vk::Result::eSuccess)
+	if (vulkanContext_->GetLogicalDevice().resetFences(1, &inFlightFence_) != vk::Result::eSuccess)
 	{
 		
 		return false;
 	}
 
-	const vk::ResultValue<uint32_t> nextImageIndexResult = vulkanContext_->get_logical_device().acquireNextImageKHR(swapchain_.get_swapchain(), 0, imageAvailableSemaphore_, VK_NULL_HANDLE);
+	if ( vulkanContext_->GetWindow().GetHeight() != lastWindowHeight_ || vulkanContext_->GetWindow().GetWidth() != lastWindowWidth_ )
+	{
+		swapchain_.Recreate();
+
+		vulkanContext_->GetLogicalDevice().freeMemory(depthImageMemory_);
+		vulkanContext_->GetLogicalDevice().destroyImageView(depthImageView_);
+		vulkanContext_->GetLogicalDevice().destroyImage(depthImage_);
+
+		vulkanContext_->GetLogicalDevice().freeMemory(colourImageMemory_);
+		vulkanContext_->GetLogicalDevice().destroyImageView(colourImageView_);
+		vulkanContext_->GetLogicalDevice().destroyImage(colourImage_);
+
+		for ( const auto& frameBuffer : frameBuffers_ )
+		{
+			vulkanContext_->GetLogicalDevice().destroyFramebuffer(frameBuffer);
+		}
+
+		depthImage_ = CreateDepthImage();
+		depthImageMemory_ = BindDepthImage();
+		depthImageView_ = CreateDepthImageView();
+
+		colourImage_ = CreateColourImage();
+		colourImageMemory_ = BindColourImage();
+		colourImageView_ = CreateColourImageView();
+
+		frameBuffers_ = CreateFrameBuffers();
+
+		mainViewport_ = vk::Viewport{
+			0.0f,
+			0.0f,
+			static_cast<float>(vulkanContext_->GetWindow().GetWidth()),
+			static_cast<float>(vulkanContext_->GetWindow().GetHeight()),
+			0.0f, 1.0f
+		};
+
+		scissor_ = vk::Rect2D{
+			{
+				0,
+				0
+			},
+			{
+				(vulkanContext_->GetWindow().GetWidth()),
+				(vulkanContext_->GetWindow().GetHeight())
+			}
+		};
+
+		lastWindowHeight_ = vulkanContext_->GetWindow().GetHeight();
+		lastWindowWidth_ = vulkanContext_->GetWindow().GetWidth();
+	}
+
+	if ( Window::closed_ ) return false;
+
+	const vk::ResultValue<uint32_t> nextImageIndexResult = vulkanContext_->GetLogicalDevice().acquireNextImageKHR(swapchain_.GetSwapchain(), 0, imageAvailableSemaphore_, VK_NULL_HANDLE);
 	if (nextImageIndexResult.result != vk::Result::eSuccess)
 	{
 		return true;
@@ -112,7 +172,7 @@ bool Renderer::Update()
 
 	const uint32_t nextImageIndex = nextImageIndexResult.value;
 
-	vulkanContext_->get_logical_device().resetCommandPool(commandPool_);
+	vulkanContext_->GetLogicalDevice().resetCommandPool(commandPool_);
 
 	///////////
 	constexpr vk::CommandBufferBeginInfo info(
@@ -120,7 +180,7 @@ bool Renderer::Update()
 		nullptr
 	);
 
-	constexpr vk::ClearValue clearValue(std::array<float, 4>({ { 0.16f, 0.16f, 0.16f, 1.0f } }));
+	constexpr vk::ClearValue clearValue(std::array<float, 4>({ {0.9f, 0.94f, 0.93f, 1.0f } }));
 	vk::ClearValue depthValue{};
 	depthValue.depthStencil.depth = 1.0f;
 	const std::vector<vk::ClearValue> clearValues = {
@@ -133,7 +193,7 @@ bool Renderer::Update()
 		frameBuffers_[nextImageIndex],
 		{
 			{ 0, 0 },
-			{ vulkanContext_->get_window().get_width(), vulkanContext_->get_window().get_height() }
+			{ vulkanContext_->GetWindow().GetWidth(), vulkanContext_->GetWindow().GetHeight() }
 		},
 		static_cast<uint32_t>(clearValues.size()),
 		clearValues.data()
@@ -179,11 +239,11 @@ bool Renderer::Update()
 	view[3][1] = -glm::dot(up, position);
 	view[3][2] = -glm::dot(forward, position);
 
-	const PMATH::uniform_buffer_object mvp{ p * view * glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) };
+	const dv_math::UniformBufferObject mvp{ p * view * glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) };
 
-	void* data = vulkanContext_->get_logical_device().mapMemory(uniformBufferMemory_, 0, sizeof(PMATH::uniform_buffer_object), {});
-	memcpy(data, &mvp, sizeof(PMATH::uniform_buffer_object));
-	vulkanContext_->get_logical_device().unmapMemory(uniformBufferMemory_);
+	void* data = vulkanContext_->GetLogicalDevice().mapMemory(uniformBufferMemory_, 0, sizeof(dv_math::UniformBufferObject), {});
+	memcpy(data, &mvp, sizeof(dv_math::UniformBufferObject));
+	vulkanContext_->GetLogicalDevice().unmapMemory(uniformBufferMemory_);
 
 	//TODO::Add List of meshes to draw and loop them in here.
 	commandBuffers_[0].begin(info);
@@ -199,15 +259,18 @@ bool Renderer::Update()
 
 		for (auto& line : linesToDraw_)
 		{
+			if ( line->name_.length() > 100 ) continue;
+			if ( !line->GetVertexBuffer() ) continue;
+
 			//TODO::Pass Something useful to push constant including mvp.
-			PMATH::push_constant pc{};
+			dv_math::PushConstant pc{};
 			pc.color = glm::vec4(line->GetColor(), 1.0f);
-			pc.mvp = glm::translate(glm::mat4(1.0f), glm::vec3(line->GetTransform().position, -line->GetTransform().depth));
+			pc.mvp = glm::translate(glm::mat4(1.0f), glm::vec3(line->GetTransform().position, -line->GetTransform().depth + line->GetOrder()));
 			pc.mvp = glm::rotate(pc.mvp, glm::radians(line->GetTransform().rotation), glm::vec3(0, 0, 1));
 			pc.mvp = p * view * glm::scale(pc.mvp, glm::vec3(line->GetTransform().scale.x, line->GetTransform().scale.y, 1.0f));
-			commandBuffers_[0].pushConstants(pipelineLayout_, vk::ShaderStageFlagBits::eVertex, 0, sizeof(PMATH::push_constant), &pc);
 
-			//TODO::Bind Index Buffer, Bind Descriptor Set.
+			commandBuffers_[0].pushConstants(pipelineLayout_, vk::ShaderStageFlagBits::eVertex, 0, sizeof(dv_math::PushConstant), &pc);
+			
 			constexpr vk::DeviceSize offsets[] = { 0 };
 
 			commandBuffers_[0].bindVertexBuffers(0, 1, &line->GetVertexBuffer(), offsets);
@@ -215,9 +278,9 @@ bool Renderer::Update()
 			commandBuffers_[0].bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout_, 0, 1, descriptorSets_.data(), 0, nullptr);
 
 			commandBuffers_[0].draw(
-				static_cast<uint32_t>(line->GetPoints().size()),
+				static_cast<uint32_t>(line->GetNumberOfPoints()),
 				1,
-				0,
+				static_cast<uint32_t>(line->GetStartPoints()),
 				0);
 		}
 
@@ -233,30 +296,30 @@ bool Renderer::Update()
 	linesToDraw_.clear();
 	///////////
 
-	constexpr vk::PipelineStageFlags wait_stages = { vk::PipelineStageFlagBits::eColorAttachmentOutput };
+	constexpr vk::PipelineStageFlags waitStages = { vk::PipelineStageFlagBits::eColorAttachmentOutput };
 
-	vk::SubmitInfo submit_info(
+	vk::SubmitInfo submitInfo(
 		1,
 		&imageAvailableSemaphore_,
-		&wait_stages,
+		&waitStages,
 		static_cast<uint32_t>(commandBuffers_.size()),
 		commandBuffers_.data(),
 		1,
 		&renderFinishedSemaphore_
 	);
 
-	vulkanContext_->get_graphics_queue().submit(submit_info, inFlightFence_);
+	vulkanContext_->GetGraphicsQueue().submit(submitInfo, inFlightFence_);
 
-	const vk::PresentInfoKHR present_info(
+	const vk::PresentInfoKHR presentInfo(
 		1,
 		&renderFinishedSemaphore_,
 		1,
-		&swapchain_.get_swapchain(),
+		&swapchain_.GetSwapchain(),
 		&nextImageIndex,
 		nullptr
 	);
 
-	if (vulkanContext_->get_graphics_queue().presentKHR(&present_info) != vk::Result::eSuccess)
+	if (vulkanContext_->GetGraphicsQueue().presentKHR(&presentInfo) != vk::Result::eSuccess)
 	{
 		LOG_ERROR("Failed Presenting");
 	}
@@ -266,34 +329,38 @@ bool Renderer::Update()
 
 void Renderer::Shutdown()
 {
-	vulkanContext_->get_logical_device().waitIdle();
+	vulkanContext_->GetLogicalDevice().waitIdle();
 
-	vulkanContext_->get_logical_device().freeMemory(depthImageMemory_);
-	vulkanContext_->get_logical_device().destroyImageView(depthImageView_);
-	vulkanContext_->get_logical_device().destroyImage(depthImage_);
+	vulkanContext_->GetLogicalDevice().freeMemory(depthImageMemory_);
+	vulkanContext_->GetLogicalDevice().destroyImageView(depthImageView_);
+	vulkanContext_->GetLogicalDevice().destroyImage(depthImage_);
 
-	vulkanContext_->get_logical_device().destroyCommandPool(commandPool_);
+	vulkanContext_->GetLogicalDevice().freeMemory(colourImageMemory_);
+	vulkanContext_->GetLogicalDevice().destroyImageView(colourImageView_);
+	vulkanContext_->GetLogicalDevice().destroyImage(colourImage_);
 
-	for (const auto& frame_buffer : frameBuffers_)
+	vulkanContext_->GetLogicalDevice().destroyCommandPool(commandPool_);
+
+	for (const auto& frameBuffer : frameBuffers_)
 	{
-		vulkanContext_->get_logical_device().destroyFramebuffer(frame_buffer);
+		vulkanContext_->GetLogicalDevice().destroyFramebuffer(frameBuffer);
 	}
 
-	vulkanContext_->get_logical_device().freeMemory(uniformBufferMemory_);
-	vulkanContext_->get_logical_device().destroyBuffer(uniformBuffer_);
+	vulkanContext_->GetLogicalDevice().freeMemory(uniformBufferMemory_);
+	vulkanContext_->GetLogicalDevice().destroyBuffer(uniformBuffer_);
 
-	vulkanContext_->get_logical_device().destroySemaphore(imageAvailableSemaphore_);
-	vulkanContext_->get_logical_device().destroySemaphore(renderFinishedSemaphore_);
-	vulkanContext_->get_logical_device().destroyFence(inFlightFence_);
+	vulkanContext_->GetLogicalDevice().destroySemaphore(imageAvailableSemaphore_);
+	vulkanContext_->GetLogicalDevice().destroySemaphore(renderFinishedSemaphore_);
+	vulkanContext_->GetLogicalDevice().destroyFence(inFlightFence_);
 
-	vulkanContext_->get_logical_device().destroyDescriptorPool(descriptorPool_);
-	vulkanContext_->get_logical_device().destroyDescriptorPool(imGuiDescriptorPool_);
+	vulkanContext_->GetLogicalDevice().destroyDescriptorPool(descriptorPool_);
+	vulkanContext_->GetLogicalDevice().destroyDescriptorPool(imGuiDescriptorPool_);
 
 	linePipeline_.Shutdown();
-	vulkanContext_->get_logical_device().destroyPipelineLayout(pipelineLayout_);
-	vulkanContext_->get_logical_device().destroyDescriptorSetLayout(descriptorSetLayout_);
-	vulkanContext_->get_logical_device().destroyRenderPass(renderPass_);
-	swapchain_.shutdown();
+	vulkanContext_->GetLogicalDevice().destroyPipelineLayout(pipelineLayout_);
+	vulkanContext_->GetLogicalDevice().destroyDescriptorSetLayout(descriptorSetLayout_);
+	vulkanContext_->GetLogicalDevice().destroyRenderPass(renderPass_);
+	swapchain_.Shutdown();
 	LOG_INFO("Shutdown Renderer");
 }
 
@@ -302,38 +369,54 @@ vk::RenderPass Renderer::CreateRenderPass() const
 	const std::vector<vk::AttachmentDescription> attachments = {
 		{
 			{},
-			swapchain_.get_details().surface_format.format,
-			vk::SampleCountFlagBits::e1,
+			swapchain_.GetDetails().surfaceFormat.format,
+			vk::SampleCountFlagBits::e8,
 			vk::AttachmentLoadOp::eClear,
 			vk::AttachmentStoreOp::eStore,
 			vk::AttachmentLoadOp::eDontCare,
 			vk::AttachmentStoreOp::eDontCare,
 			vk::ImageLayout::eUndefined,
-			vk::ImageLayout::ePresentSrcKHR
+			vk::ImageLayout::eColorAttachmentOptimal
 		},
 		{
 			{},
 			vk::Format::eD32Sfloat,
-			vk::SampleCountFlagBits::e1,
+			vk::SampleCountFlagBits::e8,
 			vk::AttachmentLoadOp::eClear,
 			vk::AttachmentStoreOp::eStore,
 			vk::AttachmentLoadOp::eClear,
 			vk::AttachmentStoreOp::eDontCare,
 			vk::ImageLayout::eUndefined,
 			vk::ImageLayout::eDepthStencilAttachmentOptimal
+		},
+		{
+			{},
+			swapchain_.GetDetails().surfaceFormat.format,
+			vk::SampleCountFlagBits::e1,
+			vk::AttachmentLoadOp::eDontCare,
+			vk::AttachmentStoreOp::eStore,
+			vk::AttachmentLoadOp::eDontCare,
+			vk::AttachmentStoreOp::eDontCare,
+			vk::ImageLayout::eUndefined,
+			vk::ImageLayout::ePresentSrcKHR
 		}
 	};
 
-	std::vector<vk::AttachmentReference> color_attachments = {
+	std::vector<vk::AttachmentReference> colorAttachments = {
 		{
 			0,
 			vk::ImageLayout::eColorAttachmentOptimal
 		}
 	};
 
-	vk::AttachmentReference depth_attachment(
+	vk::AttachmentReference depthAttachment(
 		1,
 		vk::ImageLayout::eDepthStencilAttachmentOptimal
+	);
+
+	vk::AttachmentReference colourAttachment(
+		2,
+		vk::ImageLayout::eColorAttachmentOptimal
 	);
 
 	const std::vector<vk::SubpassDescription> subpasses = {
@@ -342,10 +425,10 @@ vk::RenderPass Renderer::CreateRenderPass() const
 			vk::PipelineBindPoint::eGraphics,
 			0,
 			nullptr,
-			static_cast<uint32_t>(color_attachments.size()),
-			color_attachments.data(),
-			nullptr,
-			&depth_attachment,
+			static_cast<uint32_t>(colorAttachments.size()),
+			colorAttachments.data(),
+			&colourAttachment,
+			&depthAttachment,
 			0,
 			nullptr
 		}
@@ -370,7 +453,7 @@ vk::RenderPass Renderer::CreateRenderPass() const
 		}
 	};
 
-	const vk::RenderPassCreateInfo render_pass_info(
+	const vk::RenderPassCreateInfo renderPassInfo(
 		{},
 		static_cast<uint32_t>(attachments.size()),
 		attachments.data(),
@@ -381,12 +464,12 @@ vk::RenderPass Renderer::CreateRenderPass() const
 	);
 
 	LOG_VULK("Created Render Pass");
-	return vulkanContext_->get_logical_device().createRenderPass(render_pass_info);
+	return vulkanContext_->GetLogicalDevice().createRenderPass(renderPassInfo);
 }
 
 vk::DescriptorSetLayout Renderer::CreateDescriptorSetLayout() const
 {
-	const std::vector<vk::DescriptorSetLayoutBinding> uniform_layout_bindings = {
+	const std::vector<vk::DescriptorSetLayoutBinding> uniformLayoutBindings = {
 		{
 			0,
 			vk::DescriptorType::eUniformBuffer,
@@ -396,72 +479,111 @@ vk::DescriptorSetLayout Renderer::CreateDescriptorSetLayout() const
 		}
 	};
 
-	const vk::DescriptorSetLayoutCreateInfo descriptor_set_layout_info(
+	const vk::DescriptorSetLayoutCreateInfo descriptorSetLayoutInfo(
 		{},
-		static_cast<uint32_t>(uniform_layout_bindings.size()),
-		uniform_layout_bindings.data()
+		static_cast<uint32_t>(uniformLayoutBindings.size()),
+		uniformLayoutBindings.data()
 	);
 
 	LOG_VULK("Created Descriptor Set Layout");
-	return vulkanContext_->get_logical_device().createDescriptorSetLayout(descriptor_set_layout_info);
+	return vulkanContext_->GetLogicalDevice().createDescriptorSetLayout(descriptorSetLayoutInfo);
 }
 
 vk::PipelineLayout Renderer::CreatePipelineLayout() const
 {
-	const std::vector<vk::PushConstantRange> push_constants = {
+	const std::vector<vk::PushConstantRange> pushConstants = {
 		{
 			vk::ShaderStageFlagBits::eVertex,
 		   0,
-		   sizeof(PMATH::push_constant)
+		   sizeof(dv_math::PushConstant)
 		}
 	};
 
-	const vk::PipelineLayoutCreateInfo pipeline_layout_info(
+	const vk::PipelineLayoutCreateInfo pipelineLayoutInfo(
 		{},
 		1,
 		&descriptorSetLayout_,
-		static_cast<uint32_t>(push_constants.size()),
-		push_constants.data()
+		static_cast<uint32_t>(pushConstants.size()),
+		pushConstants.data()
 	);
 
 	LOG_VULK("Created Pipeline Layout");
-	return vulkanContext_->get_logical_device().createPipelineLayout(pipeline_layout_info);
+	return vulkanContext_->GetLogicalDevice().createPipelineLayout(pipelineLayoutInfo);
 }
 
 vk::Image Renderer::CreateDepthImage() const
 {
-	const vk::ImageCreateInfo image_info(
+	const vk::ImageCreateInfo imageInfo(
 		{},
 		vk::ImageType::e2D,
 		vk::Format::eD32Sfloat,
 		{
-			vulkanContext_->get_window().get_width(),
-			vulkanContext_->get_window().get_height(),
+			vulkanContext_->GetWindow().GetWidth(),
+			vulkanContext_->GetWindow().GetHeight(),
 			1
 		},
 		1,
 		1,
-		vk::SampleCountFlagBits::e1,
+		vk::SampleCountFlagBits::e8,
 		vk::ImageTiling::eOptimal,
 		vk::ImageUsageFlagBits::eDepthStencilAttachment
 	);
 
 	LOG_VULK("Created Depth Image");
-	return vulkanContext_->get_logical_device().createImage(image_info);
+	return vulkanContext_->GetLogicalDevice().createImage(imageInfo);
+}
+
+vk::Image Renderer::CreateColourImage() const
+{
+	const vk::ImageCreateInfo imageInfo(
+		{},
+		vk::ImageType::e2D,
+		swapchain_.GetDetails().surfaceFormat.format,
+		{
+			vulkanContext_->GetWindow().GetWidth(),
+			vulkanContext_->GetWindow().GetHeight(),
+			1
+		},
+		1,
+		1,
+		vk::SampleCountFlagBits::e8,
+		vk::ImageTiling::eOptimal,
+		vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eTransientAttachment
+	);
+
+	LOG_VULK("Created Colour Image");
+	return vulkanContext_->GetLogicalDevice().createImage(imageInfo);
 }
 
 vk::DeviceMemory Renderer::BindDepthImage() const
 {
-	const vk::MemoryRequirements memory_requirements = vulkanContext_->get_logical_device().getImageMemoryRequirements(depthImage_);
+	const vk::MemoryRequirements memoryRequirements = vulkanContext_->GetLogicalDevice().getImageMemoryRequirements(depthImage_);
 
 	//TODO::Why is this memory type index set to 1? need to check gpu i think.
-	const vk::MemoryAllocateInfo memory_allocate_info(
-		memory_requirements.size,
+	const vk::MemoryAllocateInfo memoryAllocateInfo(
+		memoryRequirements.size,
 		1
 	);
 
-	const vk::DeviceMemory memory = vulkanContext_->get_logical_device().allocateMemory(memory_allocate_info);
-	vulkanContext_->get_logical_device().bindImageMemory(depthImage_, memory, 0);
+	const vk::DeviceMemory memory = vulkanContext_->GetLogicalDevice().allocateMemory(memoryAllocateInfo);
+	vulkanContext_->GetLogicalDevice().bindImageMemory(depthImage_, memory, 0);
+
+	LOG_VULK("Binded Depth Image Memory");
+	return memory;
+}
+
+vk::DeviceMemory Renderer::BindColourImage() const
+{
+	const vk::MemoryRequirements memoryRequirements = vulkanContext_->GetLogicalDevice().getImageMemoryRequirements(colourImage_);
+
+	//TODO::Why is this memory type index set to 1? need to check gpu i think.
+	const vk::MemoryAllocateInfo memoryAllocateInfo(
+		memoryRequirements.size,
+		1
+	);
+
+	const vk::DeviceMemory memory = vulkanContext_->GetLogicalDevice().allocateMemory(memoryAllocateInfo);
+	vulkanContext_->GetLogicalDevice().bindImageMemory(colourImage_, memory, 0);
 
 	LOG_VULK("Binded Depth Image Memory");
 	return memory;
@@ -469,7 +591,7 @@ vk::DeviceMemory Renderer::BindDepthImage() const
 
 vk::ImageView Renderer::CreateDepthImageView() const
 {
-	const vk::ImageViewCreateInfo depth_image_view_info(
+	const vk::ImageViewCreateInfo depthImageViewInfo(
 		{},
 		depthImage_,
 		vk::ImageViewType::e2D,
@@ -485,103 +607,125 @@ vk::ImageView Renderer::CreateDepthImageView() const
 	);
 
 	LOG_VULK("Created Depth Image View");
-	return vulkanContext_->get_logical_device().createImageView(depth_image_view_info);
+	return vulkanContext_->GetLogicalDevice().createImageView(depthImageViewInfo);
+}
+
+vk::ImageView Renderer::CreateColourImageView() const
+{
+	const vk::ImageViewCreateInfo colourImageViewInfo(
+		{},
+		colourImage_,
+		vk::ImageViewType::e2D,
+		swapchain_.GetDetails().surfaceFormat.format,
+		{},
+		{
+			vk::ImageAspectFlagBits::eColor,
+			0,
+			1,
+			0,
+			1
+		}
+		);
+
+	LOG_VULK("Created Colour Image View");
+	return vulkanContext_->GetLogicalDevice().createImageView(colourImageViewInfo);
 }
 
 std::vector<vk::Framebuffer> Renderer::CreateFrameBuffers() const
 {
-	std::vector<vk::Framebuffer> frame_buffers(swapchain_.get_images().size());
+	std::vector<vk::Framebuffer> frameBuffers(swapchain_.GetImages().size());
 
-	for (size_t i = 0; i < swapchain_.get_image_views().size(); i++)
+	for (size_t i = 0; i < swapchain_.GetImageViews().size(); i++)
 	{
 		std::vector<vk::ImageView> attachments = {
-			swapchain_.get_image_views()[i],
-			depthImageView_
+			colourImageView_,
+			depthImageView_,
+			swapchain_.GetImageViews()[i]
 		};
 
-		vk::FramebufferCreateInfo frame_buffer_info(
+		vk::FramebufferCreateInfo frameBufferInfo(
 			{},
 			renderPass_,
 			static_cast<uint32_t>(attachments.size()),
 			attachments.data(),
-			vulkanContext_->get_window().get_width(),
-			vulkanContext_->get_window().get_height(),
+			vulkanContext_->GetWindow().GetWidth(),
+			vulkanContext_->GetWindow().GetHeight(),
 			1
 		);
 
-		frame_buffers[i] = vulkanContext_->get_logical_device().createFramebuffer(frame_buffer_info);
+		frameBuffers[i] = vulkanContext_->GetLogicalDevice().createFramebuffer(frameBufferInfo);
 	}
 
 	LOG_VULK("Created Frame Buffers");
-	return frame_buffers;
+	return frameBuffers;
 }
 
 vk::CommandPool Renderer::CreateCommandPool() const
 {
-	const vk::CommandPoolCreateInfo command_pool_info(
+	const vk::CommandPoolCreateInfo commandPoolInfo(
 		{},
-		vulkanContext_->get_graphics_queue_index()
+		vulkanContext_->GetGraphicsQueueIndex()
 	);
 
 	LOG_VULK("Created Command Pool");
-	return vulkanContext_->get_logical_device().createCommandPool(command_pool_info);
+	return vulkanContext_->GetLogicalDevice().createCommandPool(commandPoolInfo);
 }
 
 vk::Buffer Renderer::CreateUniformBuffer() const
 {
-	constexpr vk::DeviceSize buffer_size = sizeof(PMATH::uniform_buffer_object);
+	constexpr vk::DeviceSize bufferSize = sizeof(dv_math::UniformBufferObject);
 
-	const vk::BufferCreateInfo buffer_info(
+	constexpr vk::BufferCreateInfo bufferInfo(
 		{},
-		buffer_size,
+		bufferSize,
 		vk::BufferUsageFlagBits::eUniformBuffer
 	);
 
 	LOG_VULK("Created Uniform Buffer");
-	return vulkanContext_->get_logical_device().createBuffer(buffer_info);
+	return vulkanContext_->GetLogicalDevice().createBuffer(bufferInfo);
 }
 
 vk::DeviceMemory Renderer::BindUniformBufferMemory() const
 {
-	const vk::MemoryRequirements memory_requirements = vulkanContext_->get_logical_device().getBufferMemoryRequirements(uniformBuffer_);
+	const vk::MemoryRequirements memoryRequirements = vulkanContext_->GetLogicalDevice().getBufferMemoryRequirements(uniformBuffer_);
 
-	const vk::MemoryAllocateInfo allocate_info(
-		memory_requirements.size,
+	const vk::MemoryAllocateInfo allocateInfo(
+		memoryRequirements.size,
 		2
 	);
 
-	const vk::DeviceMemory memory = vulkanContext_->get_logical_device().allocateMemory(allocate_info);
+	const vk::DeviceMemory memory = vulkanContext_->GetLogicalDevice().allocateMemory(allocateInfo);
 
-	vulkanContext_->get_logical_device().bindBufferMemory(uniformBuffer_, memory, 0);
+	vulkanContext_->GetLogicalDevice().bindBufferMemory(uniformBuffer_, memory, 0);
 
 	return memory;
 }
 
 vk::DescriptorPool Renderer::CreateDescriptorPool() const
 {
-	const std::vector<vk::DescriptorPoolSize> descriptor_pool_sizes{
+	const std::vector<vk::DescriptorPoolSize> descriptorPoolSizes{
 		{
 			vk::DescriptorType::eUniformBuffer,
 			1
 		}
 	};
 
-	const vk::DescriptorPoolCreateInfo descriptor_pool_info(
+	const vk::DescriptorPoolCreateInfo descriptorPoolInfo(
 		{},
 		1,
-		static_cast<uint32_t>(descriptor_pool_sizes.size()),
-		descriptor_pool_sizes.data()
+		static_cast<uint32_t>(descriptorPoolSizes.size()),
+		descriptorPoolSizes.data()
 	);
 
 	LOG_VULK("Created Descriptor Pool");
-	return vulkanContext_->get_logical_device().createDescriptorPool(descriptor_pool_info);
+	return vulkanContext_->GetLogicalDevice().createDescriptorPool(descriptorPoolInfo);
 }
 
 
 
 vk::DescriptorPool Renderer::CreateImGuiDescriptorPool() const
 {
-	const std::vector<vk::DescriptorPoolSize> pool_sizes{
+	const std::vector<vk::DescriptorPoolSize> poolSizes{
 			{ vk::DescriptorType::eSampler, 100 },
 			{ vk::DescriptorType::eCombinedImageSampler, 100 },
 			{ vk::DescriptorType::eSampledImage, 100 },
@@ -595,91 +739,91 @@ vk::DescriptorPool Renderer::CreateImGuiDescriptorPool() const
 			{ vk::DescriptorType::eInputAttachment, 100 }
 	};
 
-	const vk::DescriptorPoolCreateInfo descriptor_pool_info(
+	const vk::DescriptorPoolCreateInfo descriptorPoolInfo(
 		vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet,
-		100 * pool_sizes.size(),
-		pool_sizes.size(),
-		pool_sizes.data()
+		100u * static_cast<uint32_t>(poolSizes.size()),
+		static_cast<uint32_t>(poolSizes.size()),
+		poolSizes.data()
 	);
 
 	LOG_INFO("CREATED IMGUI DESCRIPTOR POOL");
-	return vulkanContext_->get_logical_device().createDescriptorPool(descriptor_pool_info);
+	return vulkanContext_->GetLogicalDevice().createDescriptorPool(descriptorPoolInfo);
 }
 
 std::vector<vk::DescriptorSet> Renderer::CreateDescriptorSet() const
 {
-	const vk::DescriptorSetAllocateInfo allocate_info(
+	const vk::DescriptorSetAllocateInfo allocateInfo(
 		imGuiDescriptorPool_,
 		1,
 		&descriptorSetLayout_
 	);
 
-	return vulkanContext_->get_logical_device().allocateDescriptorSets(allocate_info);
+	return vulkanContext_->GetLogicalDevice().allocateDescriptorSets(allocateInfo);
 }
 
 void Renderer::UpdateDescriptorSets()
 {
-	const std::vector<vk::DescriptorBufferInfo> buffer_infos{
+	const std::vector<vk::DescriptorBufferInfo> bufferInfos{
 		{
 			uniformBuffer_,
 			0,
-			sizeof(PMATH::uniform_buffer_object)
+			sizeof(dv_math::UniformBufferObject)
 		}
 	};
 
-	const std::vector<vk::WriteDescriptorSet> write_descriptor_sets = {
+	const std::vector<vk::WriteDescriptorSet> writeDescriptorSets = {
 		{
 			descriptorSets_[0],
 		   0,
 		   0,
-		   static_cast<uint32_t>(buffer_infos.size()),
+		   static_cast<uint32_t>(bufferInfos.size()),
 		   vk::DescriptorType::eUniformBuffer,
 		   nullptr,
-		   buffer_infos.data(),
+		   bufferInfos.data(),
 		   nullptr
 		}
 	};
 
-	const std::vector<vk::CopyDescriptorSet> copy_descriptor_sets = {};
+	const std::vector<vk::CopyDescriptorSet> copyDescriptorSets = {};
 
-	vulkanContext_->get_logical_device().updateDescriptorSets(
-		static_cast<uint32_t>(write_descriptor_sets.size()),
-		write_descriptor_sets.data(),
-		static_cast<uint32_t>(copy_descriptor_sets.size()),
-		copy_descriptor_sets.data()
+	vulkanContext_->GetLogicalDevice().updateDescriptorSets(
+		static_cast<uint32_t>(writeDescriptorSets.size()),
+		writeDescriptorSets.data(),
+		static_cast<uint32_t>(copyDescriptorSets.size()),
+		copyDescriptorSets.data()
 	);
 }
 
 std::vector<vk::CommandBuffer> Renderer::CreateCommandBuffer() const
 {
-	const vk::CommandBufferAllocateInfo command_buffer_allocate_info(
+	const vk::CommandBufferAllocateInfo commandBufferAllocateInfo(
 		commandPool_,
 		vk::CommandBufferLevel::ePrimary,
 		1
 	);
 
-	return vulkanContext_->get_logical_device().allocateCommandBuffers(command_buffer_allocate_info);
+	return vulkanContext_->GetLogicalDevice().allocateCommandBuffers(commandBufferAllocateInfo);
 }
 
 vk::Semaphore Renderer::CreateSemaphore() const
 {
-	const vk::SemaphoreCreateInfo semaphore_info(
+	const vk::SemaphoreCreateInfo semaphoreInfo(
 		{}
 	);
 
-	return vulkanContext_->get_logical_device().createSemaphore(semaphore_info);
+	return vulkanContext_->GetLogicalDevice().createSemaphore(semaphoreInfo);
 }
 
 vk::Fence Renderer::CreateFence() const
 {
-	const vk::FenceCreateInfo fence_info(
+	constexpr vk::FenceCreateInfo fenceInfo(
 		vk::FenceCreateFlagBits::eSignaled
 	);
 
-	return vulkanContext_->get_logical_device().createFence(fence_info);
+	return vulkanContext_->GetLogicalDevice().createFence(fenceInfo);
 }
 
-vk::Buffer Renderer::CreateVertexBuffer(const std::vector<PMATH::vertex> points) const
+vk::Buffer Renderer::CreateVertexBuffer(const std::vector<dv_math::Vertex>& points) const
 {
 	if (points.empty())
 	{
@@ -687,16 +831,16 @@ vk::Buffer Renderer::CreateVertexBuffer(const std::vector<PMATH::vertex> points)
 		return nullptr;
 	}
 
-	const vk::BufferCreateInfo buffer_info(
+	const vk::BufferCreateInfo bufferInfo(
 		{},
 		sizeof(points[0]) * points.size(),
 		vk::BufferUsageFlagBits::eVertexBuffer
 	);
 
-	return vulkanContext_->get_logical_device().createBuffer(buffer_info);
+	return vulkanContext_->GetLogicalDevice().createBuffer(bufferInfo);
 }
 
-vk::DeviceMemory Renderer::BindVertexBufferMemory(const vk::Buffer vertexBuffer, const std::vector<PMATH::vertex> points) const
+vk::DeviceMemory Renderer::BindVertexBufferMemory(const vk::Buffer vertexBuffer, const std::vector<dv_math::Vertex>& points) const
 {
 	if (points.empty())
 	{
@@ -704,36 +848,66 @@ vk::DeviceMemory Renderer::BindVertexBufferMemory(const vk::Buffer vertexBuffer,
 		return nullptr;
 	}
 
-	const vk::MemoryRequirements memory_requirements = vulkanContext_->get_logical_device().getBufferMemoryRequirements(vertexBuffer);
+	const vk::MemoryRequirements memoryRequirements = vulkanContext_->GetLogicalDevice().getBufferMemoryRequirements(vertexBuffer);
 
-	const vk::MemoryAllocateInfo allocate_info(
-		memory_requirements.size,
+	const vk::MemoryAllocateInfo allocateInfo(
+		memoryRequirements.size,
 		2
 	);
 
-	const vk::DeviceMemory memory = vulkanContext_->get_logical_device().allocateMemory(allocate_info);
-
-	vulkanContext_->get_logical_device().bindBufferMemory(vertexBuffer, memory, 0);
-
-	void* data = vulkanContext_->get_logical_device().mapMemory(memory, 0, allocate_info.allocationSize, {});
-	memcpy(data, points.data(), allocate_info.allocationSize);
-	vulkanContext_->get_logical_device().unmapMemory(memory);
+	const vk::DeviceMemory memory = vulkanContext_->GetLogicalDevice().allocateMemory(allocateInfo);
+	vulkanContext_->GetLogicalDevice().bindBufferMemory(vertexBuffer, memory, 0);
 
 	return memory;
 }
 
+void* Renderer::MapMemory(const vk::Buffer vertexBuffer, const vk::DeviceMemory memory) const
+{
+	const vk::MemoryRequirements memoryRequirements = vulkanContext_->GetLogicalDevice().getBufferMemoryRequirements(vertexBuffer);
+
+	const vk::MemoryAllocateInfo allocateInfo(
+		memoryRequirements.size,
+		2
+	);
+
+	void* data = vulkanContext_->GetLogicalDevice().mapMemory(memory, 0, allocateInfo.allocationSize, {});
+	return data;
+}
+
+void Renderer::WriteToVertexBufferMemory(const vk::Buffer vertexBuffer, void* data, const std::vector<dv_math::Vertex>& points) const
+{
+	const vk::MemoryRequirements memoryRequirements = vulkanContext_->GetLogicalDevice().getBufferMemoryRequirements(vertexBuffer);
+
+	const vk::MemoryAllocateInfo allocateInfo(
+		memoryRequirements.size,
+		2
+	);
+
+	memcpy(data, points.data(), allocateInfo.allocationSize);
+}
+
+void Renderer::UnMapMemory(const vk::DeviceMemory memory) const
+{
+	vulkanContext_->GetLogicalDevice().unmapMemory(memory);
+}
+
 void Renderer::DestroyBuffer(const vk::Buffer buffer) const
 {
-	vulkanContext_->get_logical_device().destroyBuffer(buffer);
+	vulkanContext_->GetLogicalDevice().destroyBuffer(buffer);
 }
 
 void Renderer::FreeMemory(const vk::DeviceMemory memory) const
 {
-	vulkanContext_->get_logical_device().freeMemory(memory);
+	vulkanContext_->GetLogicalDevice().freeMemory(memory);
 }
 
 void Renderer::Draw(LineComponent* lineComponent)
 {
+	std::string name = lineComponent->name_;
+	if (name.length() > 100)
+	{
+		
+	}
 	const auto iterator = std::ranges::find(linesToDraw_, lineComponent);
 	if (iterator != linesToDraw_.end())
 	{

@@ -1,0 +1,53 @@
+{
+  "build": "py39haa95532_0",
+  "build_number": 0,
+  "channel": "https://repo.anaconda.com/pkgs/main/win-64",
+  "constrains": [],
+  "depends": [
+    "python >=3.9,<3.10.0a0"
+  ],
+  "extracted_package_dir": "C:\\Users\\Benas\\miniconda3\\pkgs\\certifi-2022.12.7-py39haa95532_0",
+  "features": "",
+  "files": [
+    "Lib/site-packages/certifi-2022.12.7.dist-info/INSTALLER",
+    "Lib/site-packages/certifi-2022.12.7.dist-info/LICENSE",
+    "Lib/site-packages/certifi-2022.12.7.dist-info/METADATA",
+    "Lib/site-packages/certifi-2022.12.7.dist-info/RECORD",
+    "Lib/site-packages/certifi-2022.12.7.dist-info/REQUESTED",
+    "Lib/site-packages/certifi-2022.12.7.dist-info/WHEEL",
+    "Lib/site-packages/certifi-2022.12.7.dist-info/direct_url.json",
+    "Lib/site-packages/certifi-2022.12.7.dist-info/top_level.txt",
+    "Lib/site-packages/certifi/__init__.py",
+    "Lib/site-packages/certifi/__main__.py",
+    "Lib/site-packages/certifi/__pycache__/__init__.cpython-39.pyc",
+    "Lib/site-packages/certifi/__pycache__/__main__.cpython-39.pyc",
+    "Lib/site-packages/certifi/__pycache__/core.cpython-39.pyc",
+    "Lib/site-packages/certifi/cacert.pem",
+    "Lib/site-packages/certifi/core.py",
+    "Lib/site-packages/certifi/py.typed"
+  ],
+  "fn": "certifi-2022.12.7-py39haa95532_0.conda",
+  "legacy_bz2_md5": "a9a8f7f7f2df6f1722b5ce271776cd74",
+  "legacy_bz2_size": 156244,
+  "license": "MPL-2.0",
+  "license_family": "Other",
+  "link": {
+    "source": "C:\\Users\\Benas\\miniconda3\\pkgs\\certifi-2022.12.7-py39haa95532_0",
+    "type": 1
+  },
+  "md5": "918f01da08afb02fd41c84c88c64d5e4",
+  "name": "certifi",
+  "package_tarball_full_path": "C:\\Users\\Benas\\miniconda3\\pkgs\\certifi-2022.12.7-py39haa95532_0.conda",
+  "paths_data": {
+    "paths": [],
+    "paths_version": 1
+  },
+  "requested_spec": "defaults/win-64::certifi==2022.12.7=py39haa95532_0[md5=918f01da08afb02fd41c84c88c64d5e4]",
+  "sha256": "89e2cf7fc4d1e3d90d565285d6ec673baeeb741ec35cbbf1ebb1d0aff21cdce6",
+  "size": 152872,
+  "subdir": "win-64",
+  "timestamp": 1671487921502,
+  "track_features": "",
+  "url": "https://repo.anaconda.com/pkgs/main/win-64/certifi-2022.12.7-py39haa95532_0.conda",
+  "version": "2022.12.7"
+}

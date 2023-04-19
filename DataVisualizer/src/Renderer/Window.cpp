@@ -1,20 +1,19 @@
 #include "pcHeader.h"
 #include "Window.h"
+
+#include <functional>
+
 #include "imgui.h"
-#include "backends/imgui_impl_win32.h"
 #include "backends/imgui_impl_vulkan.h"
 
-bool window::init(const LPCWSTR title, uint32_t width, uint32_t height)
+bool Window::Init(const LPCWSTR title, const uint32_t width, const uint32_t height)
 {
 	width_ = width;
 	height_ = height;
 
-	window_ = create_window(title, width, height);
-	if (!window_)
-	{
-		return false;
-	}
+	window_ = Window::CreateWinWindow(title, width, height);
 
+	if (!window_) return false;
 
 	RECT rect;
 	GetClientRect(window_, &rect);
@@ -25,14 +24,24 @@ bool window::init(const LPCWSTR title, uint32_t width, uint32_t height)
 	return true;
 }
 
-void window::shutdown() const
+void Window::Shutdown() const
 {
 	DestroyWindow(window_);
 	LOG_INFO("Shutdown Window");
 }
 
-bool window::update() const
+bool Window::Update() const
 {
+	if (resized_)
+	{
+		LOG_INFO("CALLING ON RESIZE");
+		for (const auto& function : onResizeFunctions_)
+		{
+			function();
+		}
+		resized_ = false;
+	}
+
 	MSG msg;
 	PeekMessage(&msg, window_, 0, 0, PM_REMOVE);
 
@@ -50,18 +59,25 @@ bool window::update() const
 	return true;
 }
 
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-LRESULT CALLBACK window::events(const HWND hwnd, const UINT msg, const WPARAM wparam, const LPARAM lparam)
+void Window::AddCallbackOnResize(const std::function<void()>& function)
 {
-	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam))
-		return true;
+	onResizeFunctions_.push_back(function);
+}
 
+extern IMGUI_IMPL_API LRESULT ImGuiImplWin32WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+LRESULT CALLBACK Window::Events(const HWND hwnd, const UINT msg, const WPARAM wparam, const LPARAM lparam)
+{
+	ImGuiImplWin32WndProcHandler(hwnd, msg, wparam, lparam);
 
 	switch (msg)
 	{
 	case WM_CLOSE:
+		closed_ = true;
 		PostMessage(hwnd, msg, wparam, lparam);
+		break;
+	case WM_SIZE:
+		resized_ = true;
 		break;
 	default:
 		return DefWindowProc(hwnd, msg, wparam, lparam);
@@ -69,32 +85,46 @@ LRESULT CALLBACK window::events(const HWND hwnd, const UINT msg, const WPARAM wp
 	return 0;
 }
 
-HWND window::create_window(const LPCWSTR title, int width, int height)
+uint32_t Window::GetHeight() const
 {
-	hinstance_ = GetModuleHandle(nullptr);
+	RECT windowRect;
+	GetClientRect(window_, &windowRect);
+	return std::abs(windowRect.bottom - windowRect.top);
+}
 
-	WNDCLASSEX window_info{};
-	window_info.cbSize = sizeof(WNDCLASSEX);
-	window_info.style = CS_HREDRAW | CS_VREDRAW;
-	window_info.lpfnWndProc = events;
-	window_info.cbClsExtra = 0;
-	window_info.cbWndExtra = 0;
-	window_info.hInstance = hinstance_;
-	window_info.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
-	window_info.hCursor = LoadCursor(nullptr, IDC_ARROW);
-	window_info.hbrBackground = static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
-	window_info.lpszMenuName = nullptr;
-	window_info.lpszClassName = title;
-	window_info.hIconSm = nullptr;
+uint32_t Window::GetWidth() const
+{
+	RECT windowRect;
+	GetClientRect(window_, &windowRect);
+	return std::abs(windowRect.right - windowRect.left);
+}
 
-	if (const bool result = RegisterClassEx(&window_info); !result)
+HWND Window::CreateWinWindow(const LPCWSTR title, const uint32_t width, const uint32_t height)
+{
+	hInstance_ = GetModuleHandle(nullptr);
+
+	WNDCLASSEX windowInfo{};
+	windowInfo.cbSize = sizeof(WNDCLASSEX);
+	windowInfo.style = CS_HREDRAW | CS_VREDRAW;
+	windowInfo.lpfnWndProc = Events;
+	windowInfo.cbClsExtra = 0;
+	windowInfo.cbWndExtra = 0;
+	windowInfo.hInstance = hInstance_;
+	windowInfo.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
+	windowInfo.hCursor = LoadCursor(nullptr, IDC_ARROW);
+	windowInfo.hbrBackground = static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
+	windowInfo.lpszMenuName = nullptr;
+	windowInfo.lpszClassName = title;
+	windowInfo.hIconSm = nullptr;
+
+	if (const bool result = RegisterClassEx(&windowInfo); !result)
 	{
 		return nullptr;
 	}
 
-	RECT window_rect = { 0, 0, static_cast<LONG>(width_), static_cast<LONG>(height_) };
+	RECT windowRect = { 0, 0, static_cast<LONG>(width_), static_cast<LONG>(height_) };
 
-	AdjustWindowRect(&window_rect, WS_OVERLAPPEDWINDOW, FALSE);
+	AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, FALSE);
 
 	LOG_INFO("Created Windows Window");
 	return CreateWindowEx(
@@ -108,7 +138,7 @@ HWND window::create_window(const LPCWSTR title, int width, int height)
 		height,
 		nullptr,
 		nullptr,
-		hinstance_,
+		hInstance_,
 		nullptr
 	);
 }

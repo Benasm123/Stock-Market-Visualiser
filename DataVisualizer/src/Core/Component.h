@@ -4,16 +4,20 @@
 class Component
 {
 public:
-	explicit Component(class Actor* owner, int updateOrder = 100);
+	enum State {ACTIVE, SLEEP, DEAD};
+	explicit Component(Actor* owner, int updateOrder = 100);
 	virtual ~Component();
 	
 	virtual void Update(float deltaTime);
 
+	void SetState(const State state) { state_ = state; }
+
 	[[nodiscard]] int GetUpdateOrder() const { return updateOrder_; }
 	[[nodiscard]] Actor& GetOwner() const { return *owner_; }
-	[[nodiscard]] const PMATH::transform& GetTransform() const { return owner_->GetTransform(); }
+	[[nodiscard]] dv_math::Transform& GetTransform() const { return owner_->GetTransform(); }
 
 protected:
-	class Actor* owner_;
+	Actor* owner_;
 	uint8_t updateOrder_;
+	State state_ = ACTIVE;
 };
