@@ -215,7 +215,7 @@ class StockPredictor(StockAlgorithm):
             # Start processes which run Q Learning on current Q-Table values.
             # After all complete evaluate performance on validation set, and select highest performing one by reward.
             # Select this versions Q-Table as the new Q-Table to send to all new processes, and repeat the process.
-            number_of_processes = 8
+            number_of_processes = 12
             processes = []
             q_table_array = sharedctypes.Array(QTable, number_of_processes)
             evaluation_array = sharedctypes.Array(sharedctypes.ctypes.c_float, number_of_processes)
@@ -343,9 +343,6 @@ class StockPredictor(StockAlgorithm):
 if __name__ == '__main__':
     freeze_support()
     sp = StockPredictor()
-    sp.Train(100)
-    sp.SaveModel("100E")
-    sp.LoadModel("100E")
-    print(EvaluateQTable(sp.validating_stocks, sp.q_table))
-    print(sp.rewardValues)
-    print(np.array(sp.q_table.value))
+    sp.Train(500)
+    sp.SaveModel("500E")
+    sp.LoadModel("500E")
